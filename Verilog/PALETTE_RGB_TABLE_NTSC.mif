@@ -1,0 +1,82 @@
+-- Copyright (C) 1991-2013 Altera Corporation
+-- Your use of Altera Corporation's design tools, logic functions 
+-- and other software and tools, and its AMPP partner logic 
+-- functions, and any output files from any of the foregoing 
+-- (including device programming or simulation files), and any 
+-- associated documentation or information are expressly subject 
+-- to the terms and conditions of the Altera Program License 
+-- Subscription Agreement, Altera MegaCore Function License 
+-- Agreement, or other applicable license agreement, including, 
+-- without limitation, that your use is for the sole purpose of 
+-- programming logic devices manufactured by Altera and sold by 
+-- Altera or its authorized distributors.  Please refer to the 
+-- applicable agreement for further details.
+
+-- Quartus II generated Memory Initialization File (.mif)
+
+WIDTH=24;
+DEPTH=64;
+
+ADDRESS_RADIX=HEX;
+DATA_RADIX=HEX;
+
+CONTENT BEGIN
+	000  :   656565;
+	001  :   002B9B;
+	002  :   110EC0;
+	003  :   3F00BC;
+	004  :   66008F;
+	005  :   7B0045;
+	006  :   790100;
+	007  :   601C00;
+	008  :   363800;
+	009  :   084F00;
+	00A  :   005A00;
+	00B  :   005702;
+	00C  :   004555;
+	[00D..00F]  :   090909;
+	010  :   AEAEAE;
+	011  :   0161F5;
+	012  :   3B3EFF;
+	013  :   7C1DFF;
+	014  :   AF0EE5;
+	015  :   CB1383;
+	016  :   C82A15;
+	017  :   A74D00;
+	018  :   6F7200;
+	019  :   329100;
+	01A  :   009F00;
+	01B  :   009B2A;
+	01C  :   008498;
+	[01D..01F]  :   090909;
+	020  :   FFFFFF;
+	021  :   56B1FF;
+	022  :   8E8BFF;
+	023  :   CC6CFF;
+	024  :   FF5DFF;
+	025  :   FF62D4;
+	026  :   FF7964;
+	027  :   F89D06;
+	028  :   C0C300;
+	029  :   81E200;
+	02A  :   4DF116;
+	02B  :   30EC7A;
+	02C  :   34D5EA;
+        02D  :   4E4E4E;
+	[02E..02F]  :   090909;
+	030  :   FFFFFF;
+	031  :   BADFFF;
+	032  :   D1D0FF;
+	033  :   EBC3FF;
+	034  :   FFBDFF;
+	035  :   FFBFFF;
+	036  :   FFC8C0;
+	037  :   FCD799;
+	038  :   E5E784;
+	039  :   CCF387;
+	03A  :   B6F9A0;
+	03B  :   AAF8C9;
+	03C  :   ACEEF7;
+	03D  :   B7B7B7;
+	[03E..03F]  :   090909;
+END;
