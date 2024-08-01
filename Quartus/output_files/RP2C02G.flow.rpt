@@ -1,0 +1,146 @@
+Flow report for RP2C02G
+Thu Aug 01 15:19:23 2024
+Quartus II 64-Bit Version 13.0.1 Build 232 06/12/2013 Service Pack 1 SJ Web Edition
+
+
+---------------------
+; Table of Contents ;
+---------------------
+  1. Legal Notice
+  2. Flow Summary
+  3. Flow Settings
+  4. Flow Non-Default Global Settings
+  5. Flow Elapsed Time
+  6. Flow OS Summary
+  7. Flow Log
+  8. Flow Messages
+  9. Flow Suppressed Messages
+
+
+
+----------------
+; Legal Notice ;
+----------------
+Copyright (C) 1991-2013 Altera Corporation
+Your use of Altera Corporation's design tools, logic functions 
+and other software and tools, and its AMPP partner logic 
+functions, and any output files from any of the foregoing 
+(including device programming or simulation files), and any 
+associated documentation or information are expressly subject 
+to the terms and conditions of the Altera Program License 
+Subscription Agreement, Altera MegaCore Function License 
+Agreement, or other applicable license agreement, including, 
+without limitation, that your use is for the sole purpose of 
+programming logic devices manufactured by Altera and sold by 
+Altera or its authorized distributors.  Please refer to the 
+applicable agreement for further details.
+
+
+
++--------------------------------------------------------------------------------------+
+; Flow Summary                                                                         ;
++------------------------------------+-------------------------------------------------+
+; Flow Status                        ; Successful - Thu Aug 01 15:19:21 2024           ;
+; Quartus II 64-Bit Version          ; 13.0.1 Build 232 06/12/2013 SP 1 SJ Web Edition ;
+; Revision Name                      ; RP2C02G                                         ;
+; Top-level Entity Name              ; V1                                              ;
+; Family                             ; Cyclone II                                      ;
+; Device                             ; EP2C5T144C8                                     ;
+; Timing Models                      ; Final                                           ;
+; Total logic elements               ; 1,279 / 4,608 ( 28 % )                          ;
+;     Total combinational functions  ; 938 / 4,608 ( 20 % )                            ;
+;     Dedicated logic registers      ; 1,028 / 4,608 ( 22 % )                          ;
+; Total registers                    ; 1028                                            ;
+; Total pins                         ; 71 / 89 ( 80 % )                                ;
+; Total virtual pins                 ; 0                                               ;
+; Total memory bits                  ; 20,416 / 119,808 ( 17 % )                       ;
+; Embedded Multiplier 9-bit elements ; 0 / 26 ( 0 % )                                  ;
+; Total PLLs                         ; 1 / 2 ( 50 % )                                  ;
++------------------------------------+-------------------------------------------------+
+
+
++-----------------------------------------+
+; Flow Settings                           ;
++-------------------+---------------------+
+; Option            ; Setting             ;
++-------------------+---------------------+
+; Start date & time ; 08/01/2024 15:19:07 ;
+; Main task         ; Compilation         ;
+; Revision Name     ; RP2C02G             ;
++-------------------+---------------------+
+
+
++------------------------------------------------------------------------------------------------------------------+
+; Flow Non-Default Global Settings                                                                                 ;
++-------------------------------------+-------------------------------+---------------+-------------+--------------+
+; Assignment Name                     ; Value                         ; Default Value ; Entity Name ; Section Id   ;
++-------------------------------------+-------------------------------+---------------+-------------+--------------+
+; COMPILER_SIGNATURE_ID               ; 1097931546342.172251474706496 ; --            ; --          ; --           ;
+; IP_TOOL_NAME                        ; RAM: 1-PORT                   ; --            ; --          ; --           ;
+; IP_TOOL_NAME                        ; ALTPLL                        ; --            ; --          ; --           ;
+; IP_TOOL_NAME                        ; ROM: 1-PORT                   ; --            ; --          ; --           ;
+; IP_TOOL_NAME                        ; RAM: 1-PORT                   ; --            ; --          ; --           ;
+; IP_TOOL_NAME                        ; RAM: 1-PORT                   ; --            ; --          ; --           ;
+; IP_TOOL_NAME                        ; RAM: 1-PORT                   ; --            ; --          ; --           ;
+; IP_TOOL_VERSION                     ; 13.0                          ; --            ; --          ; --           ;
+; IP_TOOL_VERSION                     ; 13.0                          ; --            ; --          ; --           ;
+; IP_TOOL_VERSION                     ; 13.0                          ; --            ; --          ; --           ;
+; IP_TOOL_VERSION                     ; 13.0                          ; --            ; --          ; --           ;
+; IP_TOOL_VERSION                     ; 13.0                          ; --            ; --          ; --           ;
+; IP_TOOL_VERSION                     ; 13.0                          ; --            ; --          ; --           ;
+; MAX_CORE_JUNCTION_TEMP              ; 85                            ; --            ; --          ; --           ;
+; MIN_CORE_JUNCTION_TEMP              ; 0                             ; --            ; --          ; --           ;
+; MISC_FILE                           ; VRAM.bsf                      ; --            ; --          ; --           ;
+; MISC_FILE                           ; PLL.bsf                       ; --            ; --          ; --           ;
+; MISC_FILE                           ; PLL.ppf                       ; --            ; --          ; --           ;
+; MISC_FILE                           ; PALETTE_RGB_TABLE.bsf         ; --            ; --          ; --           ;
+; MISC_FILE                           ; PALETTE_RAM.bsf               ; --            ; --          ; --           ;
+; MISC_FILE                           ; OAM2_RAM.bsf                  ; --            ; --          ; --           ;
+; MISC_FILE                           ; OAM_RAM.bsf                   ; --            ; --          ; --           ;
+; OUTPUT_PIN_LOAD                     ; 6                             ; --            ; --          ; 3.3-V LVTTL  ;
+; OUTPUT_PIN_LOAD                     ; 6                             ; --            ; --          ; 3.3-V LVCMOS ;
+; OUTPUT_PIN_LOAD                     ; 10                            ; --            ; --          ; 3.3-V PCI    ;
+; OUTPUT_PIN_LOAD                     ; 10                            ; --            ; --          ; 3.3-V PCI-X  ;
+; PARTITION_COLOR                     ; 16764057                      ; --            ; V1          ; Top          ;
+; PARTITION_FITTER_PRESERVATION_LEVEL ; PLACEMENT_AND_ROUTING         ; --            ; V1          ; Top          ;
+; PARTITION_NETLIST_TYPE              ; SOURCE                        ; --            ; V1          ; Top          ;
+; PROJECT_OUTPUT_DIRECTORY            ; output_files                  ; --            ; --          ; --           ;
+; TOP_LEVEL_ENTITY                    ; V1                            ; RP2C02G       ; --          ; --           ;
++-------------------------------------+-------------------------------+---------------+-------------+--------------+
+
+
++-------------------------------------------------------------------------------------------------------------------------------+
+; Flow Elapsed Time                                                                                                             ;
++---------------------------+--------------+-------------------------+---------------------+------------------------------------+
+; Module Name               ; Elapsed Time ; Average Processors Used ; Peak Virtual Memory ; Total CPU Time (on all processors) ;
++---------------------------+--------------+-------------------------+---------------------+------------------------------------+
+; Analysis & Synthesis      ; 00:00:03     ; 1.0                     ; 478 MB              ; 00:00:03                           ;
+; Fitter                    ; 00:00:09     ; 1.0                     ; 598 MB              ; 00:00:09                           ;
+; Assembler                 ; 00:00:01     ; 1.0                     ; 412 MB              ; 00:00:01                           ;
+; TimeQuest Timing Analyzer ; 00:00:01     ; 1.0                     ; 415 MB              ; 00:00:01                           ;
+; Total                     ; 00:00:14     ; --                      ; --                  ; 00:00:14                           ;
++---------------------------+--------------+-------------------------+---------------------+------------------------------------+
+
+
++----------------------------------------------------------------------------------------+
+; Flow OS Summary                                                                        ;
++---------------------------+------------------+-----------+------------+----------------+
+; Module Name               ; Machine Hostname ; OS Name   ; OS Version ; Processor type ;
++---------------------------+------------------+-----------+------------+----------------+
+; Analysis & Synthesis      ; A_N_D            ; Windows 7 ; 6.1        ; x86_64         ;
+; Fitter                    ; A_N_D            ; Windows 7 ; 6.1        ; x86_64         ;
+; Assembler                 ; A_N_D            ; Windows 7 ; 6.1        ; x86_64         ;
+; TimeQuest Timing Analyzer ; A_N_D            ; Windows 7 ; 6.1        ; x86_64         ;
++---------------------------+------------------+-----------+------------+----------------+
+
+
+------------
+; Flow Log ;
+------------
+quartus_map --read_settings_files=on --write_settings_files=off RP2C02G -c RP2C02G
+quartus_fit --read_settings_files=off --write_settings_files=off RP2C02G -c RP2C02G
+quartus_asm --read_settings_files=off --write_settings_files=off RP2C02G -c RP2C02G
+quartus_sta RP2C02G -c RP2C02G
+
+
+

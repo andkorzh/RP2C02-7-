@@ -1,0 +1,117 @@
+------------------------------------------------------------
+TimeQuest Timing Analyzer Summary
+------------------------------------------------------------
+
+Type  : Slow Model Setup 'inst2|altpll_component|pll|clk[0]~1'
+Slack : -5.049
+TNS   : -3797.672
+
+Type  : Slow Model Setup 'inst2|altpll_component|pll|clk[0]'
+Slack : -5.026
+TNS   : -3776.351
+
+Type  : Slow Model Setup 'inst2|altpll_component|pll|clk[1]~1'
+Slack : -1.205
+TNS   : -6.783
+
+Type  : Slow Model Setup 'inst2|altpll_component|pll|clk[1]'
+Slack : -1.185
+TNS   : -6.663
+
+Type  : Slow Model Hold 'inst2|altpll_component|pll|clk[0]'
+Slack : 0.499
+TNS   : 0.000
+
+Type  : Slow Model Hold 'inst2|altpll_component|pll|clk[0]~1'
+Slack : 0.499
+TNS   : 0.000
+
+Type  : Slow Model Hold 'inst2|altpll_component|pll|clk[1]'
+Slack : 0.723
+TNS   : 0.000
+
+Type  : Slow Model Hold 'inst2|altpll_component|pll|clk[1]~1'
+Slack : 0.733
+TNS   : 0.000
+
+Type  : Slow Model Minimum Pulse Width 'MCLK'
+Slack : 5.000
+TNS   : 0.000
+
+Type  : Slow Model Minimum Pulse Width 'MCLKPAL'
+Slack : 5.000
+TNS   : 0.000
+
+Type  : Slow Model Minimum Pulse Width 'inst2|altpll_component|pll|clk[0]~1'
+Slack : 6.331
+TNS   : 0.000
+
+Type  : Slow Model Minimum Pulse Width 'inst2|altpll_component|pll|clk[0]'
+Slack : 8.573
+TNS   : 0.000
+
+Type  : Slow Model Minimum Pulse Width 'inst2|altpll_component|pll|clk[1]~1'
+Slack : 17.554
+TNS   : 0.000
+
+Type  : Slow Model Minimum Pulse Width 'inst2|altpll_component|pll|clk[1]'
+Slack : 22.038
+TNS   : 0.000
+
+Type  : Fast Model Setup 'inst2|altpll_component|pll|clk[0]~1'
+Slack : -1.645
+TNS   : -1323.096
+
+Type  : Fast Model Setup 'inst2|altpll_component|pll|clk[0]'
+Slack : -1.622
+TNS   : -1301.775
+
+Type  : Fast Model Setup 'inst2|altpll_component|pll|clk[1]~1'
+Slack : -0.461
+TNS   : -2.500
+
+Type  : Fast Model Setup 'inst2|altpll_component|pll|clk[1]'
+Slack : -0.441
+TNS   : -2.380
+
+Type  : Fast Model Hold 'inst2|altpll_component|pll|clk[0]'
+Slack : 0.215
+TNS   : 0.000
+
+Type  : Fast Model Hold 'inst2|altpll_component|pll|clk[0]~1'
+Slack : 0.215
+TNS   : 0.000
+
+Type  : Fast Model Hold 'inst2|altpll_component|pll|clk[1]'
+Slack : 0.226
+TNS   : 0.000
+
+Type  : Fast Model Hold 'inst2|altpll_component|pll|clk[1]~1'
+Slack : 0.236
+TNS   : 0.000
+
+Type  : Fast Model Minimum Pulse Width 'MCLK'
+Slack : 5.000
+TNS   : 0.000
+
+Type  : Fast Model Minimum Pulse Width 'MCLKPAL'
+Slack : 5.000
+TNS   : 0.000
+
+Type  : Fast Model Minimum Pulse Width 'inst2|altpll_component|pll|clk[0]~1'
+Slack : 7.271
+TNS   : 0.000
+
+Type  : Fast Model Minimum Pulse Width 'inst2|altpll_component|pll|clk[0]'
+Slack : 9.513
+TNS   : 0.000
+
+Type  : Fast Model Minimum Pulse Width 'inst2|altpll_component|pll|clk[1]~1'
+Slack : 17.796
+TNS   : 0.000
+
+Type  : Fast Model Minimum Pulse Width 'inst2|altpll_component|pll|clk[1]'
+Slack : 22.280
+TNS   : 0.000
+
+------------------------------------------------------------
