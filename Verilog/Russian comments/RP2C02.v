@@ -546,12 +546,12 @@ assign N_TG = ~EMP_G;
 assign N_TB = ~W1R[7]; 
 // Логика
 always @(posedge Clk) begin
-			if (W0) W0R[4:0] <= RC ? 1'b0 : {DBIN[7],DBIN[5:2]};
-			if (W1) W1R[7:0] <= RC ? 1'b0 : DBIN[7:0];
+	                if (W0) W0R[4:0] <= RC ? 5'b0 : {DBIN[7],DBIN[5:2]};
+	                if (W1) W1R[7:0] <= RC ? 8'b0 : DBIN[7:0];
 			if (~W0) I1_32   <= W0R[0];
-         if (~W0) OBSEL   <= W0R[1];
+                        if (~W0) OBSEL   <= W0R[1];
 			if (~W0) BGSEL   <= W0R[2];
-         if (~W0) O8_16   <= W0R[3];
+                        if (~W0) O8_16   <= W0R[3];
 			if (~W1) BGCLIP  <= W1R[1];
 			if (~W1) OBCLIP  <= W1R[2];
 			if (~W1) BGE     <= W1R[3];
