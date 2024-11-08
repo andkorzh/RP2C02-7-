@@ -442,27 +442,27 @@ endmodule
 // Register Selection Module
 //===============================================================================================
 module REGISTER_SELECT(
-input	Clk,				      // System clock
+input Clk,	           // System clock
 // Inputs
-input	[7:0]DB,			      // Input data from CPU
-input	nDBE,				      // PPU access strobe
-input	RnW,				      // R/W circulation direction
-input	[2:0]A,		         // Register address
+input [7:0]DB,		   // Input data from CPU
+input nDBE,		   // PPU access strobe
+input RnW,		   // R/W circulation direction
+input [2:0]A,		   // Register address
 // Outputs
-output reg [7:0]DBIN,		// CPU External Data Bus Data
+output reg [7:0]DBIN,	   // CPU External Data Bus Data
 output R_EN,               // CPU Data Bus Tristate Management
-output reg W0,				   // Write to register #2000
-output reg W1,				   // Write to register #2001
-output reg R2,				   // Reading from register #2002
-output reg W3,				   // Write to register #2003
-output reg W4,				   // Write to register #2004
-output reg R4,				   // Reading from register #2004
-output reg W5_1,			   // Write to register  #2005/1
-output reg W5_2,			   // Write to register  #2005/2
-output reg W6_1,			   // Write to register  #2006/1
-output reg W6_2,			   // Write to register  #2006/2
-output reg W7,				   // Write to register  #2007
-output reg R7				   // Reading from register #2007
+output reg W0,		   // Write to register #2000
+output reg W1,		   // Write to register #2001
+output reg R2,		   // Reading from register #2002
+output reg W3,		   // Write to register #2003
+output reg W4,		   // Write to register #2004
+output reg R4,		   // Reading from register #2004
+output reg W5_1,	   // Write to register  #2005/1
+output reg W5_2,	   // Write to register  #2005/2
+output reg W6_1,	   // Write to register  #2006/1
+output reg W6_2,	   // Write to register  #2006/2
+output reg W7,		   // Write to register  #2007
+output reg R7		   // Reading from register #2007
 );
 // Variables
 reg [2:0]ADR;
@@ -571,8 +571,8 @@ endmodule
 // Bus multiplexer module when reading
 //===============================================================================================
 module READBUSMUX(
-input	Clk,		// System clock
-input	PCLK,		// Pixel clock
+input Clk,		// System clock
+input PCLK,		// Pixel clock
 // Inputs
 input R_EN,             // CPU Data Bus Tristate Management
 input R4,		// R4 Selection
@@ -664,7 +664,7 @@ reg HC, VC_LATCH;
 reg V8EDGE;
 reg ODDEVEN;
 reg FPORCH_FF;
-reg[5:0]Hn;
+reg [5:0]Hn;
 reg SEV_IN;
 reg CLIP_OUT, CLIP1, CLIP2;
 reg HPOS_IN;
@@ -761,68 +761,69 @@ always @(posedge Clk) begin
          R2FEDGE <= R2;	 
 	 if (~( R2 | R2FEDGE )) R2BOUT7 <= INT_FF;			 
          if (PCLK) begin
-			H[8:0]    <= ~nRES ? 9'h000 : { 9 { HC }} & H_IN[8:0];
-			V[8:0]    <= ~nRES ? 9'h000 : { 9 { VC }} & V_IN[8:0];
-			Hnn[5:0]  <= Hn[5:0];
-			S_EV      <= SEV_IN;
-			CLIP_OUT  <= ~( CLIP1 | ~CLIP2 );
-			O_HPOS    <= HPOS_IN;
-			nEVAL     <= ~( HPOS_IN | EVAL_IN | EEV_IN );
-			E_EV      <= EEV_IN;
-			I_OAM2    <= IOAM2_IN;
-			PAR_O     <= PARO_IN;
-			nVIS      <= ~NVIS_IN;
-			nF_NT     <= ~FNT_IN;
-			FTB_OUT   <= ~FTB_IN;
-			FTA_OUT   <= ~FTA_IN;
-			NFO_OUT   <= ~( NFO1 | NFO2 );
-			BURST_OUT <= BURST_FF;
-			CSYNC     <= ~FPORCH_FF;
-			VSYNC     <= ~( N_HB | VSYNC_FF );
-			PICT1     <= BPORCH_FF;
-			PICT2     <= PEN_FF;
-			RESCL     <= RESCL_IN;
-			VSET2     <= ~VSET1;
-			end
+	 H[8:0]    <= ~nRES ? 9'h000 : { 9 { HC }} & H_IN[8:0];
+	 V[8:0]    <= ~nRES ? 9'h000 : { 9 { VC }} & V_IN[8:0];
+	 Hnn[5:0]  <= Hn[5:0];
+	 S_EV      <= SEV_IN;
+	 CLIP_OUT  <= ~( CLIP1 | ~CLIP2 );
+	 O_HPOS    <= HPOS_IN;
+	 nEVAL     <= ~( HPOS_IN | EVAL_IN | EEV_IN );
+	 E_EV      <= EEV_IN;
+	 I_OAM2    <= IOAM2_IN;
+	 PAR_O     <= PARO_IN;
+	 nVIS      <= ~NVIS_IN;
+	 nF_NT     <= ~FNT_IN;
+	 FTB_OUT   <= ~FTB_IN;
+	 FTA_OUT   <= ~FTA_IN;
+	 NFO_OUT   <= ~( NFO1 | NFO2 );
+	 BURST_OUT <= BURST_FF;
+	 CSYNC     <= ~FPORCH_FF;
+	 VSYNC     <= ~( N_HB | VSYNC_FF );
+	 PICT1     <= BPORCH_FF;
+	 PICT2     <= PEN_FF;
+	 RESCL     <= RESCL_IN;
+	 VSET2     <= ~VSET1;
+		    end
          if (nPCLK) begin
-                        H_IN[8:0] <= H[8:0] ^ {HCarry[7:5],HIN5,HCarry[3:0], 1'b1};
-			V_IN[8:0] <= V[8:0] ^ {VCarry[7:0], H_LINE23};
-                        HC        <= ~( H_LINE23 | ( H_LINE5 & ~ODDEVEN & RESCL & ~MODE ));
-			VC_LATCH  <= V_LINE2N | VLINE311;
-			Hn[5:0]   <= H[5:0];
-                        SEV_IN    <= H_LINE2;
-			CLIP1     <= ~( H[7] | H[6] | H[5] | H[4] | H[3] );
-	                CLIP2     <= ~( H[8] | ~VB_FF );
-			HPOS_IN   <= H_LINE5;
-			EVAL_IN   <= H_LINE6;
-			EEV_IN    <= H_LINE7; 
-			IOAM2_IN  <= ~( BLNK |  H[8] |  H[7] |  H[6] );
-			PARO_IN   <= ~( BLNK | ~H[8] |  H[7] |  H[6] );
-			NVIS_IN   <= ~( BLNK |  H[8] | ~VB_FF );
-			FNT_IN    <= ~( BLNK |  H[2] |  H[1] );
-			FTB_IN    <= ~( ~H[2]| ~H[1] );
-			FTA_IN    <= ~( ~H[2]|  H[1] );
-			NFO1      <= ~( BLNK | ~H[8] | ~H[6] | H[5] | H[4]);
-			NFO2      <= ~( BLNK |  H[8] );
-			FAT_IN    <= ~(  H[2]| ~H[1] );
-	      if (H_LINE0)  FPORCH_FF <= 1'b1;
-	 else if (H_LINE1)  FPORCH_FF <= 1'b0;
-              if (H_LINE21) BURST_FF  <= 1'b1;
-	 else if (H_LINE22) BURST_FF  <= 1'b0;	
-              if (H_LINE0 ) N_HB      <= 1'b1;
-	 else if (H_LINE20) N_HB      <= 1'b0;
-              if (H_LINE17) BPORCH_FF <= 1'b1;
-	 else if (H_LINE18) BPORCH_FF <= 1'b0;
-              if (V_LINE3N | V_LINE3P)  PEN_FF  <= 1'b1;
-	 else if (V_LINE2N | V_LINE2P)  PEN_FF  <= 1'b0;   	      
-              if (V_LINE5)              BLNK_FF <= 1'b1;
-	 else if (V_LINE2N | VLINE311)  BLNK_FF <= 1'b0;
-              if (V_LINE4)  VB_FF   <= 1'b1;
-	 else if (V_LINE5)  VB_FF   <= 1'b0;
-		           RESCL_IN <= V_LINE2N | VLINE311; 
-                           VSET1    <= V_LINE3N | VLINE291; // Activate Interrupt Delay
-			   VSET3    <= ~VSET2;
-			           end          
+         H_IN[8:0] <= H[8:0] ^ {HCarry[7:5],HIN5,HCarry[3:0], 1'b1};
+	 V_IN[8:0] <= V[8:0] ^ {VCarry[7:0], H_LINE23};
+         HC        <= ~( H_LINE23 | ( H_LINE5 & ~ODDEVEN & RESCL & ~MODE ));
+	 VC_LATCH  <= V_LINE2N | VLINE311;
+	 Hn[5:0]   <= H[5:0];
+         SEV_IN    <= H_LINE2;
+	 CLIP1     <= ~( H[7] | H[6] | H[5] | H[4] | H[3] );
+	 CLIP2     <= ~( H[8] | ~VB_FF );
+	 HPOS_IN   <= H_LINE5;
+	 EVAL_IN   <= H_LINE6;
+	 EEV_IN    <= H_LINE7; 
+	 IOAM2_IN  <= ~( BLNK |  H[8] |  H[7] |  H[6] );
+	 PARO_IN   <= ~( BLNK | ~H[8] |  H[7] |  H[6] );
+	 NVIS_IN   <= ~( BLNK |  H[8] | ~VB_FF );
+	 FNT_IN    <= ~( BLNK |  H[2] |  H[1] );
+	 FTB_IN    <= ~( ~H[2]| ~H[1] );
+	 FTA_IN    <= ~( ~H[2]|  H[1] );
+	 NFO1      <= ~( BLNK | ~H[8] | ~H[6] | H[5] | H[4]);
+	 NFO2      <= ~( BLNK |  H[8] );
+	 FAT_IN    <= ~(  H[2]| ~H[1] );
+	
+	 if (H_LINE0)  FPORCH_FF <= 1'b1;
+    else if (H_LINE1)  FPORCH_FF <= 1'b0;
+         if (H_LINE21) BURST_FF  <= 1'b1;
+    else if (H_LINE22) BURST_FF  <= 1'b0;	
+         if (H_LINE0 ) N_HB      <= 1'b1;
+    else if (H_LINE20) N_HB      <= 1'b0;
+         if (H_LINE17) BPORCH_FF <= 1'b1;
+    else if (H_LINE18) BPORCH_FF <= 1'b0;
+         if (V_LINE3N | V_LINE3P)  PEN_FF  <= 1'b1;
+    else if (V_LINE2N | V_LINE2P)  PEN_FF  <= 1'b0;   	      
+         if (V_LINE5)              BLNK_FF <= 1'b1;
+    else if (V_LINE2N | VLINE311)  BLNK_FF <= 1'b0;
+         if (V_LINE4)  VB_FF   <= 1'b1;
+    else if (V_LINE5)  VB_FF   <= 1'b0;
+	 RESCL_IN <= V_LINE2N | VLINE311; 
+         VSET1    <= V_LINE3N | VLINE291; // Activate Interrupt Delay
+	 VSET3    <= ~VSET2;
+		    end          
                       end							
 // End of PPU Main Timing Generator Module
 endmodule
@@ -872,22 +873,22 @@ always @(posedge Clk) begin
 	 else if (R7)     R7_FF <= 1'b1;
          if (~W7_Q4) W7_FF <= 1'b0;
 	 else if (W7)     W7_FF <= 1'b1;	 
-                        if (PCLK) begin
-			BLNK_LATCH  <= BLNK;
-			TSTEP_LATCH <= DB_PAR;
-			R7_Q1 <=  R7_FF & ~R7;
-			W7_Q1 <=  W7_FF & ~W7;
-			R7_Q3 <=  R7_Q2;
-			W7_Q3 <=  W7_Q2;
-			R7_Q5 <= ~R7_Q4;
-			W7_Q5 <= ~W7_Q4;
-			          end
-                        if (nPCLK) begin
-                        R7_Q2 <=  R7_Q1;
-			W7_Q2 <=  W7_Q1;
-			R7_Q4 <= ~R7_Q3;
-			W7_Q4 <= ~W7_Q3;
-			           end          
+         if (PCLK) begin
+	 BLNK_LATCH  <= BLNK;
+	 TSTEP_LATCH <= DB_PAR;
+	 R7_Q1 <=  R7_FF & ~R7;
+	 W7_Q1 <=  W7_FF & ~W7;
+	 R7_Q3 <=  R7_Q2;
+	 W7_Q3 <=  W7_Q2;
+	 R7_Q5 <= ~R7_Q4;
+	 W7_Q5 <= ~W7_Q4;
+		   end
+         if (nPCLK) begin
+         R7_Q2 <=  R7_Q1;
+	 W7_Q2 <=  W7_Q1;
+	 R7_Q4 <= ~R7_Q3;
+	 W7_Q4 <= ~W7_Q3;
+		    end          
                       end							
 // End of Local Bus Control Module PPU
 endmodule
@@ -996,7 +997,7 @@ always @(posedge Clk) begin
       CLPB_LATCH <= nCLPB;
       F_AT_LATCH <= F_AT;
 	   THO1R <= THO1;
-       BGC2[3:0] <= BGC1[3:0];
+      BGC2[3:0] <= BGC1[3:0];
 		end
       if (nPCLK) BGC1[3:0] <= BGC_POS[3:0];
 		     end
