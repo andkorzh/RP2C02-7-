@@ -11,3 +11,7 @@ Logisim circuit:
 
 Video on YouTube https://www.youtube.com/watch?v=VuhXU7fyXuk
 
+Prototype PPU on FPGA Cyclone II  EP2C5T144
+
+![rgb FPGA](https://github.com/user-attachments/assets/22a5ed68-3ec2-46ab-964c-e485d007031f)
+
