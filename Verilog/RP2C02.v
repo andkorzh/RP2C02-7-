@@ -1322,7 +1322,7 @@ always @(posedge Clk) begin
 	 else if (OSTEP & TMV_LATCH ) OAMCTR2 <= 1'b1;
               if ( W3 | PAR_O | OMSTEP )	OAM1ADR[7:0] <= {8{ ~PAR_O }} & ( W3 ? DBIN[7:0] : OAM1ADR1[7:0]);
               if (~( W3 | OMSTEP )) OAM1ADR1[7:0] <= MODE4 ? {CNT4[5:0], 2'b00 } : ( OAM1ADR[7:0] ^ {OAM1Cout[6:0],1'b1});
-	      if (OSTEP | ORES) OAM2ADR[4:0] <= ORES ? 4'b00000 : OAM2ADR1[4:0];
+	      if (OSTEP | ORES) OAM2ADR[4:0] <= ORES ? 5'b00000 : OAM2ADR1[4:0];
 	      if (~( BLNK | nPCLK )) OB2[7:0] <= OB[7:0]; 
               if (PCLK) begin
 	      W4Q1 <= ~( W4 | ~W4FF );
