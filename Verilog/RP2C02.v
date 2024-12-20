@@ -33,27 +33,27 @@
 
 // Module 2C02(7)
 module RP2C02(
-        input Clk,               // System clock
-        input Clk2,	         // Clock 21.477/26.601 for divider
-        // Inputs
-        input MODE,              // PAL/NTSC mode
-	input nRES,              // Reset signal
-        input RnW,               // External Pin Read/Write	
-        input nDBE,              // PPU access strobe
-	input [2:0]A,            // Register address
-	input [7:0]PD,           // PPU Graphics Data Bus Input
-	// Outputs
-	inout [7:0]DB,           // CPU External Data Bus
-	output PCLK,             // Clock for external DAC
-	output [23:0]RGB,        // RGB output
-	output [13:0]PAD,        // PPU Bus Address Output
-	output INT,              // NMI Interrupt Request Output
-	output ALE,              // ALE VRAM Address Low Byte Latch Strobe Output
-	output WR,               // VRAM Write Strobe	
-	output RD,               // VRAM Read Strobe
-	output SYNC,             // Composite sync output
-	output [7:0]DBIN,        // CPU Internal Data Bus
-	output DB_PAR            // Forwarding CPU data to PPU bus
+input Clk,               // System clock
+input Clk2,	         // Clock 21.477/26.601 for divider
+// Inputs
+input MODE,              // PAL/NTSC mode
+input nRES,              // Reset signal
+input RnW,               // External Pin Read/Write	
+input nDBE,              // PPU access strobe
+input [2:0]A,            // Register address
+input [7:0]PD,           // PPU Graphics Data Bus Input
+// Outputs
+inout [7:0]DB,           // CPU External Data Bus
+output PCLK,             // Clock for external DAC
+output [23:0]RGB,        // RGB output
+output [13:0]PAD,        // PPU Bus Address Output
+output INT,              // NMI Interrupt Request Output
+output ALE,              // ALE VRAM Address Low Byte Latch Strobe Output
+output WR,               // VRAM Write Strobe	
+output RD,               // VRAM Read Strobe
+output SYNC,             // Composite sync output
+output [7:0]DBIN,        // CPU Internal Data Bus
+output DB_PAR            // Forwarding CPU data to PPU bus
 );
 // Module connections
 wire nPCLK;
@@ -1357,7 +1357,7 @@ input Clk,	    // System clock
 input PCLK,	    //  Pixel clock
 input nPCLK,        // ~Pixel clock
 // Inputs 		
-input	[5:0]Hnn,   // Synchronized PPU atomic state
+input [5:0]Hnn,     // Synchronized PPU atomic state
 input HPOS_0,       // Starting sprite X coordinate counters (0 sprite position)
 input PAR_O,        // Fetch sprite graphics
 input CLPO,         // Sprites are disabled
@@ -1435,44 +1435,44 @@ assign ZCOL[4:0] = SPR[0] ? { ATR0[2:0],COL1[0],COL0[0] } :
 assign nSPR0HIT = ~SPR0HIT_LATCH;   	  
 // Logics
 always @(posedge Clk) begin
-                        if (PCLK) begin
-			ZPOS[1] <= ZPOS[0];
-			SPR0HIT_LATCH <= SPR[0]; 
-			          end
-                        if (nPCLK) begin
-			SH2  <= PAR_O & ~Hnn[0] &  Hnn[1] & ~Hnn[2];
-			SH3  <= PAR_O &  Hnn[0] &  Hnn[1] & ~Hnn[2];
-			SH5  <= PAR_O &  Hnn[0] & ~Hnn[1] &  Hnn[2];
-			SH7  <= PAR_O &  Hnn[0] &  Hnn[1] &  Hnn[2];
-			SEL_LATCH[0] <= ~Hnn[3] & ~Hnn[4] & ~Hnn[5];
-			SEL_LATCH[1] <=  Hnn[3] & ~Hnn[4] & ~Hnn[5];
-			SEL_LATCH[2] <= ~Hnn[3] &  Hnn[4] & ~Hnn[5];
-			SEL_LATCH[3] <=  Hnn[3] &  Hnn[4] & ~Hnn[5];
-			SEL_LATCH[4] <= ~Hnn[3] & ~Hnn[4] &  Hnn[5];
-			SEL_LATCH[5] <=  Hnn[3] & ~Hnn[4] &  Hnn[5];
-			SEL_LATCH[6] <= ~Hnn[3] &  Hnn[4] &  Hnn[5];
-			SEL_LATCH[7] <=  Hnn[3] &  Hnn[4] &  Hnn[5];
-			ZPOS[0] <= HPOS_0;
-			ZPOS[2] <= ZPOS[1];
-			PD_LATCH[7:0] <= MIRR_MUX[7:0];
-			ATR0[2:0] <= ATR_IN0[2:0];
-			ATR1[2:0] <= ATR_IN1[2:0];
-			ATR2[2:0] <= ATR_IN2[2:0];
-			ATR3[2:0] <= ATR_IN3[2:0];
-			ATR4[2:0] <= ATR_IN4[2:0];
-			ATR5[2:0] <= ATR_IN5[2:0];
-			ATR6[2:0] <= ATR_IN6[2:0];
-			ATR7[2:0] <= ATR_IN7[2:0];
-			           end	
-		        if (PCLK & SH2) MIRR_LATCH <= OB[6];
-			if (PCLK & SH2 & SEL_LATCH[0]) ATR_IN0[2:0] <= {OB[5], OB[1:0]};
-			if (PCLK & SH2 & SEL_LATCH[1]) ATR_IN1[2:0] <= {OB[5], OB[1:0]};
-			if (PCLK & SH2 & SEL_LATCH[2]) ATR_IN2[2:0] <= {OB[5], OB[1:0]};
-			if (PCLK & SH2 & SEL_LATCH[3]) ATR_IN3[2:0] <= {OB[5], OB[1:0]};
-                        if (PCLK & SH2 & SEL_LATCH[4]) ATR_IN4[2:0] <= {OB[5], OB[1:0]};
-			if (PCLK & SH2 & SEL_LATCH[5]) ATR_IN5[2:0] <= {OB[5], OB[1:0]};
-			if (PCLK & SH2 & SEL_LATCH[6]) ATR_IN6[2:0] <= {OB[5], OB[1:0]};
-			if (PCLK & SH2 & SEL_LATCH[7]) ATR_IN7[2:0] <= {OB[5], OB[1:0]};
+        if (PCLK) begin
+	ZPOS[1] <= ZPOS[0];
+	SPR0HIT_LATCH <= SPR[0]; 
+		   end
+        if (nPCLK) begin
+	SH2  <= PAR_O & ~Hnn[0] &  Hnn[1] & ~Hnn[2];
+	SH3  <= PAR_O &  Hnn[0] &  Hnn[1] & ~Hnn[2];
+	SH5  <= PAR_O &  Hnn[0] & ~Hnn[1] &  Hnn[2];
+	SH7  <= PAR_O &  Hnn[0] &  Hnn[1] &  Hnn[2];
+	SEL_LATCH[0] <= ~Hnn[3] & ~Hnn[4] & ~Hnn[5];
+	SEL_LATCH[1] <=  Hnn[3] & ~Hnn[4] & ~Hnn[5];
+	SEL_LATCH[2] <= ~Hnn[3] &  Hnn[4] & ~Hnn[5];
+	SEL_LATCH[3] <=  Hnn[3] &  Hnn[4] & ~Hnn[5];
+	SEL_LATCH[4] <= ~Hnn[3] & ~Hnn[4] &  Hnn[5];
+	SEL_LATCH[5] <=  Hnn[3] & ~Hnn[4] &  Hnn[5];
+	SEL_LATCH[6] <= ~Hnn[3] &  Hnn[4] &  Hnn[5];
+	SEL_LATCH[7] <=  Hnn[3] &  Hnn[4] &  Hnn[5];
+	ZPOS[0] <= HPOS_0;
+	ZPOS[2] <= ZPOS[1];
+	PD_LATCH[7:0] <= MIRR_MUX[7:0];
+	ATR0[2:0] <= ATR_IN0[2:0];
+	ATR1[2:0] <= ATR_IN1[2:0];
+	ATR2[2:0] <= ATR_IN2[2:0];
+	ATR3[2:0] <= ATR_IN3[2:0];
+	ATR4[2:0] <= ATR_IN4[2:0];
+	ATR5[2:0] <= ATR_IN5[2:0];
+	ATR6[2:0] <= ATR_IN6[2:0];
+	ATR7[2:0] <= ATR_IN7[2:0];
+		    end	
+	if (PCLK & SH2) MIRR_LATCH <= OB[6];
+	if (PCLK & SH2 & SEL_LATCH[0]) ATR_IN0[2:0] <= {OB[5], OB[1:0]};
+	if (PCLK & SH2 & SEL_LATCH[1]) ATR_IN1[2:0] <= {OB[5], OB[1:0]};
+	if (PCLK & SH2 & SEL_LATCH[2]) ATR_IN2[2:0] <= {OB[5], OB[1:0]};
+	if (PCLK & SH2 & SEL_LATCH[3]) ATR_IN3[2:0] <= {OB[5], OB[1:0]};
+        if (PCLK & SH2 & SEL_LATCH[4]) ATR_IN4[2:0] <= {OB[5], OB[1:0]};
+	if (PCLK & SH2 & SEL_LATCH[5]) ATR_IN5[2:0] <= {OB[5], OB[1:0]};
+	if (PCLK & SH2 & SEL_LATCH[6]) ATR_IN6[2:0] <= {OB[5], OB[1:0]};
+	if (PCLK & SH2 & SEL_LATCH[7]) ATR_IN7[2:0] <= {OB[5], OB[1:0]};
                       end 
 // End of sprite FIFO module
 endmodule
@@ -1518,10 +1518,10 @@ endmodule
 // Sprite FIFO and BG_COLOR shift register module
 //===============================================================================================
 module SHIFTREG(
-input Clk,			  // System clock
+input Clk,	    // System clock
 // Inputs 
-input NEXT,	        // Shift Resolution, Phase 2
-input STEP,         // Shift Resolution, 1 Phase
+input NEXT,	    // Shift Resolution, Phase 2
+input STEP,         // Shift Resolution, Phase 1 
 input LOAD,         // Permission to load data for shift
 input [7:0]D,       // Data to shift
 // Outputs 
@@ -1632,8 +1632,8 @@ assign RGB[23:0] = RGB_IN[23:0] & { 24 { ~PICTURER }};
 // Logics
 always @(posedge Clk) begin
          if (PCLK) begin
-	 DB_PARR <= DB_PAR;
-	 PIX[5:0] <= {C[5],C[4],CN[3:0]};
+	 DB_PARR  <= DB_PAR;
+	 PIX[5:0] <= {C[5], C[4], CN[3:0]};
 		   end
          if (nPCLK) begin
 	 PICTURER <= nPICTURE;
