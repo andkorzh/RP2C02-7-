@@ -756,7 +756,7 @@ always @(posedge Clk) begin
 		   end
          if (~nRES) RC <= 1'b1;
     else if (RESCL) RC <= 1'b0;
-         if (RESCL | R2)                  INT_FF <= 1'b0;
+	 if (RESCL | R2)                  INT_FF <= 1'b0;   //    (RESCL | R2FEDGE)
     else if (~( nPCLK | ~VSET1 | VSET3 )) INT_FF <= 1'b1;
          R2FEDGE <= R2;	 
 	 if (~( R2 | R2FEDGE )) R2BOUT7 <= INT_FF;			 
