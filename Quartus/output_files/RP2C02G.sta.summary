@@ -3,20 +3,20 @@ TimeQuest Timing Analyzer Summary
 ------------------------------------------------------------
 
 Type  : Slow Model Setup 'inst2|altpll_component|pll|clk[0]~1'
-Slack : -5.049
-TNS   : -3797.672
+Slack : -4.609
+TNS   : -3593.922
 
 Type  : Slow Model Setup 'inst2|altpll_component|pll|clk[0]'
-Slack : -5.026
-TNS   : -3776.351
-
-Type  : Slow Model Setup 'inst2|altpll_component|pll|clk[1]~1'
-Slack : -1.205
-TNS   : -6.783
+Slack : -4.606
+TNS   : -3591.056
 
 Type  : Slow Model Setup 'inst2|altpll_component|pll|clk[1]'
-Slack : -1.185
-TNS   : -6.663
+Slack : -1.235
+TNS   : -7.193
+
+Type  : Slow Model Setup 'inst2|altpll_component|pll|clk[1]~1'
+Slack : -1.235
+TNS   : -7.193
 
 Type  : Slow Model Hold 'inst2|altpll_component|pll|clk[0]'
 Slack : 0.499
@@ -27,11 +27,11 @@ Slack : 0.499
 TNS   : 0.000
 
 Type  : Slow Model Hold 'inst2|altpll_component|pll|clk[1]'
-Slack : 0.723
+Slack : 0.787
 TNS   : 0.000
 
 Type  : Slow Model Hold 'inst2|altpll_component|pll|clk[1]~1'
-Slack : 0.733
+Slack : 0.787
 TNS   : 0.000
 
 Type  : Slow Model Minimum Pulse Width 'MCLK'
@@ -59,20 +59,20 @@ Slack : 22.038
 TNS   : 0.000
 
 Type  : Fast Model Setup 'inst2|altpll_component|pll|clk[0]~1'
-Slack : -1.645
-TNS   : -1323.096
+Slack : -1.626
+TNS   : -1255.126
 
 Type  : Fast Model Setup 'inst2|altpll_component|pll|clk[0]'
-Slack : -1.622
-TNS   : -1301.775
-
-Type  : Fast Model Setup 'inst2|altpll_component|pll|clk[1]~1'
-Slack : -0.461
-TNS   : -2.500
+Slack : -1.623
+TNS   : -1252.260
 
 Type  : Fast Model Setup 'inst2|altpll_component|pll|clk[1]'
-Slack : -0.441
-TNS   : -2.380
+Slack : -0.469
+TNS   : -2.702
+
+Type  : Fast Model Setup 'inst2|altpll_component|pll|clk[1]~1'
+Slack : -0.469
+TNS   : -2.702
 
 Type  : Fast Model Hold 'inst2|altpll_component|pll|clk[0]'
 Slack : 0.215
@@ -83,11 +83,11 @@ Slack : 0.215
 TNS   : 0.000
 
 Type  : Fast Model Hold 'inst2|altpll_component|pll|clk[1]'
-Slack : 0.226
+Slack : 0.262
 TNS   : 0.000
 
 Type  : Fast Model Hold 'inst2|altpll_component|pll|clk[1]~1'
-Slack : 0.236
+Slack : 0.262
 TNS   : 0.000
 
 Type  : Fast Model Minimum Pulse Width 'MCLK'

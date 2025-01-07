@@ -1,5 +1,5 @@
 Analysis & Synthesis report for RP2C02G
-Thu Aug 01 15:19:10 2024
+Tue Jan 07 18:30:14 2025
 Quartus II 64-Bit Version 13.0.1 Build 232 06/12/2013 Service Pack 1 SJ Web Edition
 
 
@@ -61,16 +61,16 @@ applicable agreement for further details.
 +--------------------------------------------------------------------------------------+
 ; Analysis & Synthesis Summary                                                         ;
 +------------------------------------+-------------------------------------------------+
-; Analysis & Synthesis Status        ; Successful - Thu Aug 01 15:19:10 2024           ;
+; Analysis & Synthesis Status        ; Successful - Tue Jan 07 18:30:14 2025           ;
 ; Quartus II 64-Bit Version          ; 13.0.1 Build 232 06/12/2013 SP 1 SJ Web Edition ;
 ; Revision Name                      ; RP2C02G                                         ;
-; Top-level Entity Name              ; V1                                              ;
+; Top-level Entity Name              ; V3                                              ;
 ; Family                             ; Cyclone II                                      ;
-; Total logic elements               ; 1,365                                           ;
-;     Total combinational functions  ; 938                                             ;
-;     Dedicated logic registers      ; 1,028                                           ;
-; Total registers                    ; 1028                                            ;
-; Total pins                         ; 71                                              ;
+; Total logic elements               ; 1,353                                           ;
+;     Total combinational functions  ; 921                                             ;
+;     Dedicated logic registers      ; 1,018                                           ;
+; Total registers                    ; 1018                                            ;
+; Total pins                         ; 72                                              ;
 ; Total virtual pins                 ; 0                                               ;
 ; Total memory bits                  ; 20,416                                          ;
 ; Embedded Multiplier 9-bit elements ; 0                                               ;
@@ -84,7 +84,7 @@ applicable agreement for further details.
 ; Option                                                                     ; Setting            ; Default Value      ;
 +----------------------------------------------------------------------------+--------------------+--------------------+
 ; Device                                                                     ; EP2C5T144C8        ;                    ;
-; Top-level entity name                                                      ; V1                 ; RP2C02G            ;
+; Top-level entity name                                                      ; V3                 ; RP2C02G            ;
 ; Family name                                                                ; Cyclone II         ; Cyclone IV GX      ;
 ; Use smart compilation                                                      ; Off                ; Off                ;
 ; Enable parallel Assembler and TimeQuest Timing Analyzer during compilation ; On                 ; On                 ;
@@ -179,15 +179,15 @@ Parallel compilation was disabled, but you have multiple processors available. E
 +----------------------------------+-----------------+------------------------------------+-------------------------------------------------------------------------+---------+
 ; File Name with User-Entered Path ; Used in Netlist ; File Type                          ; File Name with Absolute Path                                            ; Library ;
 +----------------------------------+-----------------+------------------------------------+-------------------------------------------------------------------------+---------+
-; VRAM.v                           ; yes             ; User Wizard-Generated File         ; C:/altera/13.0sp1/RP2C02G/VRAM.v                                        ;         ;
-; RP2C02.v                         ; yes             ; User Verilog HDL File              ; C:/altera/13.0sp1/RP2C02G/RP2C02.v                                      ;         ;
-; PLL.v                            ; yes             ; User Wizard-Generated File         ; C:/altera/13.0sp1/RP2C02G/PLL.v                                         ;         ;
-; PALETTE_RGB_TABLE_NTSC.mif       ; yes             ; User Memory Initialization File    ; C:/altera/13.0sp1/RP2C02G/PALETTE_RGB_TABLE_NTSC.mif                    ;         ;
-; PALETTE_RGB_TABLE.v              ; yes             ; User Wizard-Generated File         ; C:/altera/13.0sp1/RP2C02G/PALETTE_RGB_TABLE.v                           ;         ;
-; PALETTE_RAM.v                    ; yes             ; User Wizard-Generated File         ; C:/altera/13.0sp1/RP2C02G/PALETTE_RAM.v                                 ;         ;
-; OAM2_RAM.v                       ; yes             ; User Wizard-Generated File         ; C:/altera/13.0sp1/RP2C02G/OAM2_RAM.v                                    ;         ;
-; OAM_RAM.v                        ; yes             ; User Wizard-Generated File         ; C:/altera/13.0sp1/RP2C02G/OAM_RAM.v                                     ;         ;
-; V1.bdf                           ; yes             ; User Block Diagram/Schematic File  ; C:/altera/13.0sp1/RP2C02G/V1.bdf                                        ;         ;
+; VRAM.v                           ; yes             ; User Wizard-Generated File         ; E:/RP2C02-7--main/RP2C02-7--main/Quartus/VRAM.v                         ;         ;
+; RP2C02.v                         ; yes             ; User Verilog HDL File              ; E:/RP2C02-7--main/RP2C02-7--main/Quartus/RP2C02.v                       ;         ;
+; PLL.v                            ; yes             ; User Wizard-Generated File         ; E:/RP2C02-7--main/RP2C02-7--main/Quartus/PLL.v                          ;         ;
+; PALETTE_RGB_TABLE_NTSC.mif       ; yes             ; User Memory Initialization File    ; E:/RP2C02-7--main/RP2C02-7--main/Quartus/PALETTE_RGB_TABLE_NTSC.mif     ;         ;
+; PALETTE_RGB_TABLE.v              ; yes             ; User Wizard-Generated File         ; E:/RP2C02-7--main/RP2C02-7--main/Quartus/PALETTE_RGB_TABLE.v            ;         ;
+; PALETTE_RAM.v                    ; yes             ; User Wizard-Generated File         ; E:/RP2C02-7--main/RP2C02-7--main/Quartus/PALETTE_RAM.v                  ;         ;
+; OAM2_RAM.v                       ; yes             ; User Wizard-Generated File         ; E:/RP2C02-7--main/RP2C02-7--main/Quartus/OAM2_RAM.v                     ;         ;
+; OAM_RAM.v                        ; yes             ; User Wizard-Generated File         ; E:/RP2C02-7--main/RP2C02-7--main/Quartus/OAM_RAM.v                      ;         ;
+; V3.bdf                           ; yes             ; User Block Diagram/Schematic File  ; E:/RP2C02-7--main/RP2C02-7--main/Quartus/V3.bdf                         ;         ;
 ; altsyncram.tdf                   ; yes             ; Megafunction                       ; c:/altera/13.0sp1/quartus/libraries/megafunctions/altsyncram.tdf        ;         ;
 ; stratix_ram_block.inc            ; yes             ; Megafunction                       ; c:/altera/13.0sp1/quartus/libraries/megafunctions/stratix_ram_block.inc ;         ;
 ; lpm_mux.inc                      ; yes             ; Megafunction                       ; c:/altera/13.0sp1/quartus/libraries/megafunctions/lpm_mux.inc           ;         ;
@@ -197,15 +197,15 @@ Parallel compilation was disabled, but you have multiple processors available. E
 ; altrom.inc                       ; yes             ; Megafunction                       ; c:/altera/13.0sp1/quartus/libraries/megafunctions/altrom.inc            ;         ;
 ; altram.inc                       ; yes             ; Megafunction                       ; c:/altera/13.0sp1/quartus/libraries/megafunctions/altram.inc            ;         ;
 ; altdpram.inc                     ; yes             ; Megafunction                       ; c:/altera/13.0sp1/quartus/libraries/megafunctions/altdpram.inc          ;         ;
-; db/altsyncram_gra1.tdf           ; yes             ; Auto-Generated Megafunction        ; C:/altera/13.0sp1/RP2C02G/db/altsyncram_gra1.tdf                        ;         ;
-; db/altsyncram_lpa1.tdf           ; yes             ; Auto-Generated Megafunction        ; C:/altera/13.0sp1/RP2C02G/db/altsyncram_lpa1.tdf                        ;         ;
-; db/altsyncram_u2a1.tdf           ; yes             ; Auto-Generated Megafunction        ; C:/altera/13.0sp1/RP2C02G/db/altsyncram_u2a1.tdf                        ;         ;
-; db/altsyncram_mn81.tdf           ; yes             ; Auto-Generated Megafunction        ; C:/altera/13.0sp1/RP2C02G/db/altsyncram_mn81.tdf                        ;         ;
+; db/altsyncram_gra1.tdf           ; yes             ; Auto-Generated Megafunction        ; E:/RP2C02-7--main/RP2C02-7--main/Quartus/db/altsyncram_gra1.tdf         ;         ;
+; db/altsyncram_lpa1.tdf           ; yes             ; Auto-Generated Megafunction        ; E:/RP2C02-7--main/RP2C02-7--main/Quartus/db/altsyncram_lpa1.tdf         ;         ;
+; db/altsyncram_u2a1.tdf           ; yes             ; Auto-Generated Megafunction        ; E:/RP2C02-7--main/RP2C02-7--main/Quartus/db/altsyncram_u2a1.tdf         ;         ;
+; db/altsyncram_mn81.tdf           ; yes             ; Auto-Generated Megafunction        ; E:/RP2C02-7--main/RP2C02-7--main/Quartus/db/altsyncram_mn81.tdf         ;         ;
 ; altpll.tdf                       ; yes             ; Megafunction                       ; c:/altera/13.0sp1/quartus/libraries/megafunctions/altpll.tdf            ;         ;
 ; stratix_pll.inc                  ; yes             ; Megafunction                       ; c:/altera/13.0sp1/quartus/libraries/megafunctions/stratix_pll.inc       ;         ;
 ; stratixii_pll.inc                ; yes             ; Megafunction                       ; c:/altera/13.0sp1/quartus/libraries/megafunctions/stratixii_pll.inc     ;         ;
 ; cycloneii_pll.inc                ; yes             ; Megafunction                       ; c:/altera/13.0sp1/quartus/libraries/megafunctions/cycloneii_pll.inc     ;         ;
-; db/altsyncram_3qc1.tdf           ; yes             ; Auto-Generated Megafunction        ; C:/altera/13.0sp1/RP2C02G/db/altsyncram_3qc1.tdf                        ;         ;
+; db/altsyncram_3qc1.tdf           ; yes             ; Auto-Generated Megafunction        ; E:/RP2C02-7--main/RP2C02-7--main/Quartus/db/altsyncram_3qc1.tdf         ;         ;
 +----------------------------------+-----------------+------------------------------------+-------------------------------------------------------------------------+---------+
 
 
@@ -214,32 +214,32 @@ Parallel compilation was disabled, but you have multiple processors available. E
 +---------------------------------------------+-----------------------------------------+
 ; Resource                                    ; Usage                                   ;
 +---------------------------------------------+-----------------------------------------+
-; Estimated Total logic elements              ; 1,365                                   ;
+; Estimated Total logic elements              ; 1,353                                   ;
 ;                                             ;                                         ;
-; Total combinational functions               ; 938                                     ;
+; Total combinational functions               ; 921                                     ;
 ; Logic element usage by number of LUT inputs ;                                         ;
-;     -- 4 input functions                    ; 442                                     ;
-;     -- 3 input functions                    ; 300                                     ;
-;     -- <=2 input functions                  ; 196                                     ;
+;     -- 4 input functions                    ; 462                                     ;
+;     -- 3 input functions                    ; 276                                     ;
+;     -- <=2 input functions                  ; 183                                     ;
 ;                                             ;                                         ;
 ; Logic elements by mode                      ;                                         ;
-;     -- normal mode                          ; 931                                     ;
+;     -- normal mode                          ; 914                                     ;
 ;     -- arithmetic mode                      ; 7                                       ;
 ;                                             ;                                         ;
-; Total registers                             ; 1028                                    ;
-;     -- Dedicated logic registers            ; 1028                                    ;
+; Total registers                             ; 1018                                    ;
+;     -- Dedicated logic registers            ; 1018                                    ;
 ;     -- I/O registers                        ; 0                                       ;
 ;                                             ;                                         ;
-; I/O pins                                    ; 71                                      ;
+; I/O pins                                    ; 72                                      ;
 ; Total memory bits                           ; 20416                                   ;
 ; Embedded Multiplier 9-bit elements          ; 0                                       ;
 ; Total PLLs                                  ; 1                                       ;
 ;     -- PLLs                                 ; 1                                       ;
 ;                                             ;                                         ;
 ; Maximum fan-out node                        ; PLL:inst2|altpll:altpll_component|_clk0 ;
-; Maximum fan-out                             ; 1082                                    ;
-; Total fan-out                               ; 6708                                    ;
-; Average fan-out                             ; 3.21                                    ;
+; Maximum fan-out                             ; 1072                                    ;
+; Total fan-out                               ; 6607                                    ;
+; Average fan-out                             ; 3.20                                    ;
 +---------------------------------------------+-----------------------------------------+
 
 
@@ -248,63 +248,63 @@ Parallel compilation was disabled, but you have multiple processors available. E
 +-----------------------------------------------------+-------------------+--------------+-------------+--------------+---------+-----------+------+--------------+------------------------------------------------------------------------------------------------------------------------------------+--------------+
 ; Compilation Hierarchy Node                          ; LC Combinationals ; LC Registers ; Memory Bits ; DSP Elements ; DSP 9x9 ; DSP 18x18 ; Pins ; Virtual Pins ; Full Hierarchy Name                                                                                                                ; Library Name ;
 +-----------------------------------------------------+-------------------+--------------+-------------+--------------+---------+-----------+------+--------------+------------------------------------------------------------------------------------------------------------------------------------+--------------+
-; |V1                                                 ; 938 (1)           ; 1028 (22)    ; 20416       ; 0            ; 0       ; 0         ; 71   ; 0            ; |V1                                                                                                                                ; work         ;
-;    |PLL:inst2|                                      ; 0 (0)             ; 0 (0)        ; 0           ; 0            ; 0       ; 0         ; 0    ; 0            ; |V1|PLL:inst2                                                                                                                      ; work         ;
-;       |altpll:altpll_component|                     ; 0 (0)             ; 0 (0)        ; 0           ; 0            ; 0       ; 0         ; 0    ; 0            ; |V1|PLL:inst2|altpll:altpll_component                                                                                              ; work         ;
-;    |RP2C02:inst|                                    ; 937 (3)           ; 1006 (6)     ; 4032        ; 0            ; 0       ; 0         ; 0    ; 0            ; |V1|RP2C02:inst                                                                                                                    ; work         ;
-;       |ADDRESS_BUS_CONTROL:MOD_ADDRESS_BUS_CONTROL| ; 17 (17)           ; 13 (13)      ; 0           ; 0            ; 0       ; 0         ; 0    ; 0            ; |V1|RP2C02:inst|ADDRESS_BUS_CONTROL:MOD_ADDRESS_BUS_CONTROL                                                                        ; work         ;
-;       |BG_COLOR:MOD_BG_COLOR|                       ; 47 (31)           ; 129 (97)     ; 0           ; 0            ; 0       ; 0         ; 0    ; 0            ; |V1|RP2C02:inst|BG_COLOR:MOD_BG_COLOR                                                                                              ; work         ;
-;          |SHIFTREG:SREG_TA|                         ; 8 (8)             ; 16 (16)      ; 0           ; 0            ; 0       ; 0         ; 0    ; 0            ; |V1|RP2C02:inst|BG_COLOR:MOD_BG_COLOR|SHIFTREG:SREG_TA                                                                             ; work         ;
-;          |SHIFTREG:SREG_TB|                         ; 8 (8)             ; 16 (16)      ; 0           ; 0            ; 0       ; 0         ; 0    ; 0            ; |V1|RP2C02:inst|BG_COLOR:MOD_BG_COLOR|SHIFTREG:SREG_TB                                                                             ; work         ;
-;       |OAM:MOD_OAM|                                 ; 77 (77)           ; 60 (60)      ; 2304        ; 0            ; 0       ; 0         ; 0    ; 0            ; |V1|RP2C02:inst|OAM:MOD_OAM                                                                                                        ; work         ;
-;          |OAM2_RAM:MOD_OAM2_RAM|                    ; 0 (0)             ; 0 (0)        ; 256         ; 0            ; 0       ; 0         ; 0    ; 0            ; |V1|RP2C02:inst|OAM:MOD_OAM|OAM2_RAM:MOD_OAM2_RAM                                                                                  ; work         ;
-;             |altsyncram:altsyncram_component|       ; 0 (0)             ; 0 (0)        ; 256         ; 0            ; 0       ; 0         ; 0    ; 0            ; |V1|RP2C02:inst|OAM:MOD_OAM|OAM2_RAM:MOD_OAM2_RAM|altsyncram:altsyncram_component                                                  ; work         ;
-;                |altsyncram_lpa1:auto_generated|     ; 0 (0)             ; 0 (0)        ; 256         ; 0            ; 0       ; 0         ; 0    ; 0            ; |V1|RP2C02:inst|OAM:MOD_OAM|OAM2_RAM:MOD_OAM2_RAM|altsyncram:altsyncram_component|altsyncram_lpa1:auto_generated                   ; work         ;
-;          |OAM_RAM:MOD_OAM_RAM|                      ; 0 (0)             ; 0 (0)        ; 2048        ; 0            ; 0       ; 0         ; 0    ; 0            ; |V1|RP2C02:inst|OAM:MOD_OAM|OAM_RAM:MOD_OAM_RAM                                                                                    ; work         ;
-;             |altsyncram:altsyncram_component|       ; 0 (0)             ; 0 (0)        ; 2048        ; 0            ; 0       ; 0         ; 0    ; 0            ; |V1|RP2C02:inst|OAM:MOD_OAM|OAM_RAM:MOD_OAM_RAM|altsyncram:altsyncram_component                                                    ; work         ;
-;                |altsyncram_gra1:auto_generated|     ; 0 (0)             ; 0 (0)        ; 2048        ; 0            ; 0       ; 0         ; 0    ; 0            ; |V1|RP2C02:inst|OAM:MOD_OAM|OAM_RAM:MOD_OAM_RAM|altsyncram:altsyncram_component|altsyncram_gra1:auto_generated                     ; work         ;
-;       |OBJ_EVAL:MOD_OBJ_EVAL|                       ; 23 (23)           ; 19 (19)      ; 0           ; 0            ; 0       ; 0         ; 0    ; 0            ; |V1|RP2C02:inst|OBJ_EVAL:MOD_OBJ_EVAL                                                                                              ; work         ;
-;       |OBJ_FIFO:MOD_OBJ_FIFO|                       ; 415 (95)          ; 473 (73)     ; 0           ; 0            ; 0       ; 0         ; 0    ; 0            ; |V1|RP2C02:inst|OBJ_FIFO:MOD_OBJ_FIFO                                                                                              ; work         ;
-;          |FIFO_HPOSCNT:HPOSCNT0|                    ; 22 (22)           ; 18 (18)      ; 0           ; 0            ; 0       ; 0         ; 0    ; 0            ; |V1|RP2C02:inst|OBJ_FIFO:MOD_OBJ_FIFO|FIFO_HPOSCNT:HPOSCNT0                                                                        ; work         ;
-;          |FIFO_HPOSCNT:HPOSCNT1|                    ; 22 (22)           ; 18 (18)      ; 0           ; 0            ; 0       ; 0         ; 0    ; 0            ; |V1|RP2C02:inst|OBJ_FIFO:MOD_OBJ_FIFO|FIFO_HPOSCNT:HPOSCNT1                                                                        ; work         ;
-;          |FIFO_HPOSCNT:HPOSCNT2|                    ; 22 (22)           ; 18 (18)      ; 0           ; 0            ; 0       ; 0         ; 0    ; 0            ; |V1|RP2C02:inst|OBJ_FIFO:MOD_OBJ_FIFO|FIFO_HPOSCNT:HPOSCNT2                                                                        ; work         ;
-;          |FIFO_HPOSCNT:HPOSCNT3|                    ; 22 (22)           ; 18 (18)      ; 0           ; 0            ; 0       ; 0         ; 0    ; 0            ; |V1|RP2C02:inst|OBJ_FIFO:MOD_OBJ_FIFO|FIFO_HPOSCNT:HPOSCNT3                                                                        ; work         ;
-;          |FIFO_HPOSCNT:HPOSCNT4|                    ; 22 (22)           ; 18 (18)      ; 0           ; 0            ; 0       ; 0         ; 0    ; 0            ; |V1|RP2C02:inst|OBJ_FIFO:MOD_OBJ_FIFO|FIFO_HPOSCNT:HPOSCNT4                                                                        ; work         ;
-;          |FIFO_HPOSCNT:HPOSCNT5|                    ; 22 (22)           ; 18 (18)      ; 0           ; 0            ; 0       ; 0         ; 0    ; 0            ; |V1|RP2C02:inst|OBJ_FIFO:MOD_OBJ_FIFO|FIFO_HPOSCNT:HPOSCNT5                                                                        ; work         ;
-;          |FIFO_HPOSCNT:HPOSCNT6|                    ; 22 (22)           ; 18 (18)      ; 0           ; 0            ; 0       ; 0         ; 0    ; 0            ; |V1|RP2C02:inst|OBJ_FIFO:MOD_OBJ_FIFO|FIFO_HPOSCNT:HPOSCNT6                                                                        ; work         ;
-;          |FIFO_HPOSCNT:HPOSCNT7|                    ; 22 (22)           ; 18 (18)      ; 0           ; 0            ; 0       ; 0         ; 0    ; 0            ; |V1|RP2C02:inst|OBJ_FIFO:MOD_OBJ_FIFO|FIFO_HPOSCNT:HPOSCNT7                                                                        ; work         ;
-;          |SHIFTREG:SREG_0A|                         ; 9 (9)             ; 16 (16)      ; 0           ; 0            ; 0       ; 0         ; 0    ; 0            ; |V1|RP2C02:inst|OBJ_FIFO:MOD_OBJ_FIFO|SHIFTREG:SREG_0A                                                                             ; work         ;
-;          |SHIFTREG:SREG_0B|                         ; 9 (9)             ; 16 (16)      ; 0           ; 0            ; 0       ; 0         ; 0    ; 0            ; |V1|RP2C02:inst|OBJ_FIFO:MOD_OBJ_FIFO|SHIFTREG:SREG_0B                                                                             ; work         ;
-;          |SHIFTREG:SREG_1A|                         ; 9 (9)             ; 16 (16)      ; 0           ; 0            ; 0       ; 0         ; 0    ; 0            ; |V1|RP2C02:inst|OBJ_FIFO:MOD_OBJ_FIFO|SHIFTREG:SREG_1A                                                                             ; work         ;
-;          |SHIFTREG:SREG_1B|                         ; 9 (9)             ; 16 (16)      ; 0           ; 0            ; 0       ; 0         ; 0    ; 0            ; |V1|RP2C02:inst|OBJ_FIFO:MOD_OBJ_FIFO|SHIFTREG:SREG_1B                                                                             ; work         ;
-;          |SHIFTREG:SREG_2A|                         ; 9 (9)             ; 16 (16)      ; 0           ; 0            ; 0       ; 0         ; 0    ; 0            ; |V1|RP2C02:inst|OBJ_FIFO:MOD_OBJ_FIFO|SHIFTREG:SREG_2A                                                                             ; work         ;
-;          |SHIFTREG:SREG_2B|                         ; 9 (9)             ; 16 (16)      ; 0           ; 0            ; 0       ; 0         ; 0    ; 0            ; |V1|RP2C02:inst|OBJ_FIFO:MOD_OBJ_FIFO|SHIFTREG:SREG_2B                                                                             ; work         ;
-;          |SHIFTREG:SREG_3A|                         ; 9 (9)             ; 16 (16)      ; 0           ; 0            ; 0       ; 0         ; 0    ; 0            ; |V1|RP2C02:inst|OBJ_FIFO:MOD_OBJ_FIFO|SHIFTREG:SREG_3A                                                                             ; work         ;
-;          |SHIFTREG:SREG_3B|                         ; 9 (9)             ; 16 (16)      ; 0           ; 0            ; 0       ; 0         ; 0    ; 0            ; |V1|RP2C02:inst|OBJ_FIFO:MOD_OBJ_FIFO|SHIFTREG:SREG_3B                                                                             ; work         ;
-;          |SHIFTREG:SREG_4A|                         ; 9 (9)             ; 16 (16)      ; 0           ; 0            ; 0       ; 0         ; 0    ; 0            ; |V1|RP2C02:inst|OBJ_FIFO:MOD_OBJ_FIFO|SHIFTREG:SREG_4A                                                                             ; work         ;
-;          |SHIFTREG:SREG_4B|                         ; 9 (9)             ; 16 (16)      ; 0           ; 0            ; 0       ; 0         ; 0    ; 0            ; |V1|RP2C02:inst|OBJ_FIFO:MOD_OBJ_FIFO|SHIFTREG:SREG_4B                                                                             ; work         ;
-;          |SHIFTREG:SREG_5A|                         ; 9 (9)             ; 16 (16)      ; 0           ; 0            ; 0       ; 0         ; 0    ; 0            ; |V1|RP2C02:inst|OBJ_FIFO:MOD_OBJ_FIFO|SHIFTREG:SREG_5A                                                                             ; work         ;
-;          |SHIFTREG:SREG_5B|                         ; 9 (9)             ; 16 (16)      ; 0           ; 0            ; 0       ; 0         ; 0    ; 0            ; |V1|RP2C02:inst|OBJ_FIFO:MOD_OBJ_FIFO|SHIFTREG:SREG_5B                                                                             ; work         ;
-;          |SHIFTREG:SREG_6A|                         ; 9 (9)             ; 16 (16)      ; 0           ; 0            ; 0       ; 0         ; 0    ; 0            ; |V1|RP2C02:inst|OBJ_FIFO:MOD_OBJ_FIFO|SHIFTREG:SREG_6A                                                                             ; work         ;
-;          |SHIFTREG:SREG_6B|                         ; 9 (9)             ; 16 (16)      ; 0           ; 0            ; 0       ; 0         ; 0    ; 0            ; |V1|RP2C02:inst|OBJ_FIFO:MOD_OBJ_FIFO|SHIFTREG:SREG_6B                                                                             ; work         ;
-;          |SHIFTREG:SREG_7A|                         ; 9 (9)             ; 16 (16)      ; 0           ; 0            ; 0       ; 0         ; 0    ; 0            ; |V1|RP2C02:inst|OBJ_FIFO:MOD_OBJ_FIFO|SHIFTREG:SREG_7A                                                                             ; work         ;
-;          |SHIFTREG:SREG_7B|                         ; 9 (9)             ; 16 (16)      ; 0           ; 0            ; 0       ; 0         ; 0    ; 0            ; |V1|RP2C02:inst|OBJ_FIFO:MOD_OBJ_FIFO|SHIFTREG:SREG_7B                                                                             ; work         ;
-;       |PALETTE:MOD_PALETTE|                         ; 32 (32)           ; 8 (8)        ; 1728        ; 0            ; 0       ; 0         ; 0    ; 0            ; |V1|RP2C02:inst|PALETTE:MOD_PALETTE                                                                                                ; work         ;
-;          |PALETTE_RAM:MOD_PALETTE_RAM|              ; 0 (0)             ; 0 (0)        ; 192         ; 0            ; 0       ; 0         ; 0    ; 0            ; |V1|RP2C02:inst|PALETTE:MOD_PALETTE|PALETTE_RAM:MOD_PALETTE_RAM                                                                    ; work         ;
-;             |altsyncram:altsyncram_component|       ; 0 (0)             ; 0 (0)        ; 192         ; 0            ; 0       ; 0         ; 0    ; 0            ; |V1|RP2C02:inst|PALETTE:MOD_PALETTE|PALETTE_RAM:MOD_PALETTE_RAM|altsyncram:altsyncram_component                                    ; work         ;
-;                |altsyncram_u2a1:auto_generated|     ; 0 (0)             ; 0 (0)        ; 192         ; 0            ; 0       ; 0         ; 0    ; 0            ; |V1|RP2C02:inst|PALETTE:MOD_PALETTE|PALETTE_RAM:MOD_PALETTE_RAM|altsyncram:altsyncram_component|altsyncram_u2a1:auto_generated     ; work         ;
-;          |PALETTE_RGB_TABLE:MOD_RGB_TABLE|          ; 0 (0)             ; 0 (0)        ; 1536        ; 0            ; 0       ; 0         ; 0    ; 0            ; |V1|RP2C02:inst|PALETTE:MOD_PALETTE|PALETTE_RGB_TABLE:MOD_RGB_TABLE                                                                ; work         ;
-;             |altsyncram:altsyncram_component|       ; 0 (0)             ; 0 (0)        ; 1536        ; 0            ; 0       ; 0         ; 0    ; 0            ; |V1|RP2C02:inst|PALETTE:MOD_PALETTE|PALETTE_RGB_TABLE:MOD_RGB_TABLE|altsyncram:altsyncram_component                                ; work         ;
-;                |altsyncram_mn81:auto_generated|     ; 0 (0)             ; 0 (0)        ; 1536        ; 0            ; 0       ; 0         ; 0    ; 0            ; |V1|RP2C02:inst|PALETTE:MOD_PALETTE|PALETTE_RGB_TABLE:MOD_RGB_TABLE|altsyncram:altsyncram_component|altsyncram_mn81:auto_generated ; work         ;
-;       |PAR_GEN:MOD_PAR_GEN|                         ; 115 (115)         ; 114 (114)    ; 0           ; 0            ; 0       ; 0         ; 0    ; 0            ; |V1|RP2C02:inst|PAR_GEN:MOD_PAR_GEN                                                                                                ; work         ;
-;       |READBUSMUX:MOD_READBUSMUX|                   ; 41 (41)           ; 16 (16)      ; 0           ; 0            ; 0       ; 0         ; 0    ; 0            ; |V1|RP2C02:inst|READBUSMUX:MOD_READBUSMUX                                                                                          ; work         ;
-;       |REG2000_2001:MOD_REG2000_2001|               ; 8 (8)             ; 21 (21)      ; 0           ; 0            ; 0       ; 0         ; 0    ; 0            ; |V1|RP2C02:inst|REG2000_2001:MOD_REG2000_2001                                                                                      ; work         ;
-;       |REGISTER_SELECT:MOD_REGISTER_SELECT|         ; 19 (19)           ; 27 (27)      ; 0           ; 0            ; 0       ; 0         ; 0    ; 0            ; |V1|RP2C02:inst|REGISTER_SELECT:MOD_REGISTER_SELECT                                                                                ; work         ;
-;       |TIMING_COUNTER:MOD_TIMING_COUNTER|           ; 123 (123)         ; 97 (97)      ; 0           ; 0            ; 0       ; 0         ; 0    ; 0            ; |V1|RP2C02:inst|TIMING_COUNTER:MOD_TIMING_COUNTER                                                                                  ; work         ;
-;       |VID_MUX:MOD_VID_MUX|                         ; 17 (17)           ; 23 (23)      ; 0           ; 0            ; 0       ; 0         ; 0    ; 0            ; |V1|RP2C02:inst|VID_MUX:MOD_VID_MUX                                                                                                ; work         ;
-;    |VRAM:inst17|                                    ; 0 (0)             ; 0 (0)        ; 16384       ; 0            ; 0       ; 0         ; 0    ; 0            ; |V1|VRAM:inst17                                                                                                                    ; work         ;
-;       |altsyncram:altsyncram_component|             ; 0 (0)             ; 0 (0)        ; 16384       ; 0            ; 0       ; 0         ; 0    ; 0            ; |V1|VRAM:inst17|altsyncram:altsyncram_component                                                                                    ; work         ;
-;          |altsyncram_3qc1:auto_generated|           ; 0 (0)             ; 0 (0)        ; 16384       ; 0            ; 0       ; 0         ; 0    ; 0            ; |V1|VRAM:inst17|altsyncram:altsyncram_component|altsyncram_3qc1:auto_generated                                                     ; work         ;
+; |V3                                                 ; 921 (1)           ; 1018 (14)    ; 20416       ; 0            ; 0       ; 0         ; 72   ; 0            ; |V3                                                                                                                                ; work         ;
+;    |PLL:inst2|                                      ; 0 (0)             ; 0 (0)        ; 0           ; 0            ; 0       ; 0         ; 0    ; 0            ; |V3|PLL:inst2                                                                                                                      ; work         ;
+;       |altpll:altpll_component|                     ; 0 (0)             ; 0 (0)        ; 0           ; 0            ; 0       ; 0         ; 0    ; 0            ; |V3|PLL:inst2|altpll:altpll_component                                                                                              ; work         ;
+;    |RP2C02:inst|                                    ; 920 (3)           ; 1004 (6)     ; 4032        ; 0            ; 0       ; 0         ; 0    ; 0            ; |V3|RP2C02:inst                                                                                                                    ; work         ;
+;       |ADDRESS_BUS_CONTROL:MOD_ADDRESS_BUS_CONTROL| ; 18 (18)           ; 13 (13)      ; 0           ; 0            ; 0       ; 0         ; 0    ; 0            ; |V3|RP2C02:inst|ADDRESS_BUS_CONTROL:MOD_ADDRESS_BUS_CONTROL                                                                        ; work         ;
+;       |BG_COLOR:MOD_BG_COLOR|                       ; 44 (28)           ; 129 (97)     ; 0           ; 0            ; 0       ; 0         ; 0    ; 0            ; |V3|RP2C02:inst|BG_COLOR:MOD_BG_COLOR                                                                                              ; work         ;
+;          |SHIFTREG:SREG_TA|                         ; 8 (8)             ; 16 (16)      ; 0           ; 0            ; 0       ; 0         ; 0    ; 0            ; |V3|RP2C02:inst|BG_COLOR:MOD_BG_COLOR|SHIFTREG:SREG_TA                                                                             ; work         ;
+;          |SHIFTREG:SREG_TB|                         ; 8 (8)             ; 16 (16)      ; 0           ; 0            ; 0       ; 0         ; 0    ; 0            ; |V3|RP2C02:inst|BG_COLOR:MOD_BG_COLOR|SHIFTREG:SREG_TB                                                                             ; work         ;
+;       |OAM:MOD_OAM|                                 ; 78 (78)           ; 60 (60)      ; 2304        ; 0            ; 0       ; 0         ; 0    ; 0            ; |V3|RP2C02:inst|OAM:MOD_OAM                                                                                                        ; work         ;
+;          |OAM2_RAM:MOD_OAM2_RAM|                    ; 0 (0)             ; 0 (0)        ; 256         ; 0            ; 0       ; 0         ; 0    ; 0            ; |V3|RP2C02:inst|OAM:MOD_OAM|OAM2_RAM:MOD_OAM2_RAM                                                                                  ; work         ;
+;             |altsyncram:altsyncram_component|       ; 0 (0)             ; 0 (0)        ; 256         ; 0            ; 0       ; 0         ; 0    ; 0            ; |V3|RP2C02:inst|OAM:MOD_OAM|OAM2_RAM:MOD_OAM2_RAM|altsyncram:altsyncram_component                                                  ; work         ;
+;                |altsyncram_lpa1:auto_generated|     ; 0 (0)             ; 0 (0)        ; 256         ; 0            ; 0       ; 0         ; 0    ; 0            ; |V3|RP2C02:inst|OAM:MOD_OAM|OAM2_RAM:MOD_OAM2_RAM|altsyncram:altsyncram_component|altsyncram_lpa1:auto_generated                   ; work         ;
+;          |OAM_RAM:MOD_OAM_RAM|                      ; 0 (0)             ; 0 (0)        ; 2048        ; 0            ; 0       ; 0         ; 0    ; 0            ; |V3|RP2C02:inst|OAM:MOD_OAM|OAM_RAM:MOD_OAM_RAM                                                                                    ; work         ;
+;             |altsyncram:altsyncram_component|       ; 0 (0)             ; 0 (0)        ; 2048        ; 0            ; 0       ; 0         ; 0    ; 0            ; |V3|RP2C02:inst|OAM:MOD_OAM|OAM_RAM:MOD_OAM_RAM|altsyncram:altsyncram_component                                                    ; work         ;
+;                |altsyncram_gra1:auto_generated|     ; 0 (0)             ; 0 (0)        ; 2048        ; 0            ; 0       ; 0         ; 0    ; 0            ; |V3|RP2C02:inst|OAM:MOD_OAM|OAM_RAM:MOD_OAM_RAM|altsyncram:altsyncram_component|altsyncram_gra1:auto_generated                     ; work         ;
+;       |OBJ_EVAL:MOD_OBJ_EVAL|                       ; 25 (25)           ; 19 (19)      ; 0           ; 0            ; 0       ; 0         ; 0    ; 0            ; |V3|RP2C02:inst|OBJ_EVAL:MOD_OBJ_EVAL                                                                                              ; work         ;
+;       |OBJ_FIFO:MOD_OBJ_FIFO|                       ; 415 (95)          ; 473 (73)     ; 0           ; 0            ; 0       ; 0         ; 0    ; 0            ; |V3|RP2C02:inst|OBJ_FIFO:MOD_OBJ_FIFO                                                                                              ; work         ;
+;          |FIFO_HPOSCNT:HPOSCNT0|                    ; 22 (22)           ; 18 (18)      ; 0           ; 0            ; 0       ; 0         ; 0    ; 0            ; |V3|RP2C02:inst|OBJ_FIFO:MOD_OBJ_FIFO|FIFO_HPOSCNT:HPOSCNT0                                                                        ; work         ;
+;          |FIFO_HPOSCNT:HPOSCNT1|                    ; 22 (22)           ; 18 (18)      ; 0           ; 0            ; 0       ; 0         ; 0    ; 0            ; |V3|RP2C02:inst|OBJ_FIFO:MOD_OBJ_FIFO|FIFO_HPOSCNT:HPOSCNT1                                                                        ; work         ;
+;          |FIFO_HPOSCNT:HPOSCNT2|                    ; 22 (22)           ; 18 (18)      ; 0           ; 0            ; 0       ; 0         ; 0    ; 0            ; |V3|RP2C02:inst|OBJ_FIFO:MOD_OBJ_FIFO|FIFO_HPOSCNT:HPOSCNT2                                                                        ; work         ;
+;          |FIFO_HPOSCNT:HPOSCNT3|                    ; 22 (22)           ; 18 (18)      ; 0           ; 0            ; 0       ; 0         ; 0    ; 0            ; |V3|RP2C02:inst|OBJ_FIFO:MOD_OBJ_FIFO|FIFO_HPOSCNT:HPOSCNT3                                                                        ; work         ;
+;          |FIFO_HPOSCNT:HPOSCNT4|                    ; 22 (22)           ; 18 (18)      ; 0           ; 0            ; 0       ; 0         ; 0    ; 0            ; |V3|RP2C02:inst|OBJ_FIFO:MOD_OBJ_FIFO|FIFO_HPOSCNT:HPOSCNT4                                                                        ; work         ;
+;          |FIFO_HPOSCNT:HPOSCNT5|                    ; 22 (22)           ; 18 (18)      ; 0           ; 0            ; 0       ; 0         ; 0    ; 0            ; |V3|RP2C02:inst|OBJ_FIFO:MOD_OBJ_FIFO|FIFO_HPOSCNT:HPOSCNT5                                                                        ; work         ;
+;          |FIFO_HPOSCNT:HPOSCNT6|                    ; 22 (22)           ; 18 (18)      ; 0           ; 0            ; 0       ; 0         ; 0    ; 0            ; |V3|RP2C02:inst|OBJ_FIFO:MOD_OBJ_FIFO|FIFO_HPOSCNT:HPOSCNT6                                                                        ; work         ;
+;          |FIFO_HPOSCNT:HPOSCNT7|                    ; 22 (22)           ; 18 (18)      ; 0           ; 0            ; 0       ; 0         ; 0    ; 0            ; |V3|RP2C02:inst|OBJ_FIFO:MOD_OBJ_FIFO|FIFO_HPOSCNT:HPOSCNT7                                                                        ; work         ;
+;          |SHIFTREG:SREG_0A|                         ; 9 (9)             ; 16 (16)      ; 0           ; 0            ; 0       ; 0         ; 0    ; 0            ; |V3|RP2C02:inst|OBJ_FIFO:MOD_OBJ_FIFO|SHIFTREG:SREG_0A                                                                             ; work         ;
+;          |SHIFTREG:SREG_0B|                         ; 9 (9)             ; 16 (16)      ; 0           ; 0            ; 0       ; 0         ; 0    ; 0            ; |V3|RP2C02:inst|OBJ_FIFO:MOD_OBJ_FIFO|SHIFTREG:SREG_0B                                                                             ; work         ;
+;          |SHIFTREG:SREG_1A|                         ; 9 (9)             ; 16 (16)      ; 0           ; 0            ; 0       ; 0         ; 0    ; 0            ; |V3|RP2C02:inst|OBJ_FIFO:MOD_OBJ_FIFO|SHIFTREG:SREG_1A                                                                             ; work         ;
+;          |SHIFTREG:SREG_1B|                         ; 9 (9)             ; 16 (16)      ; 0           ; 0            ; 0       ; 0         ; 0    ; 0            ; |V3|RP2C02:inst|OBJ_FIFO:MOD_OBJ_FIFO|SHIFTREG:SREG_1B                                                                             ; work         ;
+;          |SHIFTREG:SREG_2A|                         ; 9 (9)             ; 16 (16)      ; 0           ; 0            ; 0       ; 0         ; 0    ; 0            ; |V3|RP2C02:inst|OBJ_FIFO:MOD_OBJ_FIFO|SHIFTREG:SREG_2A                                                                             ; work         ;
+;          |SHIFTREG:SREG_2B|                         ; 9 (9)             ; 16 (16)      ; 0           ; 0            ; 0       ; 0         ; 0    ; 0            ; |V3|RP2C02:inst|OBJ_FIFO:MOD_OBJ_FIFO|SHIFTREG:SREG_2B                                                                             ; work         ;
+;          |SHIFTREG:SREG_3A|                         ; 9 (9)             ; 16 (16)      ; 0           ; 0            ; 0       ; 0         ; 0    ; 0            ; |V3|RP2C02:inst|OBJ_FIFO:MOD_OBJ_FIFO|SHIFTREG:SREG_3A                                                                             ; work         ;
+;          |SHIFTREG:SREG_3B|                         ; 9 (9)             ; 16 (16)      ; 0           ; 0            ; 0       ; 0         ; 0    ; 0            ; |V3|RP2C02:inst|OBJ_FIFO:MOD_OBJ_FIFO|SHIFTREG:SREG_3B                                                                             ; work         ;
+;          |SHIFTREG:SREG_4A|                         ; 9 (9)             ; 16 (16)      ; 0           ; 0            ; 0       ; 0         ; 0    ; 0            ; |V3|RP2C02:inst|OBJ_FIFO:MOD_OBJ_FIFO|SHIFTREG:SREG_4A                                                                             ; work         ;
+;          |SHIFTREG:SREG_4B|                         ; 9 (9)             ; 16 (16)      ; 0           ; 0            ; 0       ; 0         ; 0    ; 0            ; |V3|RP2C02:inst|OBJ_FIFO:MOD_OBJ_FIFO|SHIFTREG:SREG_4B                                                                             ; work         ;
+;          |SHIFTREG:SREG_5A|                         ; 9 (9)             ; 16 (16)      ; 0           ; 0            ; 0       ; 0         ; 0    ; 0            ; |V3|RP2C02:inst|OBJ_FIFO:MOD_OBJ_FIFO|SHIFTREG:SREG_5A                                                                             ; work         ;
+;          |SHIFTREG:SREG_5B|                         ; 9 (9)             ; 16 (16)      ; 0           ; 0            ; 0       ; 0         ; 0    ; 0            ; |V3|RP2C02:inst|OBJ_FIFO:MOD_OBJ_FIFO|SHIFTREG:SREG_5B                                                                             ; work         ;
+;          |SHIFTREG:SREG_6A|                         ; 9 (9)             ; 16 (16)      ; 0           ; 0            ; 0       ; 0         ; 0    ; 0            ; |V3|RP2C02:inst|OBJ_FIFO:MOD_OBJ_FIFO|SHIFTREG:SREG_6A                                                                             ; work         ;
+;          |SHIFTREG:SREG_6B|                         ; 9 (9)             ; 16 (16)      ; 0           ; 0            ; 0       ; 0         ; 0    ; 0            ; |V3|RP2C02:inst|OBJ_FIFO:MOD_OBJ_FIFO|SHIFTREG:SREG_6B                                                                             ; work         ;
+;          |SHIFTREG:SREG_7A|                         ; 9 (9)             ; 16 (16)      ; 0           ; 0            ; 0       ; 0         ; 0    ; 0            ; |V3|RP2C02:inst|OBJ_FIFO:MOD_OBJ_FIFO|SHIFTREG:SREG_7A                                                                             ; work         ;
+;          |SHIFTREG:SREG_7B|                         ; 9 (9)             ; 16 (16)      ; 0           ; 0            ; 0       ; 0         ; 0    ; 0            ; |V3|RP2C02:inst|OBJ_FIFO:MOD_OBJ_FIFO|SHIFTREG:SREG_7B                                                                             ; work         ;
+;       |PALETTE:MOD_PALETTE|                         ; 32 (32)           ; 8 (8)        ; 1728        ; 0            ; 0       ; 0         ; 0    ; 0            ; |V3|RP2C02:inst|PALETTE:MOD_PALETTE                                                                                                ; work         ;
+;          |PALETTE_RAM:MOD_PALETTE_RAM|              ; 0 (0)             ; 0 (0)        ; 192         ; 0            ; 0       ; 0         ; 0    ; 0            ; |V3|RP2C02:inst|PALETTE:MOD_PALETTE|PALETTE_RAM:MOD_PALETTE_RAM                                                                    ; work         ;
+;             |altsyncram:altsyncram_component|       ; 0 (0)             ; 0 (0)        ; 192         ; 0            ; 0       ; 0         ; 0    ; 0            ; |V3|RP2C02:inst|PALETTE:MOD_PALETTE|PALETTE_RAM:MOD_PALETTE_RAM|altsyncram:altsyncram_component                                    ; work         ;
+;                |altsyncram_u2a1:auto_generated|     ; 0 (0)             ; 0 (0)        ; 192         ; 0            ; 0       ; 0         ; 0    ; 0            ; |V3|RP2C02:inst|PALETTE:MOD_PALETTE|PALETTE_RAM:MOD_PALETTE_RAM|altsyncram:altsyncram_component|altsyncram_u2a1:auto_generated     ; work         ;
+;          |PALETTE_RGB_TABLE:MOD_RGB_TABLE|          ; 0 (0)             ; 0 (0)        ; 1536        ; 0            ; 0       ; 0         ; 0    ; 0            ; |V3|RP2C02:inst|PALETTE:MOD_PALETTE|PALETTE_RGB_TABLE:MOD_RGB_TABLE                                                                ; work         ;
+;             |altsyncram:altsyncram_component|       ; 0 (0)             ; 0 (0)        ; 1536        ; 0            ; 0       ; 0         ; 0    ; 0            ; |V3|RP2C02:inst|PALETTE:MOD_PALETTE|PALETTE_RGB_TABLE:MOD_RGB_TABLE|altsyncram:altsyncram_component                                ; work         ;
+;                |altsyncram_mn81:auto_generated|     ; 0 (0)             ; 0 (0)        ; 1536        ; 0            ; 0       ; 0         ; 0    ; 0            ; |V3|RP2C02:inst|PALETTE:MOD_PALETTE|PALETTE_RGB_TABLE:MOD_RGB_TABLE|altsyncram:altsyncram_component|altsyncram_mn81:auto_generated ; work         ;
+;       |PAR_GEN:MOD_PAR_GEN|                         ; 114 (114)         ; 114 (114)    ; 0           ; 0            ; 0       ; 0         ; 0    ; 0            ; |V3|RP2C02:inst|PAR_GEN:MOD_PAR_GEN                                                                                                ; work         ;
+;       |READBUSMUX:MOD_READBUSMUX|                   ; 26 (26)           ; 16 (16)      ; 0           ; 0            ; 0       ; 0         ; 0    ; 0            ; |V3|RP2C02:inst|READBUSMUX:MOD_READBUSMUX                                                                                          ; work         ;
+;       |REG2000_2001:MOD_REG2000_2001|               ; 2 (2)             ; 21 (21)      ; 0           ; 0            ; 0       ; 0         ; 0    ; 0            ; |V3|RP2C02:inst|REG2000_2001:MOD_REG2000_2001                                                                                      ; work         ;
+;       |REGISTER_SELECT:MOD_REGISTER_SELECT|         ; 20 (20)           ; 27 (27)      ; 0           ; 0            ; 0       ; 0         ; 0    ; 0            ; |V3|RP2C02:inst|REGISTER_SELECT:MOD_REGISTER_SELECT                                                                                ; work         ;
+;       |TIMING_COUNTER:MOD_TIMING_COUNTER|           ; 126 (126)         ; 95 (95)      ; 0           ; 0            ; 0       ; 0         ; 0    ; 0            ; |V3|RP2C02:inst|TIMING_COUNTER:MOD_TIMING_COUNTER                                                                                  ; work         ;
+;       |VID_MUX:MOD_VID_MUX|                         ; 17 (17)           ; 23 (23)      ; 0           ; 0            ; 0       ; 0         ; 0    ; 0            ; |V3|RP2C02:inst|VID_MUX:MOD_VID_MUX                                                                                                ; work         ;
+;    |VRAM:inst17|                                    ; 0 (0)             ; 0 (0)        ; 16384       ; 0            ; 0       ; 0         ; 0    ; 0            ; |V3|VRAM:inst17                                                                                                                    ; work         ;
+;       |altsyncram:altsyncram_component|             ; 0 (0)             ; 0 (0)        ; 16384       ; 0            ; 0       ; 0         ; 0    ; 0            ; |V3|VRAM:inst17|altsyncram:altsyncram_component                                                                                    ; work         ;
+;          |altsyncram_3qc1:auto_generated|           ; 0 (0)             ; 0 (0)        ; 16384       ; 0            ; 0       ; 0         ; 0    ; 0            ; |V3|VRAM:inst17|altsyncram:altsyncram_component|altsyncram_3qc1:auto_generated                                                     ; work         ;
 +-----------------------------------------------------+-------------------+--------------+-------------+--------------+---------+-----------+------+--------------+------------------------------------------------------------------------------------------------------------------------------------+--------------+
 Note: For table entries with two numbers listed, the numbers in parentheses indicate the number of resources of the given type used by the specific entity alone. The numbers listed outside of parentheses indicate the total resources of the given type used by the specific entity and all of its sub-entities in the hierarchy.
 
@@ -322,18 +322,18 @@ Note: For table entries with two numbers listed, the numbers in parentheses indi
 +-------------------------------------------------------------------------------------------------------------------------------------------+------+-------------+--------------+--------------+--------------+--------------+-------+----------------------------+
 
 
-+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
-; Analysis & Synthesis IP Cores Summary                                                                                                                                               ;
-+--------+--------------+---------+--------------+--------------+---------------------------------------------------------------------+-----------------------------------------------+
-; Vendor ; IP Core Name ; Version ; Release Date ; License Type ; Entity Instance                                                     ; IP Include File                               ;
-+--------+--------------+---------+--------------+--------------+---------------------------------------------------------------------+-----------------------------------------------+
-; Altera ; RAM: 1-PORT  ; 13.0    ; N/A          ; N/A          ; |V1|RP2C02:inst|OAM:MOD_OAM|OAM2_RAM:MOD_OAM2_RAM                   ; C:/altera/13.0sp1/RP2C02G/OAM2_RAM.v          ;
-; Altera ; RAM: 1-PORT  ; 13.0    ; N/A          ; N/A          ; |V1|RP2C02:inst|OAM:MOD_OAM|OAM_RAM:MOD_OAM_RAM                     ; C:/altera/13.0sp1/RP2C02G/OAM_RAM.v           ;
-; Altera ; RAM: 1-PORT  ; 13.0    ; N/A          ; N/A          ; |V1|RP2C02:inst|PALETTE:MOD_PALETTE|PALETTE_RAM:MOD_PALETTE_RAM     ; C:/altera/13.0sp1/RP2C02G/PALETTE_RAM.v       ;
-; Altera ; ROM: 1-PORT  ; 13.0    ; N/A          ; N/A          ; |V1|RP2C02:inst|PALETTE:MOD_PALETTE|PALETTE_RGB_TABLE:MOD_RGB_TABLE ; C:/altera/13.0sp1/RP2C02G/PALETTE_RGB_TABLE.v ;
-; Altera ; ALTPLL       ; 13.0    ; N/A          ; N/A          ; |V1|PLL:inst2                                                       ; C:/altera/13.0sp1/RP2C02G/PLL.v               ;
-; Altera ; RAM: 1-PORT  ; 13.0    ; N/A          ; N/A          ; |V1|VRAM:inst17                                                     ; C:/altera/13.0sp1/RP2C02G/VRAM.v              ;
-+--------+--------------+---------+--------------+--------------+---------------------------------------------------------------------+-----------------------------------------------+
++----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+; Analysis & Synthesis IP Cores Summary                                                                                                                                                              ;
++--------+--------------+---------+--------------+--------------+---------------------------------------------------------------------+--------------------------------------------------------------+
+; Vendor ; IP Core Name ; Version ; Release Date ; License Type ; Entity Instance                                                     ; IP Include File                                              ;
++--------+--------------+---------+--------------+--------------+---------------------------------------------------------------------+--------------------------------------------------------------+
+; Altera ; RAM: 1-PORT  ; 13.0    ; N/A          ; N/A          ; |V3|RP2C02:inst|OAM:MOD_OAM|OAM2_RAM:MOD_OAM2_RAM                   ; E:/RP2C02-7--main/RP2C02-7--main/Quartus/OAM2_RAM.v          ;
+; Altera ; RAM: 1-PORT  ; 13.0    ; N/A          ; N/A          ; |V3|RP2C02:inst|OAM:MOD_OAM|OAM_RAM:MOD_OAM_RAM                     ; E:/RP2C02-7--main/RP2C02-7--main/Quartus/OAM_RAM.v           ;
+; Altera ; RAM: 1-PORT  ; 13.0    ; N/A          ; N/A          ; |V3|RP2C02:inst|PALETTE:MOD_PALETTE|PALETTE_RAM:MOD_PALETTE_RAM     ; E:/RP2C02-7--main/RP2C02-7--main/Quartus/PALETTE_RAM.v       ;
+; Altera ; ROM: 1-PORT  ; 13.0    ; N/A          ; N/A          ; |V3|RP2C02:inst|PALETTE:MOD_PALETTE|PALETTE_RGB_TABLE:MOD_RGB_TABLE ; E:/RP2C02-7--main/RP2C02-7--main/Quartus/PALETTE_RGB_TABLE.v ;
+; Altera ; ALTPLL       ; 13.0    ; N/A          ; N/A          ; |V3|PLL:inst2                                                       ; E:/RP2C02-7--main/RP2C02-7--main/Quartus/PLL.v               ;
+; Altera ; RAM: 1-PORT  ; 13.0    ; N/A          ; N/A          ; |V3|VRAM:inst17                                                     ; E:/RP2C02-7--main/RP2C02-7--main/Quartus/VRAM.v              ;
++--------+--------------+---------+--------------+--------------+---------------------------------------------------------------------+--------------------------------------------------------------+
 
 
 +------------------------------------------------------------------------------------------------------------------------------------------+
@@ -341,6 +341,7 @@ Note: For table entries with two numbers listed, the numbers in parentheses indi
 +---------------------------------------------------------------------+--------------------------------------------------------------------+
 ; Register name                                                       ; Reason for Removal                                                 ;
 +---------------------------------------------------------------------+--------------------------------------------------------------------+
+; RP2C02:inst|TIMING_COUNTER:MOD_TIMING_COUNTER|RC                    ; Stuck at GND due to stuck port data_in                             ;
 ; RP2C02:inst|ADDRESS_BUS_CONTROL:MOD_ADDRESS_BUS_CONTROL|TSTEP_LATCH ; Merged with RP2C02:inst|PALETTE:MOD_PALETTE|DB_PARR                ;
 ; RP2C02:inst|BG_COLOR:MOD_BG_COLOR|THO1R                             ; Merged with RP2C02:inst|VID_MUX:MOD_VID_MUX|THO_LATCH[1]           ;
 ; RP2C02:inst|OAM:MOD_OAM|OSTEP3                                      ; Merged with RP2C02:inst|OAM:MOD_OAM|OMFG_LATCH                     ;
@@ -355,7 +356,7 @@ Note: For table entries with two numbers listed, the numbers in parentheses indi
 ; RP2C02:inst|TIMING_COUNTER:MOD_TIMING_COUNTER|VC_LATCH              ; Merged with RP2C02:inst|TIMING_COUNTER:MOD_TIMING_COUNTER|RESCL_IN ;
 ; RP2C02:inst|TIMING_COUNTER:MOD_TIMING_COUNTER|H_IN[0]               ; Merged with RP2C02:inst|TIMING_COUNTER:MOD_TIMING_COUNTER|Hn[0]    ;
 ; RP2C02:inst|PAR_GEN:MOD_PAR_GEN|TAL_LATCH                           ; Merged with RP2C02:inst|OBJ_EVAL:MOD_OBJ_EVAL|PD_FIFO2             ;
-; Total Number of Removed Registers = 14                              ;                                                                    ;
+; Total Number of Removed Registers = 15                              ;                                                                    ;
 +---------------------------------------------------------------------+--------------------------------------------------------------------+
 
 
@@ -364,34 +365,30 @@ Note: For table entries with two numbers listed, the numbers in parentheses indi
 +----------------------------------------------+-------+
 ; Statistic                                    ; Value ;
 +----------------------------------------------+-------+
-; Total registers                              ; 1028  ;
-; Number of registers using Synchronous Clear  ; 47    ;
-; Number of registers using Synchronous Load   ; 19    ;
+; Total registers                              ; 1018  ;
+; Number of registers using Synchronous Clear  ; 8     ;
+; Number of registers using Synchronous Load   ; 13    ;
 ; Number of registers using Asynchronous Clear ; 0     ;
 ; Number of registers using Asynchronous Load  ; 0     ;
-; Number of registers using Clock Enable       ; 974   ;
+; Number of registers using Clock Enable       ; 961   ;
 ; Number of registers using Preset             ; 0     ;
 +----------------------------------------------+-------+
 
 
-+-----------------------------------------------------------------------------------------------------------------------------------------------------------------+
-; Multiplexer Restructuring Statistics (Restructuring Performed)                                                                                                  ;
-+--------------------+-----------+---------------+----------------------+------------------------+------------+---------------------------------------------------+
-; Multiplexer Inputs ; Bus Width ; Baseline Area ; Area if Restructured ; Saving if Restructured ; Registered ; Example Multiplexer Output                        ;
-+--------------------+-----------+---------------+----------------------+------------------------+------------+---------------------------------------------------+
-; 3:1                ; 2 bits    ; 4 LEs         ; 4 LEs                ; 0 LEs                  ; Yes        ; |V1|RP2C02:inst|PAR_GEN:MOD_PAR_GEN|TP[11]        ;
-; 3:1                ; 3 bits    ; 6 LEs         ; 3 LEs                ; 3 LEs                  ; Yes        ; |V1|RP2C02:inst|BG_COLOR:MOD_BG_COLOR|FH[2]       ;
-; 3:1                ; 8 bits    ; 16 LEs        ; 8 LEs                ; 8 LEs                  ; Yes        ; |V1|RP2C02:inst|READBUSMUX:MOD_READBUSMUX|PD_R[1] ;
-; 3:1                ; 2 bits    ; 4 LEs         ; 4 LEs                ; 0 LEs                  ; Yes        ; |V1|RP2C02:inst|PAR_GEN:MOD_PAR_GEN|PAD[9]        ;
-; 3:1                ; 5 bits    ; 10 LEs        ; 10 LEs               ; 0 LEs                  ; Yes        ; |V1|RP2C02:inst|PAR_GEN:MOD_PAR_GEN|TVO[1]        ;
-; 4:1                ; 2 bits    ; 4 LEs         ; 4 LEs                ; 0 LEs                  ; Yes        ; |V1|RP2C02:inst|READBUSMUX:MOD_READBUSMUX|Do[7]   ;
-; 8:1                ; 4 bits    ; 20 LEs        ; 20 LEs               ; 0 LEs                  ; Yes        ; |V1|RP2C02:inst|BG_COLOR:MOD_BG_COLOR|BGC1[0]     ;
-; 4:1                ; 2 bits    ; 4 LEs         ; 4 LEs                ; 0 LEs                  ; Yes        ; |V1|RP2C02:inst|PAR_GEN:MOD_PAR_GEN|PAD[7]        ;
-; 4:1                ; 6 bits    ; 12 LEs        ; 12 LEs               ; 0 LEs                  ; Yes        ; |V1|RP2C02:inst|PAR_GEN:MOD_PAR_GEN|PAD[5]        ;
-; 5:1                ; 5 bits    ; 15 LEs        ; 10 LEs               ; 5 LEs                  ; Yes        ; |V1|RP2C02:inst|READBUSMUX:MOD_READBUSMUX|Do[2]   ;
-; 9:1                ; 5 bits    ; 30 LEs        ; 30 LEs               ; 0 LEs                  ; Yes        ; |V1|RP2C02:inst|VID_MUX:MOD_VID_MUX|ZCOLN[0]      ;
-; 3:1                ; 2 bits    ; 4 LEs         ; 4 LEs                ; 0 LEs                  ; No         ; |V1|RP2C02:inst|BG_COLOR:MOD_BG_COLOR|ATSEL0      ;
-+--------------------+-----------+---------------+----------------------+------------------------+------------+---------------------------------------------------+
++-------------------------------------------------------------------------------------------------------------------------------------------------------------+
+; Multiplexer Restructuring Statistics (Restructuring Performed)                                                                                              ;
++--------------------+-----------+---------------+----------------------+------------------------+------------+-----------------------------------------------+
+; Multiplexer Inputs ; Bus Width ; Baseline Area ; Area if Restructured ; Saving if Restructured ; Registered ; Example Multiplexer Output                    ;
++--------------------+-----------+---------------+----------------------+------------------------+------------+-----------------------------------------------+
+; 3:1                ; 2 bits    ; 4 LEs         ; 4 LEs                ; 0 LEs                  ; Yes        ; |V3|RP2C02:inst|PAR_GEN:MOD_PAR_GEN|TP[11]    ;
+; 3:1                ; 2 bits    ; 4 LEs         ; 4 LEs                ; 0 LEs                  ; Yes        ; |V3|RP2C02:inst|PAR_GEN:MOD_PAR_GEN|PAD[9]    ;
+; 3:1                ; 5 bits    ; 10 LEs        ; 10 LEs               ; 0 LEs                  ; Yes        ; |V3|RP2C02:inst|PAR_GEN:MOD_PAR_GEN|TVO[3]    ;
+; 8:1                ; 4 bits    ; 20 LEs        ; 20 LEs               ; 0 LEs                  ; Yes        ; |V3|RP2C02:inst|BG_COLOR:MOD_BG_COLOR|BGC1[3] ;
+; 9:1                ; 5 bits    ; 30 LEs        ; 30 LEs               ; 0 LEs                  ; Yes        ; |V3|RP2C02:inst|VID_MUX:MOD_VID_MUX|ZCOLN[2]  ;
+; 4:1                ; 2 bits    ; 4 LEs         ; 4 LEs                ; 0 LEs                  ; Yes        ; |V3|RP2C02:inst|PAR_GEN:MOD_PAR_GEN|PAD[7]    ;
+; 4:1                ; 6 bits    ; 12 LEs        ; 12 LEs               ; 0 LEs                  ; Yes        ; |V3|RP2C02:inst|PAR_GEN:MOD_PAR_GEN|PAD[3]    ;
+; 3:1                ; 2 bits    ; 4 LEs         ; 4 LEs                ; 0 LEs                  ; No         ; |V3|RP2C02:inst|BG_COLOR:MOD_BG_COLOR|ATSEL1  ;
++--------------------+-----------+---------------+----------------------+------------------------+------------+-----------------------------------------------+
 
 
 +-----------------------------------------------------------------------------------------------------------------------------------+
@@ -1234,7 +1231,7 @@ Note: In order to hide this table in the UI and the text report file, please set
 Info: *******************************************************************
 Info: Running Quartus II 64-Bit Analysis & Synthesis
     Info: Version 13.0.1 Build 232 06/12/2013 Service Pack 1 SJ Web Edition
-    Info: Processing started: Thu Aug 01 15:19:06 2024
+    Info: Processing started: Tue Jan 07 18:30:11 2025
 Info: Command: quartus_map --read_settings_files=on --write_settings_files=off RP2C02G -c RP2C02G
 Info (12021): Found 1 design units, including 1 entities, in source file vram.v
     Info (12023): Found entity 1: VRAM
@@ -1270,7 +1267,7 @@ Info (12021): Found 1 design units, including 1 entities, in source file v2.bdf
     Info (12023): Found entity 1: V2
 Info (12021): Found 1 design units, including 1 entities, in source file v3.bdf
     Info (12023): Found entity 1: V3
-Info (12127): Elaborating entity "V1" for the top level hierarchy
+Info (12127): Elaborating entity "V3" for the top level hierarchy
 Info (12128): Elaborating entity "RP2C02" for hierarchy "RP2C02:inst"
 Info (12128): Elaborating entity "REGISTER_SELECT" for hierarchy "RP2C02:inst|REGISTER_SELECT:MOD_REGISTER_SELECT"
 Info (12128): Elaborating entity "REG2000_2001" for hierarchy "RP2C02:inst|REG2000_2001:MOD_REG2000_2001"
@@ -1448,26 +1445,28 @@ Info (12133): Instantiated megafunction "VRAM:inst17|altsyncram:altsyncram_compo
 Info (12021): Found 1 design units, including 1 entities, in source file db/altsyncram_3qc1.tdf
     Info (12023): Found entity 1: altsyncram_3qc1
 Info (12128): Elaborating entity "altsyncram_3qc1" for hierarchy "VRAM:inst17|altsyncram:altsyncram_component|altsyncram_3qc1:auto_generated"
-Info (144001): Generated suppressed messages file C:/altera/13.0sp1/RP2C02G/output_files/RP2C02G.map.smsg
+Warning (13024): Output pins are stuck at VCC or GND
+    Warning (13410): Pin "nOE" is stuck at GND
+Info (144001): Generated suppressed messages file E:/RP2C02-7--main/RP2C02-7--main/Quartus/output_files/RP2C02G.map.smsg
 Info (16010): Generating hard_block partition "hard_block:auto_generated_inst"
     Info (16011): Adding 1 node(s), including 0 DDIO, 1 PLL, 0 transceiver and 0 LCELL
-Info (21057): Implemented 1520 device resources after synthesis - the final resource count might be different
+Info (21057): Implemented 1503 device resources after synthesis - the final resource count might be different
     Info (21058): Implemented 11 input pins
-    Info (21059): Implemented 44 output pins
+    Info (21059): Implemented 45 output pins
     Info (21060): Implemented 16 bidirectional pins
-    Info (21061): Implemented 1394 logic cells
+    Info (21061): Implemented 1376 logic cells
     Info (21064): Implemented 54 RAM segments
     Info (21065): Implemented 1 PLLs
-Info: Quartus II 64-Bit Analysis & Synthesis was successful. 0 errors, 0 warnings
-    Info: Peak virtual memory: 488 megabytes
-    Info: Processing ended: Thu Aug 01 15:19:10 2024
-    Info: Elapsed time: 00:00:04
+Info: Quartus II 64-Bit Analysis & Synthesis was successful. 0 errors, 2 warnings
+    Info: Peak virtual memory: 480 megabytes
+    Info: Processing ended: Tue Jan 07 18:30:14 2025
+    Info: Elapsed time: 00:00:03
     Info: Total CPU time (on all processors): 00:00:03
 
 
 +------------------------------------------+
 ; Analysis & Synthesis Suppressed Messages ;
 +------------------------------------------+
-The suppressed messages can be found in C:/altera/13.0sp1/RP2C02G/output_files/RP2C02G.map.smsg.
+The suppressed messages can be found in E:/RP2C02-7--main/RP2C02-7--main/Quartus/output_files/RP2C02G.map.smsg.
 
 
