@@ -680,7 +680,7 @@ reg RESCL_IN;
 reg BLNK_FF;
 reg VB_FF;
 reg VSET1,VSET2,VSET3;
-reg INT_FF, R2FEDGE; 
+reg INT_FF; 
 // Combinatorics
 // HV COUNTERS CONTROL
 wire [8:0]HCarry;
@@ -1567,8 +1567,8 @@ assign BGCF[3:0] = ( ~( BGC_LATCH | ZCOL_LATCH )) ? 4'b0000 : STEP2[3:0];
 assign CGA[4:0] = TH_MUX ? THO_LATCH[4:0] : STEP3[4:0];
 // Logics
 always @(posedge Clk) begin
-         if (RESCL) R2BOUT6 <= 1'b0;
-	 else if (~( PCLK | nVIS | SPR0_EV | nSPR0HIT | ~( BGC[0] | BGC[1] ))) R2DB6 <= 1'b1;
+	 if (RESCL) R2DB6 <= 1'b0;
+    else if (~( PCLK | nVIS | SPR0_EV | nSPR0HIT | ~( BGC[0] | BGC[1] ))) R2DB6 <= 1'b1;
          if (PCLK) begin
 	 ZCOLN[4:0] <= ZCOL[4:0];
 	 THO_LATCH[4:0] <= THO[4:0];
