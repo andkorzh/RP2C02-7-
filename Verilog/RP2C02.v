@@ -780,7 +780,7 @@ always @(posedge Clk) begin
          if (nPCLK) begin
          H_IN[8:0] <= H[8:0] ^ {HCarry[7:5],HIN5,HCarry[3:0], 1'b1};
 	 V_IN[8:0] <= V[8:0] ^ {VCarry[7:0], H_LINE23};
-         HC        <= ~( H_LINE23 | ( H_LINE5 & ~ODDEVEN & RESCL & ~MODE ));
+	 HC        <= ~( H_LINE23 | ( H_LINE5 & ~ODDEVEN1 & RESCL & ~MODE ));
 	 VC_LATCH  <= V_LINE2N | VLINE311;
 	 Hn[5:0]   <= H[5:0];
          SEV_IN    <= H_LINE2;
