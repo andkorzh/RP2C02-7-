@@ -37,6 +37,7 @@ input Clk,               // System clock
 input Clk2,	         // Clock 21.477/26.601 for divider
 // Inputs
 input MODE,              // PAL/NTSC mode
+input DENDY,             // DENDY mode	(for PAL)
 input nRES,              // Reset signal
 input RnW,               // External Pin Read/Write	
 input nDBE,              // PPU access strobe
@@ -49,8 +50,8 @@ output [23:0]RGB,        // RGB output
 output [13:0]PAD,        // PPU Bus Address Output
 output INT,              // NMI Interrupt Request Output
 output ALE,              // ALE VRAM Address Low Byte Latch Strobe Output
-output WR,               // VRAM Write Strobe	
-output RD,               // VRAM Read Strobe
+output nWR,              // VRAM Write Strobe	
+output nRD,              // VRAM Read Strobe
 output SYNC,             // Composite sync output
 output [7:0]DBIN,        // CPU Internal Data Bus
 output DB_PAR            // Forwarding CPU data to PPU bus
@@ -133,21 +134,17 @@ wire RPIX;
 reg PCLK_N1, PCLK_N2;
 reg PCLK_P1, PCLK_P2, PCLK_P3, PCLK_P4;
 // Combinatorics
-assign PCLK  = MODE ? (PCLK_P3 | PCLK_P4) : PCLK_N2;
+assign PCLK  =  PCLK_N2 | PCLK_P3 | PCLK_P4;
 assign nPCLK = ~PCLK;
 // Logics (Pixel clock divider)
-always @(negedge Clk2) begin
-        if (~MODE) begin      // If NTSC
-	PCLK_N1 <= ~( ~nRES | PCLK_N2 );		  
-        PCLK_N2 <= PCLK_N1;
-		   end
-	if (MODE) begin       // If PAL
-        PCLK_P1 <= ~( ~nRES | ( PCLK_P2 | PCLK_P3 ));
-	PCLK_P2 <= PCLK_P1;
-	PCLK_P3 <= PCLK_P2;
-                  end		  
-                      end
 always @(posedge Clk2) begin
+	PCLK_N1 <= ~( ~nRES |  MODE | PCLK_N2 );
+        PCLK_N2 <= PCLK_N1;
+        PCLK_P1 <= ~( ~nRES | ~MODE | ( PCLK_P2 | PCLK_P3 ));
+	PCLK_P2 <= PCLK_P1;
+	PCLK_P3 <= PCLK_P2;	  
+                      end
+always @(negedge Clk2) begin
 	PCLK_P4 <= PCLK_P2;
                        end							 
 // Register Selection Signals
@@ -224,7 +221,8 @@ TIMING_COUNTER MOD_TIMING_COUNTER(
 Clk,			   
 PCLK,	         
 nPCLK,
-MODE,         
+MODE,
+DENDY,	
 OBCLIP,        
 BGCLIP,        
 BLACK,         
@@ -276,8 +274,8 @@ TSTEP,
 PD_RB,		
 DB_PAR,	
 ALE,		
-WR,			
-RD,			
+nWR,			
+nRD,			
 XRB,			
 TH_MUX	
 );
@@ -468,11 +466,8 @@ output reg R7		   // Reading from register #2007
 reg [2:0]ADR;
 reg RnWR;
 reg nDBER;
-reg Sel;
-reg FlipR;
+reg DWR1, DWR2;
 // Combinatorics
-wire Flip;
-assign Flip = W5_1 | W5_2 | W6_1 | W6_2;
 assign R_EN = RnWR & ~nDBER; 
 // Logics
 always @(posedge Clk) begin
@@ -485,15 +480,16 @@ always @(posedge Clk) begin
 	     W3   <= ~ADR[2] &  ADR[1] &  ADR[0] & ~RnWR & ~nDBER;
 	     R4   <=  ADR[2] & ~ADR[1] & ~ADR[0] &  RnWR & ~nDBER;
 	     W4   <=  ADR[2] & ~ADR[1] & ~ADR[0] & ~RnWR & ~nDBER;
-	     W5_1 <=  ADR[2] & ~ADR[1] &  ADR[0] & ~RnWR & ~nDBER & ~Sel;
-	     W5_2 <=  ADR[2] & ~ADR[1] &  ADR[0] & ~RnWR & ~nDBER &  Sel;
-	     W6_1 <=  ADR[2] &  ADR[1] & ~ADR[0] & ~RnWR & ~nDBER & ~Sel;
-	     W6_2 <=  ADR[2] &  ADR[1] & ~ADR[0] & ~RnWR & ~nDBER &  Sel;
+	     W5_1 <=  ADR[2] & ~ADR[1] &  ADR[0] & ~RnWR & ~nDBER &  DWR2;;
+	     W5_2 <=  ADR[2] & ~ADR[1] &  ADR[0] & ~RnWR & ~nDBER & ~DWR2;;
+	     W6_1 <=  ADR[2] &  ADR[1] & ~ADR[0] & ~RnWR & ~nDBER &  DWR2;;
+	     W6_2 <=  ADR[2] &  ADR[1] & ~ADR[0] & ~RnWR & ~nDBER & ~DWR2;;
 	     R7   <=  ADR[2] &  ADR[1] &  ADR[0] &  RnWR & ~nDBER;
 	     W7   <=  ADR[2] &  ADR[1] &  ADR[0] & ~RnWR & ~nDBER;
-	     if (R2) Sel <= 1'b0;
-	else if (FlipR & ~Flip) Sel <= ~Sel;
-	     FlipR <= Flip;
+	     if (R2) DWR1 <= 1'b1;
+	else if (W5_1 | W5_2 | W6_1 | W6_2) DWR1 <= ~DWR2;
+	     if (R2) DWR2 <= 1'b1;
+	else if (~(W5_1 | W5_2 | W6_1 | W6_2)) DWR2 <=  DWR1;	  
 	     if (~nDBE & ~RnW) DBIN[7:0] <= DB[7:0];
                       end
 endmodule
@@ -546,8 +542,8 @@ assign N_TG = ~EMP_G;
 assign N_TB = ~W1R[7]; 
 // Logics
 always @(posedge Clk) begin
-	if (W0) W0R[4:0] <= RC ? 5'b0 : {DBIN[7],DBIN[5:2]};
-	if (W1) W1R[7:0] <= RC ? 8'b0 : DBIN[7:0];
+	if (W0) W0R[4:0] <= RC ? 5'h00 : {DBIN[7],DBIN[5:2]};
+	if (W1) W1R[7:0] <= RC ? 8'h00 : DBIN[7:0];
 	if (~W0) I1_32   <= W0R[0];
         if (~W0) OBSEL   <= W0R[1];
 	if (~W0) BGSEL   <= W0R[2];
@@ -575,11 +571,11 @@ input Clk,		// System clock
 input PCLK,		// Pixel clock
 // Inputs
 input R_EN,             // CPU Data Bus Tristate Management
-input R4,		// R4 Selection
+input R4,		// 2004 Reading Selection
 input [7:0]OB,		// Sprite data bus
 input RPIX,		// Selecting RAM data palette
 input [5:0]PIX,		// RAM data palette
-input R2,		// R2 Reading Selection
+input R2,		// 2002 Reading Selection
 input [2:0]R2DB,	// R2 data
 input XRB,		// VRAM Read Selection
 input PD_RB,		// VRAM Bus Bridge Strobe
@@ -602,11 +598,8 @@ always @(posedge Clk) begin
       if (PCLK)  OB_R[7:0] <= OB[7:0];
       if (RC)    PD_R[7:0] <= 8'h00;
  else if (PD_RB) PD_R[7:0] <= PD[7:0];
-      if (R2)    Do[7:0]   <= {R2DB[2:0],5'b00000};
- else if (XRB)   Do[7:0]   <= PD_R[7:0];
- else if (R4)    Do[7:0]   <= OB_R[7:0];
- else if (RPIX)  Do[7:0]   <= {2'b00,PIX[5:0]};
- else            Do[7:0]   <= 8'h00;
+         Do[7:0] <= ({8{R4}} & OB_R[7:0]) | ({8{RPIX}} & {2'h0,PIX[5:0]}) 
+	  | ({8{R2}} & {R2DB[2:0],5'h00}) | ({8{XRB}} & PD_R[7:0]);
                       end
 endmodule
 
@@ -619,6 +612,7 @@ input PCLK,	     //  Pixel clock
 input nPCLK,         // ~Pixel clock
 // Inputs
 input MODE,          // PAL mode
+input DENDY,         // DENDY mode
 input OBCLIP,        // Controls the blanking of the left 8 sprite dots
 input BGCLIP,        // Controls the blanking of the left 8 background dots
 input BLACK,         // Disabling rendering
@@ -652,7 +646,7 @@ output reg RC,       // Clearing registers
 output reg RESCL,    // Prerender line (reset all fetch schemes)
 output BLNK,         // Rendering is disabled
 output INT,          // NMI interrupt on VBLANK
-output reg R2BOUT7,  // Reading NMI flag
+output reg R2DB7,    // Reading NMI flag
 output [7:0]Vo       // Vertical counter output (for sprite machine)
 );
 // Variables
@@ -661,8 +655,7 @@ reg [8:0]V;
 reg [8:0]H_IN;
 reg [8:0]V_IN;
 reg HC, VC_LATCH;
-reg V8EDGE;
-reg ODDEVEN;
+reg ODDEVEN1, ODDEVEN2;
 reg FPORCH_FF;
 reg [5:0]Hn;
 reg SEV_IN;
@@ -707,7 +700,7 @@ assign CLIP_B = ~( CLIP_OUT | BGCLIP );
 wire H_LINE0, H_LINE1, H_LINE2, H_LINE5, H_LINE6, H_LINE7, H_LINE17, H_LINE18;
 wire H_LINE20, H_LINE21, H_LINE22, H_LINE23;
 wire V_LINE0N, V_LINE0P, V_LINE1N, V_LINE1P, V_LINE2N, V_LINE2P; 
-wire V_LINE3N, V_LINE3P, V_LINE4, V_LINE5, VLINE291, VLINE311;
+wire V_LINE3N, V_LINE3P, V_LINE4, V_LINE5, VLINE241, VLINE291, VLINE311;
 assign H_LINE0  = ~( ~H[8] |  H[7] |  H[6] |  H[5] | ~H[4] |  H[3] | ~H[2] | ~H[1] | ~H[0] );         // H279
 assign H_LINE1  = ~( ~H[8] |  H[7] |  H[6] |  H[5] |  H[4] |  H[3] |  H[2] |  H[1] |  H[0] );         // H256
 assign H_LINE2  = ~(  BLNK |  H[8] |  H[7] | ~H[6] |  H[5] |  H[4] |  H[3] |  H[2] |  H[1] | ~H[0] ); // H065
@@ -730,8 +723,9 @@ assign V_LINE3N = ~( ~V[7] | ~V[6] | ~V[5] | ~V[4] |  V[3] |  V[2] |  V[1] | ~V[
 assign V_LINE3P = ~( ~V[7] | ~V[6] | ~V[5] | ~V[4] |  V[3] |  V[2] |  V[1] |  V[0] | ~MODE );         // V240 PAL 
 assign V_LINE4  = ~(  V[8] |  V[7] |  V[6] |  V[5] |  V[4] |  V[3] |  V[2] |  V[1] |  V[0] );         // V000
 assign V_LINE5  = ~( ~V[7] | ~V[6] | ~V[5] | ~V[4] |  V[3] |  V[2] |  V[1] |  V[0] );                 // V240
-assign VLINE291 = ~( ~V[8] |  V[7] |  V[6] | ~V[5] |  V[4] |  V[3] |  V[2] | ~V[1] | ~V[0] | ~MODE ); // V291 PAL
-assign VLINE311 = ~( ~V[8] |  V[7] |  V[6] | ~V[5] | ~V[4] |  V[3] | ~V[2] | ~V[1] | ~V[0] | ~MODE ); // V311 PAL
+assign VLINE241 = ~( ~V[8] | ~V[7] | ~V[6] | ~V[5] | ~V[4] |  V[3] |  V[2] |  V[1] | ~V[0] | ~MODE | ~DENDY ); // V241 DENDY
+assign VLINE291 = ~( ~V[8] |  V[7] |  V[6] | ~V[5] |  V[4] |  V[3] |  V[2] | ~V[1] | ~V[0] | ~MODE |  DENDY ); // V291 PAL
+assign VLINE311 = ~( ~V[8] |  V[7] |  V[6] | ~V[5] | ~V[4] |  V[3] | ~V[2] | ~V[1] | ~V[0] | ~MODE );          // V311 PAL
 //FETCH CONTROL
 assign F_TB = ~( FTB_OUT | NFO_OUT );
 assign F_TA = ~( FTA_OUT | NFO_OUT );
@@ -747,19 +741,18 @@ assign Vo[7:0] = V[7:0];
 assign INT = VBL_EN & INT_FF;
 // Logics
 always @(posedge Clk) begin
-         V8EDGE <= V[8];
-	 if (~nRES) ODDEVEN <= 1'b0;
-    else if ( ~V[8] & V8EDGE ) ODDEVEN <= ~ODDEVEN;
+         if (~nRES) ODDEVEN1 <= 1'b0;
+    else if ( V[8]) ODDEVEN1 <=  ODDEVEN2;
+	 if (~V[8]) ODDEVEN2 <= ~ODDEVEN1;
 	 if (N_HB) begin
 	 if (V_LINE1N | V_LINE1P) VSYNC_FF <= 1'b1;
     else if (V_LINE0N | V_LINE0P) VSYNC_FF <= 1'b0;
 		   end
          if (~nRES) RC <= 1'b1;
     else if (RESCL) RC <= 1'b0;
-	 if (RESCL | R2)                  INT_FF <= 1'b0;   //    (RESCL | R2FEDGE)
-    else if (~( nPCLK | ~VSET1 | VSET3 )) INT_FF <= 1'b1;
-         R2FEDGE <= R2;	 
-	 if (~( R2 | R2FEDGE )) R2BOUT7 <= INT_FF;			 
+	 if (RESCL | R2)                  INT_FF <= 1'b0;
+    else if (~( nPCLK | ~VSET1 | VSET3 )) INT_FF <= 1'b1; 
+	if ( ~R2 ) R2DB7 <= INT_FF;				 
          if (PCLK) begin
 	 H[8:0]    <= ~nRES ? 9'h000 : { 9 { HC }} & H_IN[8:0];
 	 V[8:0]    <= ~nRES ? 9'h000 : { 9 { VC }} & V_IN[8:0];
@@ -821,7 +814,7 @@ always @(posedge Clk) begin
          if (V_LINE4)  VB_FF   <= 1'b1;
     else if (V_LINE5)  VB_FF   <= 1'b0;
 	 RESCL_IN <= V_LINE2N | VLINE311; 
-         VSET1    <= V_LINE3N | VLINE291; // Activate Interrupt Delay
+         VSET1    <= V_LINE3N | VLINE291 | VLINE241; // Activate Interrupt Delay
 	 VSET3    <= ~VSET2;
 		    end          
                       end							
@@ -847,8 +840,8 @@ output TSTEP,		// Increment PPU address counters
 output PD_RB,		// Data to PD bus read latch
 output DB_PAR,		// Forwarding CPU data to PPU bus
 output ALE,		// ALE signal
-output WR,		// write activate
-output RD,		// read activate
+output nWR,		// write activate
+output nRD,		// read activate
 output XRB,		// PD data on CPU bus
 output TH_MUX		// Appeal to the palette
 );
@@ -863,8 +856,8 @@ assign TH_MUX = PAD[13] & PAD[12] & PAD[11] & PAD[10] & PAD[9] & PAD[8] & BLNK_L
 assign TSTEP  = PD_RB | TSTEP_LATCH;
 assign PD_RB  = ~( ~R7_Q5 | R7_Q3 ); 
 assign DB_PAR = ~( W7_Q2 | W7_Q4 );
-assign WR  = ~DB_PAR | TH_MUX;
-assign RD  = ~( PD_RB | ( Hnn0 & ~BLNK ));
+assign nWR  = ~DB_PAR | TH_MUX;
+assign nRD  = ~( PD_RB | ( Hnn0 & ~BLNK ));
 assign XRB = ~( ~R7 | TH_MUX );
 assign ALE = ~( ~R7_Q3 | R7_Q5 ) | ~( ~W7_Q3 | W7_Q5 ) | ~( nPCLK | Hn0 | BLNK );
 // Logics
@@ -1261,7 +1254,7 @@ input RESCL,	    // Prerender line (reset all fetch schemes)
 input [7:0]DBIN,    // CPU data bus
 // Outputs
 output reg [7:0]OB, // Sprite data bus
-output reg R2BOUT5, // Sprite Overflow Flag
+output reg R2DB5,   // Sprite Overflow Flag
 output reg SPR_OV   // OAM counter is full or more than 8 sprites found
 );
 // Variables
@@ -1314,8 +1307,8 @@ OAM2_RAM MOD_OAM2_RAM (OAM2ADR[4:0], Clk, ( {8{ I_OAM2 }} | OB2[7:0] ), WE, OAM2
 always @(posedge Clk) begin
               if (~W4Q4) W4FF <= 1'b0;
 	 else if (W4)    W4FF <= 1'b1;
-	      if (RESCL)        R2BOUT5 <= 1'b0;
-	 else if (SPR_OVERFLOW) R2BOUT5 <= 1'b1;
+	      if (RESCL)        R2DB5 <= 1'b0;
+	 else if (SPR_OVERFLOW) R2DB5 <= 1'b1;
 	      if (I_OAM2)       SPR_OV <= 1'b0;
 	 else if ( SPR_OVERFLOW |( OMSTEP & OMV_LATCH )) SPR_OV <= 1'b1;
 	      if (ORES)               OAMCTR2 <= 1'b0;
@@ -1558,7 +1551,7 @@ input RESCL,	     // Prerender line (reset all fetch schemes)
 input TH_MUX,	     // Appeal to the palette
 // Outputs
 output [4:0]CGA,     // Graphics data bus
-output reg R2BOUT6   // Spritehit flag
+output reg R2DB6     // Spritehit flag
 );
 // Variables
 reg [4:0]ZCOLN;
@@ -1575,7 +1568,7 @@ assign CGA[4:0] = TH_MUX ? THO_LATCH[4:0] : STEP3[4:0];
 // Logics
 always @(posedge Clk) begin
          if (RESCL) R2BOUT6 <= 1'b0;
-	 else if (~( PCLK | nVIS | SPR0_EV | nSPR0HIT | ~( BGC[0] | BGC[1] ))) R2BOUT6 <= 1'b1;
+	 else if (~( PCLK | nVIS | SPR0_EV | nSPR0HIT | ~( BGC[0] | BGC[1] ))) R2DB6 <= 1'b1;
          if (PCLK) begin
 	 ZCOLN[4:0] <= ZCOL[4:0];
 	 THO_LATCH[4:0] <= THO[4:0];
