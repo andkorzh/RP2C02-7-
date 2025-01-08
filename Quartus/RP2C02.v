@@ -673,7 +673,7 @@ reg NFO_OUT, NFO1, NFO2;
 reg FAT_IN;
 reg BURST_FF, BURST_OUT;
 reg N_HB;
-reg VSYNC_FF, CSYNC, VSYNC;
+reg VSYNC_FF, HSYNC, VSYNC;
 reg BPORCH_FF;
 reg PEN_FF, PICT1, PICT2;
 reg RESCL_IN;
@@ -734,7 +734,7 @@ assign F_AT = ~( ~FAT_IN | ~( NFO1 | NFO2 ));
 //Outputs
 assign BURST = ~( BURST_OUT | ~SYNC );
 assign SC_CNT = ~( ~N_HB | BLACK );
-assign SYNC = CSYNC | VSYNC;
+assign SYNC = HSYNC | VSYNC;
 assign nPICTURE = PICT1 | PICT2;
 assign BLNK = BLACK | BLNK_FF;
 assign Vo[7:0] = V[7:0];
@@ -770,7 +770,7 @@ always @(posedge Clk) begin
 	 FTA_OUT   <= ~FTA_IN;
 	 NFO_OUT   <= ~( NFO1 | NFO2 );
 	 BURST_OUT <= BURST_FF;
-	 CSYNC     <= ~FPORCH_FF;
+	 HSYNC     <= ~FPORCH_FF;
 	 VSYNC     <= ~( N_HB | VSYNC_FF );
 	 PICT1     <= BPORCH_FF;
 	 PICT2     <= PEN_FF;
