@@ -139,8 +139,8 @@ assign nPCLK = ~PCLK;
 // Логика (Делитель пиксельклока)
 always @(posedge Clk2) begin
 		  PCLK_N1 <= ~( ~nRES |  MODE | PCLK_N2 );
-        PCLK_N2 <= PCLK_N1;
-        PCLK_P1 <= ~( ~nRES | ~MODE | ( PCLK_P2 | PCLK_P3 ));
+                  PCLK_N2 <= PCLK_N1;
+                  PCLK_P1 <= ~( ~nRES | ~MODE | ( PCLK_P2 | PCLK_P3 ));
 		  PCLK_P2 <= PCLK_P1;
 		  PCLK_P3 <= PCLK_P2;	  
                        end
