@@ -1335,7 +1335,7 @@ always @(posedge Clk) begin
 	      OVF_LATCH  <= ~OAMCTR2;
 	      OMFG_LATCH <= OMFG;
 	      OMV_LATCH  <= OMV;
-	      TMV_LATCH  <= OAM2ADR[4] & OAM2ADR[3] & OAM2ADR[2] & OAM2ADR[1] & OAM2ADR[0];
+	      TMV_LATCH  <= OAM2Cout[4];
 	      OAM2ADR1[4:0] <= OAM2ADR[4:0] ^ { OAM2Cout[3:0], 1'b1 };
 			end          
                      end							
