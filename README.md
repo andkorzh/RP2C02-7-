@@ -9,6 +9,11 @@ Logisim circuit:
 
 ![circ](https://github.com/user-attachments/assets/13d78d78-8a04-49e7-a387-6d5db5d440b4)
 
+Quartus circuit:
+
+![RGB_PPU](https://github.com/user-attachments/assets/00c77185-5c63-4304-9a40-17386c2a27a9)
+
+
 Video on YouTube https://www.youtube.com/watch?v=VuhXU7fyXuk
 
 Prototype PPU on FPGA Cyclone II  EP2C5T144
