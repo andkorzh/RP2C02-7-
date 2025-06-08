@@ -7230,59 +7230,6 @@ http://www.bccomponents.com/</description>
 <text x="-3.39" y="3.63" size="1.27" layer="25">&gt;NAME</text>
 <text x="-3.425" y="-4.885" size="1.27" layer="27">&gt;VALUE</text>
 </package>
-<package name="DIP-40">
-<pad name="1" x="0" y="0" drill="1" shape="long"/>
-<pad name="2" x="0" y="-2.54" drill="1" shape="long"/>
-<pad name="3" x="0" y="-5.08" drill="1" shape="long"/>
-<pad name="4" x="0" y="-7.62" drill="1" shape="long"/>
-<pad name="5" x="0" y="-10.16" drill="1" shape="long"/>
-<pad name="6" x="0" y="-12.7" drill="1" shape="long"/>
-<pad name="7" x="0" y="-15.24" drill="1" shape="long"/>
-<pad name="8" x="0" y="-17.78" drill="1" shape="long"/>
-<pad name="9" x="0" y="-20.32" drill="1" shape="long"/>
-<pad name="10" x="0" y="-22.86" drill="1" shape="long"/>
-<pad name="11" x="0" y="-25.4" drill="1" shape="long"/>
-<pad name="12" x="0" y="-27.94" drill="1" shape="long"/>
-<pad name="13" x="0" y="-30.48" drill="1" shape="long"/>
-<pad name="14" x="0" y="-33.02" drill="1" shape="long"/>
-<pad name="15" x="0" y="-35.56" drill="1" shape="long"/>
-<pad name="16" x="0" y="-38.1" drill="1" shape="long"/>
-<pad name="17" x="0" y="-40.64" drill="1" shape="long"/>
-<pad name="18" x="0" y="-43.18" drill="1" shape="long"/>
-<pad name="19" x="0" y="-45.72" drill="1" shape="long"/>
-<pad name="20" x="0" y="-48.26" drill="1" shape="long"/>
-<pad name="40" x="15.24" y="0" drill="1" shape="long"/>
-<pad name="39" x="15.24" y="-2.54" drill="1" shape="long"/>
-<pad name="38" x="15.24" y="-5.08" drill="1" shape="long"/>
-<pad name="37" x="15.24" y="-7.62" drill="1" shape="long"/>
-<pad name="36" x="15.24" y="-10.16" drill="1" shape="long"/>
-<pad name="35" x="15.24" y="-12.7" drill="1" shape="long"/>
-<pad name="34" x="15.24" y="-15.24" drill="1" shape="long"/>
-<pad name="33" x="15.24" y="-17.78" drill="1" shape="long"/>
-<pad name="32" x="15.24" y="-20.32" drill="1" shape="long"/>
-<pad name="31" x="15.24" y="-22.86" drill="1" shape="long"/>
-<pad name="30" x="15.24" y="-25.4" drill="1" shape="long"/>
-<pad name="29" x="15.24" y="-27.94" drill="1" shape="long"/>
-<pad name="28" x="15.24" y="-30.48" drill="1" shape="long"/>
-<pad name="27" x="15.24" y="-33.02" drill="1" shape="long"/>
-<pad name="26" x="15.24" y="-35.56" drill="1" shape="long"/>
-<pad name="25" x="15.24" y="-38.1" drill="1" shape="long"/>
-<pad name="24" x="15.24" y="-40.64" drill="1" shape="long"/>
-<pad name="23" x="15.24" y="-43.18" drill="1" shape="long"/>
-<pad name="22" x="15.24" y="-45.72" drill="1" shape="long"/>
-<pad name="21" x="15.24" y="-48.26" drill="1" shape="long"/>
-<wire x1="2.54" y1="0" x2="6.35" y2="0" width="0.127" layer="21"/>
-<wire x1="6.35" y1="0" x2="8.89" y2="0" width="0.127" layer="21"/>
-<wire x1="8.89" y1="0" x2="12.7" y2="0" width="0.127" layer="21"/>
-<wire x1="12.7" y1="0" x2="12.7" y2="-48.26" width="0.127" layer="21"/>
-<wire x1="12.7" y1="-48.26" x2="2.54" y2="-48.26" width="0.127" layer="21"/>
-<wire x1="2.54" y1="-48.26" x2="2.54" y2="0" width="0.127" layer="21"/>
-<wire x1="6.35" y1="0" x2="6.35" y2="-1.27" width="0.127" layer="21"/>
-<wire x1="6.35" y1="-1.27" x2="8.89" y2="-1.27" width="0.127" layer="21"/>
-<wire x1="8.89" y1="-1.27" x2="8.89" y2="0" width="0.127" layer="21"/>
-<text x="5.08" y="1.27" size="1.27" layer="21">&gt;NAME</text>
-<text x="5.08" y="-50.8" size="1.27" layer="21">&gt;VALUE</text>
-</package>
 <package name="TSOP20">
 <smd name="1" x="0.91145625" y="-0.3143625" dx="0.44" dy="1.6" layer="1" rot="R90"/>
 <smd name="2" x="0.91145625" y="-0.9643625" dx="0.44" dy="1.6" layer="1" rot="R90"/>
@@ -7386,6 +7333,59 @@ http://www.bccomponents.com/</description>
 <smd name="35" x="4.18" y="2.25" dx="1.56" dy="0.28" layer="1" roundness="25"/>
 <smd name="36" x="4.18" y="2.75" dx="1.56" dy="0.28" layer="1" roundness="25"/>
 </package>
+<package name="DIP-40">
+<pad name="1" x="0" y="0" drill="1" shape="long"/>
+<pad name="2" x="0" y="-2.54" drill="1" shape="long"/>
+<pad name="3" x="0" y="-5.08" drill="1" shape="long"/>
+<pad name="4" x="0" y="-7.62" drill="1" shape="long"/>
+<pad name="5" x="0" y="-10.16" drill="1" shape="long"/>
+<pad name="6" x="0" y="-12.7" drill="1" shape="long"/>
+<pad name="7" x="0" y="-15.24" drill="1" shape="long"/>
+<pad name="8" x="0" y="-17.78" drill="1" shape="long"/>
+<pad name="9" x="0" y="-20.32" drill="1" shape="long"/>
+<pad name="10" x="0" y="-22.86" drill="1" shape="long"/>
+<pad name="11" x="0" y="-25.4" drill="1" shape="long"/>
+<pad name="12" x="0" y="-27.94" drill="1" shape="long"/>
+<pad name="13" x="0" y="-30.48" drill="1" shape="long"/>
+<pad name="14" x="0" y="-33.02" drill="1" shape="long"/>
+<pad name="15" x="0" y="-35.56" drill="1" shape="long"/>
+<pad name="16" x="0" y="-38.1" drill="1" shape="long"/>
+<pad name="17" x="0" y="-40.64" drill="1" shape="long"/>
+<pad name="18" x="0" y="-43.18" drill="1" shape="long"/>
+<pad name="19" x="0" y="-45.72" drill="1" shape="long"/>
+<pad name="20" x="0" y="-48.26" drill="1" shape="long"/>
+<pad name="40" x="15.24" y="0" drill="1" shape="long"/>
+<pad name="39" x="15.24" y="-2.54" drill="1" shape="long"/>
+<pad name="38" x="15.24" y="-5.08" drill="1" shape="long"/>
+<pad name="37" x="15.24" y="-7.62" drill="1" shape="long"/>
+<pad name="36" x="15.24" y="-10.16" drill="1" shape="long"/>
+<pad name="35" x="15.24" y="-12.7" drill="1" shape="long"/>
+<pad name="34" x="15.24" y="-15.24" drill="1" shape="long"/>
+<pad name="33" x="15.24" y="-17.78" drill="1" shape="long"/>
+<pad name="32" x="15.24" y="-20.32" drill="1" shape="long"/>
+<pad name="31" x="15.24" y="-22.86" drill="1" shape="long"/>
+<pad name="30" x="15.24" y="-25.4" drill="1" shape="long"/>
+<pad name="29" x="15.24" y="-27.94" drill="1" shape="long"/>
+<pad name="28" x="15.24" y="-30.48" drill="1" shape="long"/>
+<pad name="27" x="15.24" y="-33.02" drill="1" shape="long"/>
+<pad name="26" x="15.24" y="-35.56" drill="1" shape="long"/>
+<pad name="25" x="15.24" y="-38.1" drill="1" shape="long"/>
+<pad name="24" x="15.24" y="-40.64" drill="1" shape="long"/>
+<pad name="23" x="15.24" y="-43.18" drill="1" shape="long"/>
+<pad name="22" x="15.24" y="-45.72" drill="1" shape="long"/>
+<pad name="21" x="15.24" y="-48.26" drill="1" shape="long"/>
+<wire x1="2.54" y1="0" x2="6.35" y2="0" width="0.127" layer="21"/>
+<wire x1="6.35" y1="0" x2="8.89" y2="0" width="0.127" layer="21"/>
+<wire x1="8.89" y1="0" x2="12.7" y2="0" width="0.127" layer="21"/>
+<wire x1="12.7" y1="0" x2="12.7" y2="-48.26" width="0.127" layer="21"/>
+<wire x1="12.7" y1="-48.26" x2="2.54" y2="-48.26" width="0.127" layer="21"/>
+<wire x1="2.54" y1="-48.26" x2="2.54" y2="0" width="0.127" layer="21"/>
+<wire x1="6.35" y1="0" x2="6.35" y2="-1.27" width="0.127" layer="21"/>
+<wire x1="6.35" y1="-1.27" x2="8.89" y2="-1.27" width="0.127" layer="21"/>
+<wire x1="8.89" y1="-1.27" x2="8.89" y2="0" width="0.127" layer="21"/>
+<text x="5.08" y="1.27" size="1.27" layer="21">&gt;NAME</text>
+<text x="5.08" y="-50.8" size="1.27" layer="21">&gt;VALUE</text>
+</package>
 </packages>
 <symbols>
 <symbol name="74LVC4245APW,112">
@@ -7437,57 +7437,6 @@ http://www.bccomponents.com/</description>
 <wire x1="-1.92" y1="2.476" x2="-3.92" y2="2.476" width="0.254" layer="94"/>
 <text x="-6.92" y="4.976" size="1.778" layer="95">&gt;NAME</text>
 <text x="3.08" y="4.976" size="1.778" layer="96">&gt;VALUE</text>
-</symbol>
-<symbol name="DIP-40">
-<pin name="RW" x="-10.16" y="5.08" length="middle"/>
-<pin name="DB0" x="-10.16" y="2.54" length="middle"/>
-<pin name="DB1" x="-10.16" y="0" length="middle"/>
-<pin name="DB2" x="-10.16" y="-2.54" length="middle"/>
-<pin name="DB3" x="-10.16" y="-5.08" length="middle"/>
-<pin name="DB4" x="-10.16" y="-7.62" length="middle"/>
-<pin name="DB5" x="-10.16" y="-10.16" length="middle"/>
-<pin name="DB6" x="-10.16" y="-12.7" length="middle"/>
-<pin name="DB7" x="-10.16" y="-15.24" length="middle"/>
-<pin name="A2" x="-10.16" y="-17.78" length="middle"/>
-<pin name="A1" x="-10.16" y="-20.32" length="middle"/>
-<pin name="A0" x="-10.16" y="-22.86" length="middle"/>
-<pin name="/DBE" x="-10.16" y="-25.4" length="middle"/>
-<pin name="EXT0" x="-10.16" y="-27.94" length="middle"/>
-<pin name="EXT1" x="-10.16" y="-30.48" length="middle"/>
-<pin name="EXT2" x="-10.16" y="-33.02" length="middle"/>
-<pin name="EXT3" x="-10.16" y="-35.56" length="middle"/>
-<pin name="CLK" x="-10.16" y="-38.1" length="middle"/>
-<pin name="/INT" x="-10.16" y="-40.64" length="middle"/>
-<pin name="GND" x="-10.16" y="-43.18" length="middle"/>
-<pin name="ALE" x="25.4" y="2.54" length="middle" rot="R180"/>
-<pin name="PD0" x="25.4" y="0" length="middle" rot="R180"/>
-<pin name="PD1" x="25.4" y="-2.54" length="middle" rot="R180"/>
-<pin name="PD2" x="25.4" y="-5.08" length="middle" rot="R180"/>
-<pin name="PD3" x="25.4" y="-7.62" length="middle" rot="R180"/>
-<pin name="PD4" x="25.4" y="-10.16" length="middle" rot="R180"/>
-<pin name="PD5" x="25.4" y="-12.7" length="middle" rot="R180"/>
-<pin name="PD6" x="25.4" y="-15.24" length="middle" rot="R180"/>
-<pin name="PD7" x="25.4" y="-17.78" length="middle" rot="R180"/>
-<pin name="PA8" x="25.4" y="-20.32" length="middle" rot="R180"/>
-<pin name="PA9" x="25.4" y="-22.86" length="middle" rot="R180"/>
-<pin name="PA10" x="25.4" y="-25.4" length="middle" rot="R180"/>
-<pin name="PA11" x="25.4" y="-27.94" length="middle" rot="R180"/>
-<pin name="PA12" x="25.4" y="-30.48" length="middle" rot="R180"/>
-<pin name="PA13" x="25.4" y="-33.02" length="middle" rot="R180"/>
-<pin name="/PRD" x="25.4" y="-35.56" length="middle" rot="R180"/>
-<pin name="/PWR" x="25.4" y="-38.1" length="middle" rot="R180"/>
-<pin name="/RES" x="25.4" y="-40.64" length="middle" rot="R180"/>
-<pin name="VOUT" x="25.4" y="-43.18" length="middle" rot="R180"/>
-<pin name="VCC" x="25.4" y="5.08" length="middle" rot="R180"/>
-<wire x1="-5.08" y1="-45.72" x2="-5.08" y2="7.62" width="0.4064" layer="94"/>
-<wire x1="-5.08" y1="7.62" x2="20.32" y2="7.62" width="0.4064" layer="94"/>
-<wire x1="20.32" y1="7.62" x2="20.32" y2="-45.72" width="0.4064" layer="94"/>
-<wire x1="20.32" y1="-45.72" x2="-5.08" y2="-45.72" width="0.4064" layer="94"/>
-<wire x1="10.16" y1="7.62" x2="5.08" y2="7.62" width="0.254" layer="94" curve="-180"/>
-<text x="7.62" y="-30.48" size="1.778" layer="94" rot="R90">PPU CONNECTOR</text>
-<text x="5.08" y="10.16" size="1.27" layer="95">&gt;NAME</text>
-<text x="5.08" y="-48.26" size="1.27" layer="96">&gt;VALUE</text>
-<text x="10.16" y="-22.86" size="1.778" layer="94" rot="R90">40pin</text>
 </symbol>
 <symbol name="SN74LVC541A">
 <pin name="/OE2" x="0" y="-2.54" length="middle" function="dot"/>
@@ -7574,6 +7523,57 @@ http://www.bccomponents.com/</description>
 <text x="15.24" y="-116.84" size="1.778" layer="96">&gt;VALUE</text>
 <text x="17.78" y="0" size="1.27" layer="94">DAC</text>
 </symbol>
+<symbol name="DIP-40">
+<pin name="RW" x="-10.16" y="5.08" length="middle"/>
+<pin name="DB0" x="-10.16" y="2.54" length="middle"/>
+<pin name="DB1" x="-10.16" y="0" length="middle"/>
+<pin name="DB2" x="-10.16" y="-2.54" length="middle"/>
+<pin name="DB3" x="-10.16" y="-5.08" length="middle"/>
+<pin name="DB4" x="-10.16" y="-7.62" length="middle"/>
+<pin name="DB5" x="-10.16" y="-10.16" length="middle"/>
+<pin name="DB6" x="-10.16" y="-12.7" length="middle"/>
+<pin name="DB7" x="-10.16" y="-15.24" length="middle"/>
+<pin name="A2" x="-10.16" y="-17.78" length="middle"/>
+<pin name="A1" x="-10.16" y="-20.32" length="middle"/>
+<pin name="A0" x="-10.16" y="-22.86" length="middle"/>
+<pin name="/DBE" x="-10.16" y="-25.4" length="middle"/>
+<pin name="EXT0" x="-10.16" y="-27.94" length="middle"/>
+<pin name="EXT1" x="-10.16" y="-30.48" length="middle"/>
+<pin name="EXT2" x="-10.16" y="-33.02" length="middle"/>
+<pin name="EXT3" x="-10.16" y="-35.56" length="middle"/>
+<pin name="CLK" x="-10.16" y="-38.1" length="middle"/>
+<pin name="/INT" x="-10.16" y="-40.64" length="middle"/>
+<pin name="GND" x="-10.16" y="-43.18" length="middle"/>
+<pin name="ALE" x="25.4" y="2.54" length="middle" rot="R180"/>
+<pin name="PD0" x="25.4" y="0" length="middle" rot="R180"/>
+<pin name="PD1" x="25.4" y="-2.54" length="middle" rot="R180"/>
+<pin name="PD2" x="25.4" y="-5.08" length="middle" rot="R180"/>
+<pin name="PD3" x="25.4" y="-7.62" length="middle" rot="R180"/>
+<pin name="PD4" x="25.4" y="-10.16" length="middle" rot="R180"/>
+<pin name="PD5" x="25.4" y="-12.7" length="middle" rot="R180"/>
+<pin name="PD6" x="25.4" y="-15.24" length="middle" rot="R180"/>
+<pin name="PD7" x="25.4" y="-17.78" length="middle" rot="R180"/>
+<pin name="PA8" x="25.4" y="-20.32" length="middle" rot="R180"/>
+<pin name="PA9" x="25.4" y="-22.86" length="middle" rot="R180"/>
+<pin name="PA10" x="25.4" y="-25.4" length="middle" rot="R180"/>
+<pin name="PA11" x="25.4" y="-27.94" length="middle" rot="R180"/>
+<pin name="PA12" x="25.4" y="-30.48" length="middle" rot="R180"/>
+<pin name="PA13" x="25.4" y="-33.02" length="middle" rot="R180"/>
+<pin name="/PRD" x="25.4" y="-35.56" length="middle" rot="R180"/>
+<pin name="/PWR" x="25.4" y="-38.1" length="middle" rot="R180"/>
+<pin name="/RES" x="25.4" y="-40.64" length="middle" rot="R180"/>
+<pin name="VOUT" x="25.4" y="-43.18" length="middle" rot="R180"/>
+<pin name="VCC" x="25.4" y="5.08" length="middle" rot="R180"/>
+<wire x1="-5.08" y1="-45.72" x2="-5.08" y2="7.62" width="0.4064" layer="94"/>
+<wire x1="-5.08" y1="7.62" x2="20.32" y2="7.62" width="0.4064" layer="94"/>
+<wire x1="20.32" y1="7.62" x2="20.32" y2="-45.72" width="0.4064" layer="94"/>
+<wire x1="20.32" y1="-45.72" x2="-5.08" y2="-45.72" width="0.4064" layer="94"/>
+<wire x1="10.16" y1="7.62" x2="5.08" y2="7.62" width="0.254" layer="94" curve="-180"/>
+<text x="7.62" y="-30.48" size="1.778" layer="94" rot="R90">PPU CONNECTOR</text>
+<text x="5.08" y="10.16" size="1.778" layer="95">&gt;NAME</text>
+<text x="5.08" y="-48.26" size="1.778" layer="96">&gt;VALUE</text>
+<text x="10.16" y="-22.86" size="1.778" layer="94" rot="R90">40pin</text>
+</symbol>
 </symbols>
 <devicesets>
 <deviceset name="74LVC4245APW,112" prefix="U">
@@ -7645,60 +7645,6 @@ http://www.bccomponents.com/</description>
 <connects>
 <connect gate="G$1" pin="1" pad="+"/>
 <connect gate="G$1" pin="2" pad="-"/>
-</connects>
-<technologies>
-<technology name=""/>
-</technologies>
-</device>
-</devices>
-</deviceset>
-<deviceset name="DIP40" prefix="CON">
-<gates>
-<gate name="G$1" symbol="DIP-40" x="10.16" y="-5.08"/>
-</gates>
-<devices>
-<device name="" package="DIP-40">
-<connects>
-<connect gate="G$1" pin="/DBE" pad="13"/>
-<connect gate="G$1" pin="/INT" pad="19"/>
-<connect gate="G$1" pin="/PRD" pad="24"/>
-<connect gate="G$1" pin="/PWR" pad="23"/>
-<connect gate="G$1" pin="/RES" pad="22"/>
-<connect gate="G$1" pin="A0" pad="12"/>
-<connect gate="G$1" pin="A1" pad="11"/>
-<connect gate="G$1" pin="A2" pad="10"/>
-<connect gate="G$1" pin="ALE" pad="39"/>
-<connect gate="G$1" pin="CLK" pad="18"/>
-<connect gate="G$1" pin="DB0" pad="2"/>
-<connect gate="G$1" pin="DB1" pad="3"/>
-<connect gate="G$1" pin="DB2" pad="4"/>
-<connect gate="G$1" pin="DB3" pad="5"/>
-<connect gate="G$1" pin="DB4" pad="6"/>
-<connect gate="G$1" pin="DB5" pad="7"/>
-<connect gate="G$1" pin="DB6" pad="8"/>
-<connect gate="G$1" pin="DB7" pad="9"/>
-<connect gate="G$1" pin="EXT0" pad="14"/>
-<connect gate="G$1" pin="EXT1" pad="15"/>
-<connect gate="G$1" pin="EXT2" pad="16"/>
-<connect gate="G$1" pin="EXT3" pad="17"/>
-<connect gate="G$1" pin="GND" pad="20"/>
-<connect gate="G$1" pin="PA10" pad="28"/>
-<connect gate="G$1" pin="PA11" pad="27"/>
-<connect gate="G$1" pin="PA12" pad="26"/>
-<connect gate="G$1" pin="PA13" pad="25"/>
-<connect gate="G$1" pin="PA8" pad="30"/>
-<connect gate="G$1" pin="PA9" pad="29"/>
-<connect gate="G$1" pin="PD0" pad="38"/>
-<connect gate="G$1" pin="PD1" pad="37"/>
-<connect gate="G$1" pin="PD2" pad="36"/>
-<connect gate="G$1" pin="PD3" pad="35"/>
-<connect gate="G$1" pin="PD4" pad="34"/>
-<connect gate="G$1" pin="PD5" pad="33"/>
-<connect gate="G$1" pin="PD6" pad="32"/>
-<connect gate="G$1" pin="PD7" pad="31"/>
-<connect gate="G$1" pin="RW" pad="1"/>
-<connect gate="G$1" pin="VCC" pad="40"/>
-<connect gate="G$1" pin="VOUT" pad="21"/>
 </connects>
 <technologies>
 <technology name=""/>
@@ -7842,6 +7788,60 @@ http://www.bccomponents.com/</description>
 <attribute name="THERMAL_PAD" value=""/>
 <attribute name="VACANCIES" value=""/>
 </technology>
+</technologies>
+</device>
+</devices>
+</deviceset>
+<deviceset name="DIP40" prefix="CON">
+<gates>
+<gate name="G$1" symbol="DIP-40" x="10.16" y="-5.08"/>
+</gates>
+<devices>
+<device name="" package="DIP-40">
+<connects>
+<connect gate="G$1" pin="/DBE" pad="13"/>
+<connect gate="G$1" pin="/INT" pad="19"/>
+<connect gate="G$1" pin="/PRD" pad="24"/>
+<connect gate="G$1" pin="/PWR" pad="23"/>
+<connect gate="G$1" pin="/RES" pad="22"/>
+<connect gate="G$1" pin="A0" pad="12"/>
+<connect gate="G$1" pin="A1" pad="11"/>
+<connect gate="G$1" pin="A2" pad="10"/>
+<connect gate="G$1" pin="ALE" pad="39"/>
+<connect gate="G$1" pin="CLK" pad="18"/>
+<connect gate="G$1" pin="DB0" pad="2"/>
+<connect gate="G$1" pin="DB1" pad="3"/>
+<connect gate="G$1" pin="DB2" pad="4"/>
+<connect gate="G$1" pin="DB3" pad="5"/>
+<connect gate="G$1" pin="DB4" pad="6"/>
+<connect gate="G$1" pin="DB5" pad="7"/>
+<connect gate="G$1" pin="DB6" pad="8"/>
+<connect gate="G$1" pin="DB7" pad="9"/>
+<connect gate="G$1" pin="EXT0" pad="14"/>
+<connect gate="G$1" pin="EXT1" pad="15"/>
+<connect gate="G$1" pin="EXT2" pad="16"/>
+<connect gate="G$1" pin="EXT3" pad="17"/>
+<connect gate="G$1" pin="GND" pad="20"/>
+<connect gate="G$1" pin="PA10" pad="28"/>
+<connect gate="G$1" pin="PA11" pad="27"/>
+<connect gate="G$1" pin="PA12" pad="26"/>
+<connect gate="G$1" pin="PA13" pad="25"/>
+<connect gate="G$1" pin="PA8" pad="30"/>
+<connect gate="G$1" pin="PA9" pad="29"/>
+<connect gate="G$1" pin="PD0" pad="38"/>
+<connect gate="G$1" pin="PD1" pad="37"/>
+<connect gate="G$1" pin="PD2" pad="36"/>
+<connect gate="G$1" pin="PD3" pad="35"/>
+<connect gate="G$1" pin="PD4" pad="34"/>
+<connect gate="G$1" pin="PD5" pad="33"/>
+<connect gate="G$1" pin="PD6" pad="32"/>
+<connect gate="G$1" pin="PD7" pad="31"/>
+<connect gate="G$1" pin="RW" pad="1"/>
+<connect gate="G$1" pin="VCC" pad="40"/>
+<connect gate="G$1" pin="VOUT" pad="21"/>
+</connects>
+<technologies>
+<technology name=""/>
 </technologies>
 </device>
 </devices>
@@ -12767,7 +12767,6 @@ Mates with: 87758, 87759, 87760, 87831, 87832, 87833</description>
 <part name="C39" library="SnapEDA-Library" deviceset="CAP" device="" value="1nF"/>
 <part name="C45" library="SnapEDA-Library" deviceset="CAP" device="" value="0,1uF"/>
 <part name="GND72" library="supply1" library_urn="urn:adsk.eagle:library:371" deviceset="GND" device=""/>
-<part name="CON1" library="SnapEDA-Library" deviceset="DIP40" device=""/>
 <part name="U3" library="SnapEDA-Library" deviceset="SN74LVC541A" device=""/>
 <part name="U4" library="SnapEDA-Library" deviceset="ADV7125KST140" device=""/>
 <part name="U8" library="altera-cyclone-II" deviceset="EP2C5T144" device="" package3d_urn="urn:adsk.eagle:package:8080266/1"/>
@@ -12776,6 +12775,7 @@ Mates with: 87758, 87759, 87760, 87831, 87832, 87833</description>
 <part name="VR3" library="LD1117S12TR" deviceset="LD1117S12TR" device=""/>
 <part name="U2" library="SnapEDA-Library" deviceset="74LVC4245APW,112" device=""/>
 <part name="J1" library="con-headers-jp" deviceset="J-08-" device="SIP-100"/>
+<part name="CON1" library="SnapEDA-Library" deviceset="DIP40" device=""/>
 </parts>
 <sheets>
 <sheet>
@@ -13544,10 +13544,6 @@ Mates with: 87758, 87759, 87760, 87831, 87832, 87833</description>
 <instance part="GND72" gate="1" x="-53.34" y="68.58" smashed="yes" rot="R180">
 <attribute name="VALUE" x="-50.8" y="71.12" size="1.778" layer="96" rot="R180"/>
 </instance>
-<instance part="CON1" gate="G$1" x="-81.28" y="50.8" smashed="yes">
-<attribute name="NAME" x="-76.2" y="60.96" size="1.27" layer="95"/>
-<attribute name="VALUE" x="-76.2" y="2.54" size="1.27" layer="96"/>
-</instance>
 <instance part="U3" gate="G$1" x="-91.44" y="111.76" smashed="yes">
 <attribute name="NAME" x="-77.42" y="115.39" size="1.778" layer="95"/>
 <attribute name="VALUE" x="-83.82" y="71.12" size="1.778" layer="96"/>
@@ -13599,6 +13595,10 @@ Mates with: 87758, 87759, 87760, 87831, 87832, 87833</description>
 </instance>
 <instance part="J1" gate="-8" x="86.36" y="-116.84" smashed="yes">
 <attribute name="NAME" x="84.455" y="-116.205" size="1.016" layer="95" ratio="12"/>
+</instance>
+<instance part="CON1" gate="G$1" x="-81.28" y="50.8" smashed="yes">
+<attribute name="NAME" x="-77.01" y="59.39" size="1.778" layer="95"/>
+<attribute name="VALUE" x="-77.1" y="2.53" size="1.778" layer="96"/>
 </instance>
 </instances>
 <busses>
@@ -13911,10 +13911,6 @@ Mates with: 87758, 87759, 87760, 87831, 87832, 87833</description>
 <pinref part="U8" gate="G$1" pin="MSEL1"/>
 </segment>
 <segment>
-<pinref part="GND29" gate="1" pin="GND"/>
-<pinref part="CON1" gate="G$1" pin="GND"/>
-</segment>
-<segment>
 <pinref part="GND11" gate="1" pin="GND"/>
 <pinref part="U4" gate="G$1" pin="/IOB"/>
 </segment>
@@ -13925,6 +13921,10 @@ Mates with: 87758, 87759, 87760, 87831, 87832, 87833</description>
 <segment>
 <pinref part="GND13" gate="1" pin="GND"/>
 <pinref part="U4" gate="G$1" pin="/IOR"/>
+</segment>
+<segment>
+<pinref part="GND29" gate="1" pin="GND"/>
+<pinref part="CON1" gate="G$1" pin="GND"/>
 </segment>
 </net>
 <net name="TDI" class="0">
