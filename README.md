@@ -27,5 +27,5 @@ Schematic diagram of the FPGA RGB PPU
 
 Added Gerber files for the printed circuit board of the FPGA replacement for the PPU.
 
-Full description and circuit diagram will be a little later
+
 
