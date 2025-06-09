@@ -11079,98 +11079,6 @@ Created 2016-06-07, Hans Locher&lt;br&gt;
 </deviceset>
 </devicesets>
 </library>
-<library name="EPCS4">
-<packages>
-<package name="SO08">
-<description>&lt;b&gt;Small Outline Package&lt;/b&gt;</description>
-<wire x1="2.159" y1="1.9558" x2="-2.159" y2="1.9558" width="0.1524" layer="21"/>
-<wire x1="2.159" y1="-1.9558" x2="2.54" y2="-1.5748" width="0.1524" layer="21" curve="90"/>
-<wire x1="-2.54" y1="1.5748" x2="-2.159" y2="1.9558" width="0.1524" layer="21" curve="-90"/>
-<wire x1="2.159" y1="1.9558" x2="2.54" y2="1.5748" width="0.1524" layer="21" curve="-90"/>
-<wire x1="-2.54" y1="-1.5748" x2="-2.159" y2="-1.9558" width="0.1524" layer="21" curve="90"/>
-<wire x1="-2.159" y1="-1.9558" x2="2.159" y2="-1.9558" width="0.1524" layer="21"/>
-<wire x1="2.54" y1="-1.5748" x2="2.54" y2="1.5748" width="0.1524" layer="21"/>
-<wire x1="-2.54" y1="1.5748" x2="-2.54" y2="-1.5748" width="0.1524" layer="21"/>
-<wire x1="-2.54" y1="0.508" x2="-2.54" y2="-0.508" width="0.1524" layer="21" curve="-180"/>
-<wire x1="-2.54" y1="-1.6002" x2="2.54" y2="-1.6002" width="0.0508" layer="21"/>
-<text x="3.94318125" y="-2.035190625" size="1.271990625" layer="27" ratio="10" rot="R90">&gt;VALUE</text>
-<text x="-2.923509375" y="-1.906640625" size="1.271090625" layer="25" ratio="10" rot="R90">&gt;NAME</text>
-<rectangle x1="1.65211875" y1="1.95711875" x2="2.159" y2="3.0988" layer="51"/>
-<rectangle x1="-2.16313125" y1="-3.10473125" x2="-1.651" y2="-1.9558" layer="51"/>
-<rectangle x1="-0.89074375" y1="-3.10488125" x2="-0.381" y2="-1.9558" layer="51"/>
-<rectangle x1="0.381203125" y1="-3.07505" x2="0.889" y2="-1.9304" layer="51"/>
-<rectangle x1="1.65358125" y1="-3.103640625" x2="2.159" y2="-1.9558" layer="51"/>
-<rectangle x1="0.381025" y1="1.95593125" x2="0.889" y2="3.0988" layer="51"/>
-<rectangle x1="-0.889615625" y1="1.95715" x2="-0.381" y2="3.0988" layer="51"/>
-<rectangle x1="-2.16138125" y1="1.957959375" x2="-1.651" y2="3.0988" layer="51"/>
-<smd name="1" x="-1.905" y="-3.0734" dx="0.6604" dy="2.032" layer="1"/>
-<smd name="8" x="-1.905" y="3.0734" dx="0.6604" dy="2.032" layer="1"/>
-<smd name="2" x="-0.635" y="-3.0734" dx="0.6604" dy="2.032" layer="1"/>
-<smd name="3" x="0.635" y="-3.0734" dx="0.6604" dy="2.032" layer="1"/>
-<smd name="7" x="-0.635" y="3.0734" dx="0.6604" dy="2.032" layer="1"/>
-<smd name="6" x="0.635" y="3.0734" dx="0.6604" dy="2.032" layer="1"/>
-<smd name="4" x="1.905" y="-3.0734" dx="0.6604" dy="2.032" layer="1"/>
-<smd name="5" x="1.905" y="3.0734" dx="0.6604" dy="2.032" layer="1"/>
-</package>
-</packages>
-<symbols>
-<symbol name="EPCS1">
-<wire x1="10.16" y1="-5.08" x2="-10.16" y2="-5.08" width="0.4064" layer="94"/>
-<wire x1="-10.16" y1="-5.08" x2="-10.16" y2="7.62" width="0.4064" layer="94"/>
-<wire x1="-10.16" y1="7.62" x2="10.16" y2="7.62" width="0.4064" layer="94"/>
-<wire x1="10.16" y1="7.62" x2="10.16" y2="-5.08" width="0.4064" layer="94"/>
-<text x="-10.163" y="8.892659375" size="1.77853125" layer="95">&gt;NAME</text>
-<text x="-10.1744" y="-7.63081875" size="1.78051875" layer="96">&gt;VALUE</text>
-<pin name="DCLK" x="12.7" y="0" length="short" direction="in" rot="R180"/>
-<pin name="VCC2@2" x="12.7" y="2.54" length="short" direction="in" rot="R180"/>
-<pin name="ASDI" x="12.7" y="-2.54" length="short" direction="in" rot="R180"/>
-<pin name="VCC3@3" x="12.7" y="5.08" length="short" direction="out" rot="R180"/>
-<pin name="GND" x="-12.7" y="-2.54" length="short" direction="pwr"/>
-<pin name="VCC@1" x="-12.7" y="0" length="short" direction="pwr"/>
-<pin name="/CS" x="-12.7" y="5.08" length="short" direction="pwr"/>
-<pin name="DATA" x="-12.7" y="2.54" length="short" direction="pwr"/>
-</symbol>
-</symbols>
-<devicesets>
-<deviceset name="EPCS4" prefix="U">
-<gates>
-<gate name="G$1" symbol="EPCS1" x="0" y="0"/>
-</gates>
-<devices>
-<device name="SI8" package="SO08">
-<connects>
-<connect gate="G$1" pin="/CS" pad="3"/>
-<connect gate="G$1" pin="ASDI" pad="5"/>
-<connect gate="G$1" pin="DATA" pad="7"/>
-<connect gate="G$1" pin="DCLK" pad="1"/>
-<connect gate="G$1" pin="GND" pad="4"/>
-<connect gate="G$1" pin="VCC2@2" pad="6"/>
-<connect gate="G$1" pin="VCC3@3" pad="2"/>
-<connect gate="G$1" pin="VCC@1" pad="8"/>
-</connects>
-<technologies>
-<technology name=""/>
-</technologies>
-</device>
-<device name="" package="SO08">
-<connects>
-<connect gate="G$1" pin="/CS" pad="1"/>
-<connect gate="G$1" pin="ASDI" pad="5"/>
-<connect gate="G$1" pin="DATA" pad="2"/>
-<connect gate="G$1" pin="DCLK" pad="6"/>
-<connect gate="G$1" pin="GND" pad="4"/>
-<connect gate="G$1" pin="VCC2@2" pad="7"/>
-<connect gate="G$1" pin="VCC3@3" pad="8"/>
-<connect gate="G$1" pin="VCC@1" pad="3"/>
-</connects>
-<technologies>
-<technology name=""/>
-</technologies>
-</device>
-</devices>
-</deviceset>
-</devicesets>
-</library>
 <library name="supply">
 <description>&lt;b&gt;Supply Symbols&lt;/b&gt;&lt;p&gt;
  GND, VCC, 0V, +5V, -5V, etc.&lt;p&gt;
@@ -12564,6 +12472,98 @@ Mates with: 87758, 87759, 87760, 87831, 87832, 87833</description>
 </deviceset>
 </devicesets>
 </library>
+<library name="EPCS4">
+<packages>
+<package name="SO08">
+<description>&lt;b&gt;Small Outline Package&lt;/b&gt;</description>
+<wire x1="2.159" y1="1.9558" x2="-2.159" y2="1.9558" width="0.1524" layer="21"/>
+<wire x1="2.159" y1="-1.9558" x2="2.54" y2="-1.5748" width="0.1524" layer="21" curve="90"/>
+<wire x1="-2.54" y1="1.5748" x2="-2.159" y2="1.9558" width="0.1524" layer="21" curve="-90"/>
+<wire x1="2.159" y1="1.9558" x2="2.54" y2="1.5748" width="0.1524" layer="21" curve="-90"/>
+<wire x1="-2.54" y1="-1.5748" x2="-2.159" y2="-1.9558" width="0.1524" layer="21" curve="90"/>
+<wire x1="-2.159" y1="-1.9558" x2="2.159" y2="-1.9558" width="0.1524" layer="21"/>
+<wire x1="2.54" y1="-1.5748" x2="2.54" y2="1.5748" width="0.1524" layer="21"/>
+<wire x1="-2.54" y1="1.5748" x2="-2.54" y2="-1.5748" width="0.1524" layer="21"/>
+<wire x1="-2.54" y1="0.508" x2="-2.54" y2="-0.508" width="0.1524" layer="21" curve="-180"/>
+<wire x1="-2.54" y1="-1.6002" x2="2.54" y2="-1.6002" width="0.0508" layer="21"/>
+<text x="3.94318125" y="-2.035190625" size="1.271990625" layer="27" ratio="10" rot="R90">&gt;VALUE</text>
+<text x="-2.923509375" y="-1.906640625" size="1.271090625" layer="25" ratio="10" rot="R90">&gt;NAME</text>
+<rectangle x1="1.65211875" y1="1.95711875" x2="2.159" y2="3.0988" layer="51"/>
+<rectangle x1="-2.16313125" y1="-3.10473125" x2="-1.651" y2="-1.9558" layer="51"/>
+<rectangle x1="-0.89074375" y1="-3.10488125" x2="-0.381" y2="-1.9558" layer="51"/>
+<rectangle x1="0.381203125" y1="-3.07505" x2="0.889" y2="-1.9304" layer="51"/>
+<rectangle x1="1.65358125" y1="-3.103640625" x2="2.159" y2="-1.9558" layer="51"/>
+<rectangle x1="0.381025" y1="1.95593125" x2="0.889" y2="3.0988" layer="51"/>
+<rectangle x1="-0.889615625" y1="1.95715" x2="-0.381" y2="3.0988" layer="51"/>
+<rectangle x1="-2.16138125" y1="1.957959375" x2="-1.651" y2="3.0988" layer="51"/>
+<smd name="1" x="-1.905" y="-3.0734" dx="0.6604" dy="2.032" layer="1"/>
+<smd name="8" x="-1.905" y="3.0734" dx="0.6604" dy="2.032" layer="1"/>
+<smd name="2" x="-0.635" y="-3.0734" dx="0.6604" dy="2.032" layer="1"/>
+<smd name="3" x="0.635" y="-3.0734" dx="0.6604" dy="2.032" layer="1"/>
+<smd name="7" x="-0.635" y="3.0734" dx="0.6604" dy="2.032" layer="1"/>
+<smd name="6" x="0.635" y="3.0734" dx="0.6604" dy="2.032" layer="1"/>
+<smd name="4" x="1.905" y="-3.0734" dx="0.6604" dy="2.032" layer="1"/>
+<smd name="5" x="1.905" y="3.0734" dx="0.6604" dy="2.032" layer="1"/>
+</package>
+</packages>
+<symbols>
+<symbol name="EPCS1">
+<wire x1="10.16" y1="-5.08" x2="-10.16" y2="-5.08" width="0.4064" layer="94"/>
+<wire x1="-10.16" y1="-5.08" x2="-10.16" y2="7.62" width="0.4064" layer="94"/>
+<wire x1="-10.16" y1="7.62" x2="10.16" y2="7.62" width="0.4064" layer="94"/>
+<wire x1="10.16" y1="7.62" x2="10.16" y2="-5.08" width="0.4064" layer="94"/>
+<text x="-10.163" y="8.892659375" size="1.77853125" layer="95">&gt;NAME</text>
+<text x="-10.1744" y="-7.63081875" size="1.78051875" layer="96">&gt;VALUE</text>
+<pin name="DCLK" x="12.7" y="0" length="short" direction="in" rot="R180"/>
+<pin name="VCC@2" x="12.7" y="2.54" length="short" direction="in" rot="R180"/>
+<pin name="ASDI" x="12.7" y="-2.54" length="short" direction="in" rot="R180"/>
+<pin name="VCC@3" x="12.7" y="5.08" length="short" direction="out" rot="R180"/>
+<pin name="GND" x="-12.7" y="-2.54" length="short" direction="pwr"/>
+<pin name="VCC@1" x="-12.7" y="0" length="short" direction="pwr"/>
+<pin name="/CS" x="-12.7" y="5.08" length="short" direction="pwr"/>
+<pin name="DATA" x="-12.7" y="2.54" length="short" direction="pwr"/>
+</symbol>
+</symbols>
+<devicesets>
+<deviceset name="EPCS4" prefix="U">
+<gates>
+<gate name="G$1" symbol="EPCS1" x="0" y="0"/>
+</gates>
+<devices>
+<device name="SI8" package="SO08">
+<connects>
+<connect gate="G$1" pin="/CS" pad="3"/>
+<connect gate="G$1" pin="ASDI" pad="5"/>
+<connect gate="G$1" pin="DATA" pad="7"/>
+<connect gate="G$1" pin="DCLK" pad="1"/>
+<connect gate="G$1" pin="GND" pad="4"/>
+<connect gate="G$1" pin="VCC@1" pad="8"/>
+<connect gate="G$1" pin="VCC@2" pad="6"/>
+<connect gate="G$1" pin="VCC@3" pad="2"/>
+</connects>
+<technologies>
+<technology name=""/>
+</technologies>
+</device>
+<device name="" package="SO08">
+<connects>
+<connect gate="G$1" pin="/CS" pad="1"/>
+<connect gate="G$1" pin="ASDI" pad="5"/>
+<connect gate="G$1" pin="DATA" pad="2"/>
+<connect gate="G$1" pin="DCLK" pad="6"/>
+<connect gate="G$1" pin="GND" pad="4"/>
+<connect gate="G$1" pin="VCC@1" pad="3"/>
+<connect gate="G$1" pin="VCC@2" pad="7"/>
+<connect gate="G$1" pin="VCC@3" pad="8"/>
+</connects>
+<technologies>
+<technology name=""/>
+</technologies>
+</device>
+</devices>
+</deviceset>
+</devicesets>
+</library>
 </libraries>
 <attributes>
 </attributes>
@@ -12698,7 +12698,6 @@ Mates with: 87758, 87759, 87760, 87831, 87832, 87833</description>
 <part name="C44" library="SnapEDA-Library" deviceset="ELCAP" device="" value="22uF"/>
 <part name="GND73" library="supply1" library_urn="urn:adsk.eagle:library:371" deviceset="GND" device=""/>
 <part name="C46" library="SnapEDA-Library" deviceset="ELCAP" device="" value="22uF"/>
-<part name="U6" library="EPCS4" deviceset="EPCS4" device=""/>
 <part name="V1" library="supply" deviceset="+1V2" device=""/>
 <part name="V2" library="supply" deviceset="+1V2" device=""/>
 <part name="V3" library="supply" deviceset="AVCC" device=""/>
@@ -12776,6 +12775,7 @@ Mates with: 87758, 87759, 87760, 87831, 87832, 87833</description>
 <part name="U2" library="SnapEDA-Library" deviceset="74LVC4245APW,112" device=""/>
 <part name="J1" library="con-headers-jp" deviceset="J-08-" device="SIP-100"/>
 <part name="CON1" library="SnapEDA-Library" deviceset="DIP40" device=""/>
+<part name="U6" library="EPCS4" deviceset="EPCS4" device=""/>
 </parts>
 <sheets>
 <sheet>
@@ -13296,10 +13296,6 @@ Mates with: 87758, 87759, 87760, 87831, 87832, 87833</description>
 <attribute name="NAME" x="-102.67" y="-118.86" size="1.778" layer="95"/>
 <attribute name="VALUE" x="-102.67" y="-121.24" size="1.778" layer="96"/>
 </instance>
-<instance part="U6" gate="G$1" x="182.88" y="0" smashed="yes">
-<attribute name="NAME" x="181.757" y="8.422659375" size="1.77853125" layer="95"/>
-<attribute name="VALUE" x="177.7856" y="-7.63081875" size="1.78051875" layer="96"/>
-</instance>
 <instance part="V1" gate="G$1" x="132.08" y="109.22" smashed="yes">
 <attribute name="VALUE" x="128.905" y="111.76" size="1.778" layer="96"/>
 </instance>
@@ -13599,6 +13595,10 @@ Mates with: 87758, 87759, 87760, 87831, 87832, 87833</description>
 <instance part="CON1" gate="G$1" x="-81.28" y="50.8" smashed="yes">
 <attribute name="NAME" x="-77.01" y="59.39" size="1.778" layer="95"/>
 <attribute name="VALUE" x="-77.1" y="2.53" size="1.778" layer="96"/>
+</instance>
+<instance part="U6" gate="G$1" x="182.88" y="0" smashed="yes">
+<attribute name="NAME" x="181.507" y="8.492659375" size="1.77853125" layer="95"/>
+<attribute name="VALUE" x="179.0156" y="-7.69081875" size="1.78051875" layer="96"/>
 </instance>
 </instances>
 <busses>
@@ -15808,10 +15808,10 @@ Mates with: 87758, 87759, 87760, 87831, 87832, 87833</description>
 <junction x="198.12" y="5.08"/>
 <wire x1="200.66" y1="12.7" x2="198.12" y2="12.7" width="0.1524" layer="91"/>
 <junction x="198.12" y="12.7"/>
-<pinref part="U6" gate="G$1" pin="VCC2@2"/>
-<pinref part="U6" gate="G$1" pin="VCC3@3"/>
-<pinref part="U6" gate="G$1" pin="VCC@1"/>
 <pinref part="V14" gate="G$1" pin="+3V3"/>
+<pinref part="U6" gate="G$1" pin="VCC@2"/>
+<pinref part="U6" gate="G$1" pin="VCC@3"/>
+<pinref part="U6" gate="G$1" pin="VCC@1"/>
 </segment>
 <segment>
 <pinref part="X1" gate="-4" pin="S"/>
