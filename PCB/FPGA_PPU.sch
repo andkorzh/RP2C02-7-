@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE eagle SYSTEM "eagle.dtd">
-<eagle version="9.6.2">
+<eagle version="9.4.2">
 <drawing>
 <settings>
 <setting alwaysvectorfont="no"/>
 <setting verticaltext="up"/>
 </settings>
-<grid distance="0.1" unitdist="inch" unit="inch" style="lines" multiple="1" display="yes" altdistance="0.01" altunitdist="mm" altunit="mm"/>
+<grid distance="0.1" unitdist="inch" unit="inch" style="lines" multiple="1" display="yes" altdistance="0.000393700787" altunitdist="inch" altunit="inch"/>
 <layers>
 <layer number="1" name="Top" color="4" fill="1" visible="no" active="no"/>
 <layer number="16" name="Bottom" color="1" fill="1" visible="no" active="no"/>
@@ -12583,9 +12583,9 @@ Mates with: 87758, 87759, 87760, 87831, 87832, 87833</description>
 <part name="GND6" library="supply1" library_urn="urn:adsk.eagle:library:371" deviceset="GND" device=""/>
 <part name="GND7" library="supply1" library_urn="urn:adsk.eagle:library:371" deviceset="GND" device=""/>
 <part name="GND8" library="supply1" library_urn="urn:adsk.eagle:library:371" deviceset="GND" device=""/>
-<part name="R10" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="R-EU_" device="R0805" package3d_urn="urn:adsk.eagle:package:23553/2" value="1k"/>
+<part name="R10" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="R-EU_" device="R0805" package3d_urn="urn:adsk.eagle:package:23553/2" value="910"/>
 <part name="GND9" library="supply1" library_urn="urn:adsk.eagle:library:371" deviceset="GND" device=""/>
-<part name="R11" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="R-EU_" device="R0805" package3d_urn="urn:adsk.eagle:package:23553/2" value="75R"/>
+<part name="R11" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="R-EU_" device="R0805" package3d_urn="urn:adsk.eagle:package:23553/2" value="75"/>
 <part name="GND10" library="supply1" library_urn="urn:adsk.eagle:library:371" deviceset="GND" device=""/>
 <part name="GND11" library="supply1" library_urn="urn:adsk.eagle:library:371" deviceset="GND" device=""/>
 <part name="GND12" library="supply1" library_urn="urn:adsk.eagle:library:371" deviceset="GND" device=""/>
@@ -12603,8 +12603,8 @@ Mates with: 87758, 87759, 87760, 87831, 87832, 87833</description>
 <part name="GND23" library="supply1" library_urn="urn:adsk.eagle:library:371" deviceset="GND" device=""/>
 <part name="R14" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="R-EU_" device="R0805" package3d_urn="urn:adsk.eagle:package:23553/2" value="75R"/>
 <part name="GND24" library="supply1" library_urn="urn:adsk.eagle:library:371" deviceset="GND" device=""/>
-<part name="R15" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="R-EU_" device="R0805" package3d_urn="urn:adsk.eagle:package:23553/2" value="10k"/>
-<part name="R16" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="R-EU_" device="R0805" package3d_urn="urn:adsk.eagle:package:23553/2" value="10k"/>
+<part name="R15" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="R-EU_" device="R0805" package3d_urn="urn:adsk.eagle:package:23553/2" value="1.1k"/>
+<part name="R16" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="R-EU_" device="R0805" package3d_urn="urn:adsk.eagle:package:23553/2" value="510"/>
 <part name="GND25" library="supply1" library_urn="urn:adsk.eagle:library:371" deviceset="GND" device=""/>
 <part name="GND26" library="supply1" library_urn="urn:adsk.eagle:library:371" deviceset="GND" device=""/>
 <part name="JP1" library="jumper" library_urn="urn:adsk.eagle:library:252" deviceset="JP1E" device="" package3d_urn="urn:adsk.eagle:package:15455/1" value="BYPASS"/>
@@ -12786,6 +12786,7 @@ Mates with: 87758, 87759, 87760, 87831, 87832, 87833</description>
 <text x="-2.54" y="-104.14" size="1.778" layer="98">NTSC/PAL</text>
 <text x="-2.54" y="-114.3" size="1.778" layer="98">PALSEL1</text>
 <text x="-2.54" y="-124.46" size="1.778" layer="98">PALSEL0</text>
+<text x="81.28" y="-114.3" size="1.778" layer="94" rot="R90">EXT LSB ADDRESS DATA</text>
 </plain>
 <instances>
 <instance part="R1" gate="G$1" x="180.34" y="60.96" smashed="yes" rot="R270">
@@ -12841,15 +12842,15 @@ Mates with: 87758, 87759, 87760, 87831, 87832, 87833</description>
 <attribute name="VALUE" x="142.24" y="-152.4" size="1.778" layer="96"/>
 </instance>
 <instance part="R10" gate="G$1" x="134.62" y="-114.3" smashed="yes">
-<attribute name="NAME" x="135.89" y="-110.2614" size="1.778" layer="95" rot="R180"/>
-<attribute name="VALUE" x="135.89" y="-117.602" size="1.778" layer="96" rot="R180"/>
+<attribute name="NAME" x="136.82" y="-108.8614" size="1.778" layer="95" rot="R180"/>
+<attribute name="VALUE" x="136.87" y="-111.002" size="1.778" layer="96" rot="R180"/>
 </instance>
 <instance part="GND9" gate="1" x="127" y="-114.3" smashed="yes" rot="R270">
 <attribute name="VALUE" x="124.46" y="-111.76" size="1.778" layer="96" rot="R270"/>
 </instance>
 <instance part="R11" gate="G$1" x="134.62" y="-101.6" smashed="yes">
-<attribute name="NAME" x="133.35" y="-100.1014" size="1.778" layer="95"/>
-<attribute name="VALUE" x="133.35" y="-104.902" size="1.778" layer="96"/>
+<attribute name="NAME" x="132.38" y="-97.3514" size="1.778" layer="95"/>
+<attribute name="VALUE" x="132.29" y="-99.702" size="1.778" layer="96"/>
 </instance>
 <instance part="GND10" gate="1" x="127" y="-106.68" smashed="yes" rot="R270">
 <attribute name="VALUE" x="124.46" y="-104.14" size="1.778" layer="96" rot="R270"/>
