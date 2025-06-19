@@ -1,7 +1,7 @@
 # RP2C02-7-
 A highly clock-accurate FPGA clone of the NES 2C02(7) PPU, created on the basis of reverse engineering.
 
-This design has multiregional timings NTSC | PAL . 
+This design has multiregional timings NTSC | PAL . Color output in RGB888 format.
 
 The output is in RGB.
 
