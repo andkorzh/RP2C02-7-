@@ -66,7 +66,8 @@ wire [2:0]R2DB;
 wire [4:0]THO;	
 wire [3:0]BGC;
 wire [4:0]ZCOL;
-wire [4:0]CGA;  
+wire [4:0]CGA;
+wire [2:0]EMPH;
 wire Hn0;          
 wire nHn2;         
 wire nHn1;         
@@ -192,9 +193,7 @@ OBCLIP,
 BLACK,        
 nCLPB,			
 CLPO,			 
-N_TR,		
-N_TG,		    
-N_TB		    
+EMPH[2:0]	    
 );
 
 //Мультиплексор шины при чтении
@@ -428,7 +427,8 @@ nPICTURE,
 B_W,           
 DB_PAR,		 
 CGA[4:0],     
-DBIN[5:0],	 
+DBIN[5:0],
+EMPH[2:0],
 RPIX,         
 PIX[5:0],
 RGB[23:0]    
@@ -521,9 +521,7 @@ output reg OBCLIP,	      // Гашение левого столбца 8 точ�
 output BLACK,                 // Отключение рендера
 output nCLPB,		      // Отключение фона
 output CLPO,		      // Отключение спрайтов 
-output N_TR,		      // Эмпфазис R
-output N_TG,		      // Эмпфазис G
-output N_TB		      // Эмпфазис B
+output [2:0]EMPH              // Эмпфазис B, G, R
 );
 // Переменные
 reg [4:0]W0R;
@@ -538,9 +536,7 @@ assign VBL_EN = W0R[4];
 assign B_W    = W1R[0];
 assign nCLPB = ~( ~BGE | nVISR | CLIPBR );
 assign CLPO = ~CLIPOR;
-assign N_TR = ~EMP_R;
-assign N_TG = ~EMP_G;
-assign N_TB = ~W1R[7]; 
+assign EMPH[2:0] = {W1R[7], EMP_G, EMP_R};
 // Логика
 always @(posedge Clk) begin
 	                if (W0) W0R[4:0] <= RC ? 5'b0 : {DBIN[7],DBIN[5:2]};
@@ -1599,6 +1595,7 @@ input B_W,           // Режим Ч/Б (обнуление младших 4х 
 input DB_PAR,	     // Проброс данных CPU на шину PPU
 input [4:0]CGA,      // Шина данных графики 
 input [5:0]DBIN,     // Шина данных CPU
+input [2:0]EMPH,     // Эмпфазис B,G,R
 // Выходы
 output RPIX,         // Выбор пиксельного вывода
 output reg [5:0]PIX, // Данные пиксельного вывода
@@ -1607,6 +1604,7 @@ output [23:0]RGB     // Выход RGB
 // Переменные
 reg DB_PARR;
 reg PICTURER;
+reg [7:0]ro, go, bo;
 // Комбинаторика
 wire CGAH;
 assign CGAH = ( CGA[0] | CGA[1] ) & CGA[4];
@@ -1620,8 +1618,11 @@ wire [23:0]RGB_IN;
 wire [5:0]C;
 PALETTE_RAM MOD_PALETTE_RAM ( {CGAH,CGA[3:0]}, Clk, DBIN[5:0],( TH_MUX & DB_PARR ), C[5:0] );
 PALETTE_RGB_TABLE MOD_RGB_TABLE ( PIX[5:0], Clk, RGB_IN[23:0] );
+// Эмпфазис
+wire [7:0]ri, gi, bi;
+assign {ri[7:0], gi[7:0], bi[7:0]} = RGB_IN[23:0];
 // Выход
-assign RGB[23:0] = RGB_IN[23:0] & { 24 { ~PICTURER }};
+assign RGB[23:0] = {ro[7:0], go[7:0], bo[7:0]} & { 24 { ~PICTURER }}; // Гашение
 // Логика
 always @(posedge Clk) begin
          if (PCLK) begin
@@ -1630,7 +1631,49 @@ always @(posedge Clk) begin
 		   end
          if (nPCLK) begin
 	PICTURER <= nPICTURE;
-		    end          
+		    end
+case(EMPH)  // Emphasis
+      0: begin
+            ro <= ri;
+	    go <= gi;
+	    bo <= bi;
+         end    
+      1: begin
+	    ro <= ri;
+	    go <= gi - gi[7:2];
+	    bo <= bi - bi[7:2];
+	 end
+      2: begin
+	    ro <= ri - ri[7:2];
+	    go <= gi;
+	    bo <= bi - bi[7:2];
+	 end
+      3: begin
+	    ro <= ri - ri[7:2];
+	    go <= gi - gi[7:3];
+	    bo <= bi - bi[7:2] - bi[7:3];
+	 end
+      4: begin
+	    ro <= ri - ri[7:3];
+	    go <= gi - gi[7:3];
+	    bo <= bi;
+	 end
+      5: begin
+	    ro <= ri - ri[7:3];
+	    go <= gi - gi[7:2];
+	    bo <= bi - bi[7:3];
+	 end
+      6: begin
+	    ro <= ri - ri[7:2];
+	    go <= gi - gi[7:3];
+	    bo <= bi - bi[7:3];
+	 end
+      7: begin
+	    ro <= ri - ri[7:2];
+	    go <= gi - gi[7:2];
+	    bo <= bi - bi[7:2];
+	 end
+	endcase
                       end							
 // Конец модуля палитры
 endmodule
