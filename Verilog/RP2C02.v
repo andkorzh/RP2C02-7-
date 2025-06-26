@@ -66,7 +66,8 @@ wire [2:0]R2DB;
 wire [4:0]THO;	
 wire [3:0]BGC;
 wire [4:0]ZCOL;
-wire [4:0]CGA;  
+wire [4:0]CGA;
+wire [2:0]EMPH;              //EMPHASIS	
 wire Hn0;          
 wire nHn2;         
 wire nHn1;         
@@ -192,9 +193,7 @@ OBCLIP,
 BLACK,        
 nCLPB,			
 CLPO,			 
-N_TR,		
-N_TG,		    
-N_TB		    
+EMPH[2:0]		    
 );
 
 //Bus multiplexer on read
@@ -428,7 +427,8 @@ nPICTURE,
 B_W,           
 DB_PAR,		 
 CGA[4:0],     
-DBIN[5:0],	 
+DBIN[5:0],
+EMPH[2:0],
 RPIX,         
 PIX[5:0],
 RGB[23:0]    
@@ -520,9 +520,7 @@ output reg OBCLIP,	// Controls the blanking of the left 8 sprite dots
 output BLACK,           // Disabling rendering
 output nCLPB,		// Disabling background
 output CLPO,		// Disabling sprites 
-output N_TR,		// Empphasis R
-output N_TG,	        // Empphasis G
-output N_TB		// Empphasis B
+output [2:0]EMPH	// Emphasis B, G, R
 );
 // Variables
 reg [4:0]W0R;
@@ -537,9 +535,7 @@ assign VBL_EN = W0R[4];
 assign B_W    = W1R[0];
 assign nCLPB = ~( ~BGE | nVISR | CLIPBR );
 assign CLPO = ~CLIPOR;
-assign N_TR = ~EMP_R;
-assign N_TG = ~EMP_G;
-assign N_TB = ~W1R[7]; 
+assign EMPH[2:0] = {W1R[7], EMP_G, EMP_R}; 
 // Logics
 always @(posedge Clk) begin
 	if (W0) W0R[4:0] <= RC ? 5'h00 : {DBIN[7],DBIN[5:2]};
@@ -1599,6 +1595,7 @@ input B_W,           // B/W mode (zeroing the lower 4 bits of the color index)
 input DB_PAR,	     // Forwarding CPU data to PPU bus
 input [4:0]CGA,      // Graphics data bus 
 input [5:0]DBIN,     // CPU data bus
+input [2:0]EMPH,     // Emphasis B,G,R
 // Outputs
 output RPIX,         // Selecting pixel output
 output reg [5:0]PIX, // Pixel output data
@@ -1607,6 +1604,7 @@ output [23:0]RGB     // RGB output
 // Variables
 reg DB_PARR;
 reg PICTURER;
+reg [7:0]ro, go, bo;
 // Combinatorics
 wire CGAH;
 assign CGAH = ( CGA[0] | CGA[1] ) & CGA[4];
@@ -1620,8 +1618,11 @@ wire [23:0]RGB_IN;
 wire [5:0]C;
 PALETTE_RAM MOD_PALETTE_RAM ( {CGAH,CGA[3:0]}, Clk, DBIN[5:0],( TH_MUX & DB_PARR ), C[5:0] );
 PALETTE_RGB_TABLE MOD_RGB_TABLE ( PIX[5:0], Clk, RGB_IN[23:0] );
+// Emphasis
+wire [7:0]ri, gi, bi;
+assign {ri[7:0], gi[7:0], bi[7:0]} = RGB_IN[23:0];
 // Output
-assign RGB[23:0] = RGB_IN[23:0] & { 24 { ~PICTURER }};
+assign RGB[23:0] = {ro[7:0], go[7:0], bo[7:0]} & { 24 { ~PICTURER }};
 // Logics
 always @(posedge Clk) begin
          if (PCLK) begin
@@ -1630,7 +1631,49 @@ always @(posedge Clk) begin
 		   end
          if (nPCLK) begin
 	 PICTURER <= nPICTURE;
-		    end          
+		    end 
+case(EMPH)  // Emphasis
+      0: begin
+            ro <= ri;
+	    go <= gi;
+	    bo <= bi;
+         end    
+      1: begin
+	    ro <= ri;
+	    go <= gi - gi[7:2];
+	    bo <= bi - bi[7:2];
+	 end
+      2: begin
+	    ro <= ri - ri[7:2];
+	    go <= gi;
+	    bo <= bi - bi[7:2];
+	 end
+      3: begin
+	    ro <= ri - ri[7:2];
+	    go <= gi - gi[7:3];
+	    bo <= bi - bi[7:2] - bi[7:3];
+	 end
+      4: begin
+	    ro <= ri - ri[7:3];
+	    go <= gi - gi[7:3];
+	    bo <= bi;
+	 end
+      5: begin
+	    ro <= ri - ri[7:3];
+	    go <= gi - gi[7:2];
+	    bo <= bi - bi[7:3];
+	 end
+      6: begin
+	    ro <= ri - ri[7:2];
+	    go <= gi - gi[7:3];
+	    bo <= bi - bi[7:3];
+	 end
+      7: begin
+	    ro <= ri - ri[7:2];
+	    go <= gi - gi[7:2];
+	    bo <= bi - bi[7:2];
+	 end
+	endcase 
                       end							
 // End of palette module
 endmodule
