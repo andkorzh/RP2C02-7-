@@ -11,7 +11,7 @@ Logisim circuit:
 
 Quartus circuit:
 
-![RGB_PPU](https://github.com/user-attachments/assets/00c77185-5c63-4304-9a40-17386c2a27a9)
+![RGB_PPU](https://github.com/user-attachments/assets/814e4902-b997-4ce5-ba74-13064f7ded9c)
 
 
 Video on YouTube https://www.youtube.com/watch?v=VuhXU7fyXuk
