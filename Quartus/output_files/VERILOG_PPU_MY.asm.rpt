@@ -1,5 +1,5 @@
 Assembler report for VERILOG_PPU_MY
-Fri Jun 27 16:49:09 2025
+Fri Jun 27 16:57:05 2025
 Quartus II 64-Bit Version 13.0.1 Build 232 06/12/2013 Service Pack 1 SJ Web Edition
 
 
@@ -38,7 +38,7 @@ applicable agreement for further details.
 +---------------------------------------------------------------+
 ; Assembler Summary                                             ;
 +-----------------------+---------------------------------------+
-; Assembler Status      ; Successful - Fri Jun 27 16:49:09 2025 ;
+; Assembler Status      ; Successful - Fri Jun 27 16:57:05 2025 ;
 ; Revision Name         ; VERILOG_PPU_MY                        ;
 ; Top-level Entity Name ; VERILOG_PPU_MY                        ;
 ; Family                ; Cyclone II                            ;
@@ -94,8 +94,8 @@ applicable agreement for further details.
 ; Option         ; Setting                                                                                   ;
 +----------------+-------------------------------------------------------------------------------------------+
 ; Device         ; EP2C5T144C8                                                                               ;
-; JTAG usercode  ; 0x00154828                                                                                ;
-; Checksum       ; 0x00154828                                                                                ;
+; JTAG usercode  ; 0x0015E66C                                                                                ;
+; Checksum       ; 0x0015E66C                                                                                ;
 +----------------+-------------------------------------------------------------------------------------------+
 
 
@@ -106,7 +106,7 @@ applicable agreement for further details.
 +--------------------+---------------------------------------------------------------------------------------+
 ; Device             ; EPCS4                                                                                 ;
 ; JTAG usercode      ; 0x00000000                                                                            ;
-; Checksum           ; 0x073CEEA4                                                                            ;
+; Checksum           ; 0x073CB6AA                                                                            ;
 ; Compression Ratio  ; 2                                                                                     ;
 +--------------------+---------------------------------------------------------------------------------------+
 
@@ -117,14 +117,14 @@ applicable agreement for further details.
 Info: *******************************************************************
 Info: Running Quartus II 64-Bit Assembler
     Info: Version 13.0.1 Build 232 06/12/2013 Service Pack 1 SJ Web Edition
-    Info: Processing started: Fri Jun 27 16:49:08 2025
+    Info: Processing started: Fri Jun 27 16:57:05 2025
 Info: Command: quartus_asm --read_settings_files=off --write_settings_files=off VERILOG_PPU_MY -c VERILOG_PPU_MY
 Info (115031): Writing out detailed assembly data for power analysis
 Info (115030): Assembler is generating device programming files
 Info: Quartus II 64-Bit Assembler was successful. 0 errors, 0 warnings
-    Info: Peak virtual memory: 421 megabytes
-    Info: Processing ended: Fri Jun 27 16:49:09 2025
-    Info: Elapsed time: 00:00:01
+    Info: Peak virtual memory: 427 megabytes
+    Info: Processing ended: Fri Jun 27 16:57:05 2025
+    Info: Elapsed time: 00:00:00
     Info: Total CPU time (on all processors): 00:00:00
 
 

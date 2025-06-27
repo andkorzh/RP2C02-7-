@@ -1,11 +1,11 @@
-Fitter Status : Successful - Fri Jun 27 16:49:07 2025
+Fitter Status : Successful - Fri Jun 27 16:57:04 2025
 Quartus II 64-Bit Version : 13.0.1 Build 232 06/12/2013 SP 1 SJ Web Edition
 Revision Name : VERILOG_PPU_MY
 Top-level Entity Name : VERILOG_PPU_MY
 Family : Cyclone II
 Device : EP2C5T144C8
 Timing Models : Final
-Total logic elements : 1,354 / 4,608 ( 29 % )
+Total logic elements : 1,379 / 4,608 ( 30 % )
     Total combinational functions : 1,012 / 4,608 ( 22 % )
     Dedicated logic registers : 1,056 / 4,608 ( 23 % )
 Total registers : 1056
@@ -13,4 +13,4 @@ Total pins : 74 / 89 ( 83 % )
 Total virtual pins : 0
 Total memory bits : 20,416 / 119,808 ( 17 % )
 Embedded Multiplier 9-bit elements : 0 / 26 ( 0 % )
-Total PLLs : 0 / 2 ( 0 % )
+Total PLLs : 1 / 2 ( 50 % )
