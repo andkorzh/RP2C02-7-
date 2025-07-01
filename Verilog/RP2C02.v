@@ -1480,8 +1480,8 @@ output reg EN       // Enable output for sprite shift register
 );
 // Variables
 reg ZH_FF;          // Downward Counter Control Trigger
-reg [7:0]CNT;       // Reverse counter latches
-reg [7:0]CNT1;      // Reverse counter latches
+reg [7:0]CNT;       // Downward counter latches
+reg [7:0]CNT1;      // Downward counter latches
 // Combinatorics
 wire STEP;
 assign STEP = ~( PCLK | ~ZH_FF );  
