@@ -471,8 +471,8 @@ always @(posedge Clk) begin
 	     ADR[2:0] <= A[2:0];
 	     RnWR <= RnW;
 	     nDBER <= nDBE;
-	     W0   <= ~ADR[2] & ~ADR[1] & ~ADR[0] & ~RnWR & ~nDBER;
-	     W1   <= ~ADR[2] & ~ADR[1] &  ADR[0] & ~RnWR & ~nDBER;
+	     W0   <= ~ADR[2] & ~ADR[1] & ~ADR[0] & ~RnWR & ~nDBER;  //Замените местами W0 и W1 для замены PPUMASK и PPUCTRL в PPU 2C05-01
+	     W1   <= ~ADR[2] & ~ADR[1] &  ADR[0] & ~RnWR & ~nDBER;  //Замените местами W0 и W1 для замены PPUMASK и PPUCTRL в PPU 2C05-01
 	     R2   <= ~ADR[2] &  ADR[1] & ~ADR[0] &  RnWR & ~nDBER;
 	     W3   <= ~ADR[2] &  ADR[1] &  ADR[0] & ~RnWR & ~nDBER;
 	     R4   <=  ADR[2] & ~ADR[1] & ~ADR[0] &  RnWR & ~nDBER;
@@ -593,7 +593,7 @@ always @(posedge Clk) begin
       if (RC)    PD_R[7:0] <= 8'h00;
  else if (PD_RB) PD_R[7:0] <= PD[7:0];
          Do[7:0] <= ({8{R4}} & OB_R[7:0]) | ({8{RPIX}} & {2'h0,PIX[5:0]}) 
-	  | ({8{R2}} & {R2DB[2:0],5'h00}) | ({8{XRB}} & PD_R[7:0]);
+	| ({8{R2}} & {R2DB[2:0],DBIN[4:0]}) | ({8{XRB}} & PD_R[7:0]);   // Для PPU2C05-02 (03, 04) добавьте вместо DBIN[4:0] необходимый идентификатор PPU
                       end
 endmodule
 
