@@ -919,10 +919,8 @@ reg [7:0]FSR0;
 reg [7:0]FSR1;
 reg [7:0]FSR2;
 reg [7:0]FSR3;
-reg ATR0;
-reg ATR1;
-reg ATR00;
-reg ATR01;
+reg [1:0]ATR;
+reg [1:0]ATRO;
 // Combinatorics
 wire PD_SR;
 assign PD_SR  = nPCLK & Hnn0 & F_TA;
@@ -936,20 +934,19 @@ wire STEP2;
 assign STEP2  = nPCLK & N_FO;
 wire NEXT;
 assign NEXT   = ~( nPCLK | STEP | STEP2 );
-wire ATSEL0;
-assign ATSEL0 = ( PDNN[0] & ~THO1R & ~TVO1 )|( PDNN[2] & THO1R & ~TVO1 )|( PDNN[4] & ~THO1R & TVO1 )|( PDNN[6] & THO1R & TVO1 );
-wire ATSEL1;
-assign ATSEL1 = ( PDNN[1] & ~THO1R & ~TVO1 )|( PDNN[3] & THO1R & ~TVO1 )|( PDNN[5] & ~THO1R & TVO1 )|( PDNN[7] & THO1R & TVO1 );
+wire [1:0]ATSEL;
+assign ATSEL[0] = ( PDNN[0] & ~THO1R & ~TVO1 )|( PDNN[2] & THO1R & ~TVO1 )|( PDNN[4] & ~THO1R & TVO1 )|( PDNN[6] & THO1R & TVO1 );
+assign ATSEL[1] = ( PDNN[1] & ~THO1R & ~TVO1 )|( PDNN[3] & THO1R & ~TVO1 )|( PDNN[5] & ~THO1R & TVO1 )|( PDNN[7] & THO1R & TVO1 );
 wire [3:0]BGC_POS;
 assign BGC_POS[3:0] = (~FH[0] & ~FH[1] & ~FH[2]) ? {SR3[7], SR2[7], SR1[7], SR0[7]} :
                       ( FH[0] & ~FH[1] & ~FH[2]) ? {SR3[6], SR2[6], SR1[6], SR0[6]} :
                       (~FH[0] &  FH[1] & ~FH[2]) ? {SR3[5], SR2[5], SR1[5], SR0[5]} :
-		      ( FH[0] &  FH[1] & ~FH[2]) ? {SR3[4], SR2[4], SR1[4], SR0[4]} :
-		      (~FH[0] & ~FH[1] &  FH[2]) ? {SR3[3], SR2[3], SR1[3], SR0[3]} :
-		      ( FH[0] & ~FH[1] &  FH[2]) ? {SR3[2], SR2[2], SR1[2], SR0[2]} :
-		      (~FH[0] &  FH[1] &  FH[2]) ? {SR3[1], SR2[1], SR1[1], SR0[1]} :
-		      ( FH[0] &  FH[1] &  FH[2]) ? {SR3[0], SR2[0], SR1[0], SR0[0]} :
-							                    4'b0000 ;
+		              ( FH[0] &  FH[1] & ~FH[2]) ? {SR3[4], SR2[4], SR1[4], SR0[4]} :
+		              (~FH[0] & ~FH[1] &  FH[2]) ? {SR3[3], SR2[3], SR1[3], SR0[3]} :
+		              ( FH[0] & ~FH[1] &  FH[2]) ? {SR3[2], SR2[2], SR1[2], SR0[2]} :
+		              (~FH[0] &  FH[1] &  FH[2]) ? {SR3[1], SR2[1], SR1[1], SR0[1]} :
+		              ( FH[0] &  FH[1] &  FH[2]) ? {SR3[0], SR2[0], SR1[0], SR0[0]} :
+							                                                4'b0000 ;
 // Background Pixel Shift Registers
 wire QTA, QTB;
 SHIFTREG SREG_TA( Clk, NEXT, STEP, SRLOAD ,PDN[7:0], QTA );
@@ -962,12 +959,10 @@ always @(posedge Clk) begin
       if (RC)   FH[2:0] <= 3'b000;
  else if (W5_1) FH[2:0] <= DBIN[2:0];	
       if (SRLOAD)begin
-      ATR00 <= ATSEL0;
-      ATR01 <= ATSEL1;
+	  ATRO[1:0] <= ATSEL[1:0];
 		end
       if (NEXT)begin
-      ATR0 <= ATR00;
-      ATR1 <= ATR01;
+	  ATR[1:0] <= ATRO[1:0];
       SR0[7:0] <= FSR0[7:0];
       SR1[7:0] <= FSR1[7:0];
       SR2[7:0] <= FSR2[7:0];
@@ -976,15 +971,15 @@ always @(posedge Clk) begin
       if (STEP2)begin
       FSR0[7:0] <= {SR0[6:0],QTA};
       FSR1[7:0] <= {SR1[6:0],QTB};
-      FSR2[7:0] <= {SR2[6:0],ATR0};
-      FSR3[7:0] <= {SR3[6:0],ATR1};
+	  FSR2[7:0] <= {SR2[6:0],ATR[0]};
+	  FSR3[7:0] <= {SR3[6:0],ATR[1]};
                 end		
       if (PCLK) begin
       CLPB_LATCH <= nCLPB;
       F_AT_LATCH <= F_AT;
-	   THO1R <= THO1;
+	  THO1R <= THO1;
       BGC2[3:0] <= BGC1[3:0];
-		end
+		        end
       if (nPCLK) BGC1[3:0] <= BGC_POS[3:0];
 		     end
 // End of background pixel generator module
@@ -1674,3 +1669,4 @@ case(EMPH)  // Emphasis
                       end							
 // End of palette module
 endmodule
+
