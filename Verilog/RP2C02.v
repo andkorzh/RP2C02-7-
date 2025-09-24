@@ -909,8 +909,8 @@ reg [2:0]FH;
 reg CLPB_LATCH;
 reg F_AT_LATCH;
 reg THO1R;
-reg [7:0]PDNN;
-reg [7:0]PDN;
+reg [7:0]PDAT;
+reg [7:0]PDTA;
 reg [7:0]SR0;
 reg [7:0]SR1;
 reg [7:0]SR2;
@@ -935,8 +935,8 @@ assign STEP2  = nPCLK & N_FO;
 wire NEXT;
 assign NEXT   = ~( nPCLK | STEP | STEP2 );
 wire [1:0]ATSEL;
-assign ATSEL[0] = ( PDNN[0] & ~THO1R & ~TVO1 )|( PDNN[2] & THO1R & ~TVO1 )|( PDNN[4] & ~THO1R & TVO1 )|( PDNN[6] & THO1R & TVO1 );
-assign ATSEL[1] = ( PDNN[1] & ~THO1R & ~TVO1 )|( PDNN[3] & THO1R & ~TVO1 )|( PDNN[5] & ~THO1R & TVO1 )|( PDNN[7] & THO1R & TVO1 );
+assign ATSEL[0] = ( PDAT[0] & ~THO1R & ~TVO1 )|( PDAT[2] & THO1R & ~TVO1 )|( PDAT[4] & ~THO1R & TVO1 )|( PDAT[6] & THO1R & TVO1 );
+assign ATSEL[1] = ( PDAT[1] & ~THO1R & ~TVO1 )|( PDAT[3] & THO1R & ~TVO1 )|( PDAT[5] & ~THO1R & TVO1 )|( PDAT[7] & THO1R & TVO1 );
 wire [3:0]BGC_POS;
 assign BGC_POS[3:0] = (~FH[0] & ~FH[1] & ~FH[2]) ? {SR3[7], SR2[7], SR1[7], SR0[7]} :
                       ( FH[0] & ~FH[1] & ~FH[2]) ? {SR3[6], SR2[6], SR1[6], SR0[6]} :
@@ -949,13 +949,13 @@ assign BGC_POS[3:0] = (~FH[0] & ~FH[1] & ~FH[2]) ? {SR3[7], SR2[7], SR1[7], SR0[
 							                                                4'b0000 ;
 // Background Pixel Shift Registers
 wire QTA, QTB;
-SHIFTREG SREG_TA( Clk, NEXT, STEP, SRLOAD ,PDN[7:0], QTA );
-SHIFTREG SREG_TB( Clk, NEXT, STEP, SRLOAD ,PD[7:0],  QTB );
+SHIFTREG SREG_TA( Clk, NEXT, STEP, SRLOAD ,PDTA[7:0], QTA );
+SHIFTREG SREG_TB( Clk, NEXT, STEP, SRLOAD ,PD[7:0],   QTB );
 assign BGC[3:0] = BGC2[3:0] & { 4 { CLPB_LATCH }};
 // Logics
 always @(posedge Clk) begin
-      if (PD_SR)  PDN[7:0]  <= PD[7:0];
-      if (PD_SEL) PDNN[7:0] <= PD[7:0];	
+      if (PD_SR)  PDTA[7:0] <= PD[7:0];
+      if (PD_SEL) PDAT[7:0] <= PD[7:0];	
       if (RC)   FH[2:0] <= 3'b000;
  else if (W5_1) FH[2:0] <= DBIN[2:0];	
       if (SRLOAD)begin
@@ -1669,4 +1669,5 @@ case(EMPH)  // Emphasis
                       end							
 // End of palette module
 endmodule
+
 
