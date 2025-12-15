@@ -25,5 +25,5 @@ Schematic diagram of the FPGA RGB PPU
 
 Added Gerber files for the printed circuit board of the FPGA replacement for the PPU.
 
-
+Attention! The board only has a JTAG configuration interface. Please upload only the jic file. If you try to upload the pof file, you will receive an error.
 
