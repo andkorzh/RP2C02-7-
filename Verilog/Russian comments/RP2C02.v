@@ -336,23 +336,23 @@ TVO1
 
 //Поиск спрайтов, подлежащих выводу на данной строке
 OBJ_EVAL MOD_OBJ_EVAL(
-Clk,			 
-PCLK,	
-nPCLK,		
-Vo[7:0],       
-OB[7:0],		  
-O8_16,		  
-I_OAM2,		 
-nVIS,			 
-SPR_OV,		  
-nF_NT,		
-Hnn[0],		     
-S_EV,			
-PAR_O,		 
-OV[3:0],	 
-OMFG,		  
-PD_FIFO, 
-SPR0_EV 
+Clk,
+PCLK,
+nPCLK,
+Hnn[0],
+Vo[7:0],
+OB[7:0],
+O8_16,
+I_OAM2,
+nVIS,
+SPR_OV,
+nF_NT,
+S_EV,
+PAR_O,
+OV[3:0],
+OMFG,
+PD_FIFO,
+SPR0_EV
 );
 
 //Управление памятью спрайтов
@@ -1671,6 +1671,7 @@ case(EMPH)  // Emphasis
                       end							
 // Конец модуля палитры
 endmodule
+
 
 
 
