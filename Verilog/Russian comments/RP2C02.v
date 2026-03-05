@@ -397,7 +397,7 @@ ZCOL[4:0]
 );
 
 //Мультиплексор пикселей
-VID_MUX MOD_VID_MUX(
+PIX_MUX MOD_VID_MUX(
 Clk,			   
 PCLK,	
 nPCLK,
@@ -592,8 +592,8 @@ always @(posedge Clk) begin
       if (PCLK)  OB_R[7:0] <= OB[7:0];
       if (RC)    PD_R[7:0] <= 8'h00;
  else if (PD_RB) PD_R[7:0] <= PD[7:0];
-         Do[7:0] <= ({8{R4}} & OB_R[7:0]) | ({8{RPIX}} & {2'h0,PIX[5:0]}) 
-	| ({8{R2}} & {R2DB[2:0],DBIN[4:0]}) | ({8{XRB}} & PD_R[7:0]);   // Для PPU2C05-02 (03, 04) добавьте вместо DBIN[4:0] необходимый идентификатор PPU
+	   Do[7:0] <= ({8{R4}} & OB_R[7:0]) | ({8{RPIX}} & {DBIN[7:6],PIX[5:0]}) 
+	| ({8{R2}} & {R2DB[2:0],DBIN[4:0]}) | ({8{XRB}} & PD_R[7:0]);            // Для PPU2C05-02 (03, 04) добавьте вместо DBIN[4:0] необходимый идентификатор PPU
                       end
 endmodule
 
@@ -1223,21 +1223,21 @@ endmodule
 // Модуль управления памятью спрайтов
 //===============================================================================================
 module OAM(
-input Clk,	    // Системный клок 
-input PCLK,	    // Пиксельклок
+input Clk,	        // Системный клок 
+input PCLK,	        // Пиксельклок
 input nPCLK,        // Пиксельклок
 // Входы
-input BLNK,	    // Рендер отключен
-input nVIS,	    // Видимая часть строки
-input W3,	    // Запись в регистр адреса OAM
-input W4,	    // Запись в регистр данных OAM
+input BLNK,	        // Рендер отключен
+input nVIS,	        // Видимая часть строки
+input W3,	        // Запись в регистр адреса OAM
+input W4,	        // Запись в регистр данных OAM
 input I_OAM2,	    // Сигнал инициализации (очистки) OAM2
-input Hnn0,	    // Синхронизированное атомарное состояние PPU
+input Hnn0,	        // Синхронизированное атомарное состояние PPU
 input nEVAL,	    // Сброс счетчика OAM2 и начало процесса обработки OAM2
 input PAR_O,	    // Чтение графики спрайтов
-input Hn0,	    // Синхронизированное атомарное состояние PPU 
-input NHn2,	    // Синхронизированное атомарное состояние PPU	
-input OMFG,	    // Сигнал копирования текущего спрайта сравнения в ОАМ2
+input Hn0,	        // Синхронизированное атомарное состояние PPU 
+input NHn2,	        // Синхронизированное атомарное состояние PPU	
+input OMFG,	        // Сигнал копирования текущего спрайта сравнения в ОАМ2
 input RESCL,	    // Строка пререндера (сброс всех схем выборки)
 input [7:0]DBIN,    // Шина данных CPU
 // Выходы
@@ -1279,6 +1279,8 @@ assign SPR_OVERFLOW = ~( nPCLK | Hn0 | OVF_LATCH | OMFG_LATCH );
 wire OMV;
 assign OMV = (MODE4) ? OAM1ADR[7] & OAM1ADR[6] & OAM1ADR[5] & OAM1ADR[4] & OAM1ADR[3] & OAM1ADR[2] & ~OAM1ADR[1] & ~OAM1ADR[0] 
                      : OAM1ADR[7] & OAM1ADR[6] & OAM1ADR[5] & OAM1ADR[4] & OAM1ADR[3] & OAM1ADR[2] &  OAM1ADR[1] &  OAM1ADR[0];
+wire [2:0]OBDZ;
+assign OBDZ[2:0] =  OAMQ[4:2] &  {3{ ~( OAM1ADR[1] & ~OAM1ADR[0] )}};	
 wire [7:0]OAM1Cout;
 assign OAM1Cout[7:0] = OAM1ADR[7:0] & {OAM1Cout[6:0],1'b1};
 wire [5:0]OAM14Cout; 
@@ -1289,11 +1291,11 @@ wire [4:0]OAM2Cout;
 assign OAM2Cout[4:0] = OAM2ADR[4:0] & {OAM2Cout[3:0],1'b1};
 // Вложенные модули памяти
 wire [7:0]OAMQ, OAM2Q; 
-OAM_RAM  MOD_OAM_RAM  (OAM1ADR[7:0], Clk, DBIN[7:0], (WE & BLNK), OAMQ[7:0]);             // Память OAM
-OAM2_RAM MOD_OAM2_RAM (OAM2ADR[4:0], Clk, ( {8{ I_OAM2 }} | OB2[7:0] ), WE, OAM2Q[7:0]);  // Память OAM2
+OAM_RAM  MOD_OAM_RAM  (OAM1ADR[7:0], Clk, DBIN[7:0], (WE & BLNK), OAMQ[7:0]); // Память OAM
+OAM2_RAM MOD_OAM2_RAM (OAM2ADR[4:0], Clk, OB2[7:0], WE, OAM2Q[7:0]);          // Память OAM2
 // Логика
 always @(posedge Clk) begin
-              if (~W4Q4) W4FF <= 1'b0;
+          if (~W4Q4) W4FF <= 1'b0;
 	 else if (W4)    W4FF <= 1'b1;
 	      if (RESCL)        R2DB5 <= 1'b0;
 	 else if (SPR_OVERFLOW) R2DB5 <= 1'b1;
@@ -1301,19 +1303,19 @@ always @(posedge Clk) begin
 	 else if ( SPR_OVERFLOW |( OMSTEP & OMV_LATCH )) SPR_OV <= 1'b1;
 	      if (ORES)               OAMCTR2 <= 1'b0;
 	 else if (OSTEP & TMV_LATCH ) OAMCTR2 <= 1'b1;
-              if ( W3 | PAR_O | OMSTEP )	OAM1ADR[7:0] <= {8{ ~PAR_O }} & ( W3 ? DBIN[7:0] : OAM1ADR1[7:0]);
-              if (~( W3 | OMSTEP )) OAM1ADR1[7:0] <= MODE4 ? {CNT4[5:0], 2'b00 } : ( OAM1ADR[7:0] ^ {OAM1Cout[6:0],1'b1});
+          if ( W3 | PAR_O | OMSTEP )	OAM1ADR[7:0] <= {8{ ~PAR_O }} & ( W3 ? DBIN[7:0] : OAM1ADR1[7:0]);
+          if (~( W3 | OMSTEP )) OAM1ADR1[7:0] <= MODE4 ? {CNT4[5:0], 2'b00 } : ( OAM1ADR[7:0] ^ {OAM1Cout[6:0],1'b1});
 	      if (OSTEP | ORES) OAM2ADR[4:0] <= ORES ? 5'b00000 : OAM2ADR1[4:0];
 	      if (~( BLNK | nPCLK )) OB2[7:0] <= OB[7:0]; 
-              if (PCLK) begin
+          if (PCLK) begin
 	      W4Q1 <= ~( W4 | ~W4FF );
 	      W4Q3 <=  W4Q2;
 	      W4Q5 <= ~W4Q4;
-		        end
-              if (nPCLK) begin
+		            end
+          if (nPCLK) begin
 	      W4Q2 <=  W4Q1;
 	      W4Q4 <= ~W4Q3;
-              OB[7:0] <= OAP ? OAMQ[7:0] : OAM2Q[7:0];
+          OB[7:0] <= I_OAM2 ? 8'hFF : OAP ? {OAMQ[7:5], OBDZ[2:0], OAMQ[1:0]} : OAM2Q[7:0];
 	      OMSTEP1 <= OFETCH;
 	      OMSTEP2 <= ~( Hnn0 & ~( I_OAM2 | nVIS ));
 	      ORES_LATCH <= nEVAL;
@@ -1325,8 +1327,8 @@ always @(posedge Clk) begin
 	      OMV_LATCH  <= OMV;
 	      TMV_LATCH  <= OAM2Cout[4];
 	      OAM2ADR1[4:0] <= OAM2ADR[4:0] ^ { OAM2Cout[3:0], 1'b1 };
-		         end          
-                      end							
+		              end          
+                        end							
 // Конец модуля управления памятью спрайтов
 endmodule			
 
@@ -1515,7 +1517,7 @@ reg [7:0]QS_IN;     // Первая фаза сдвига
 assign Q = QS[7];   // Выход сдвигового регистра
 // Логика
 always @(posedge Clk) begin
-  if (LOAD | STEP) QS_IN[7:0] <= LOAD ? D[7:0] : {QS[6:0], 1'b0};
+  if (LOAD | STEP) QS_IN[7:0] <= LOAD ? D[7:0] : {QS[6:0], 1'b1};
   if (NEXT) QS[7:0] <= QS_IN[7:0];
                       end
 // Конец модуля сдвигового регистра спрайтового FIFO и BG_COLOR
@@ -1524,7 +1526,7 @@ endmodule
 //===============================================================================================
 // Модуль мультиплексора пикселей
 //===============================================================================================
-module VID_MUX(
+module PIX_MUX(
 input Clk,	     // Системный клок
 input PCLK,	     // Пиксельклок
 input nPCLK,         // Пиксельклок
@@ -1669,5 +1671,6 @@ case(EMPH)  // Emphasis
                       end							
 // Конец модуля палитры
 endmodule
+
 
 
