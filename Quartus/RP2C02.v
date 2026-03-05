@@ -397,7 +397,7 @@ ZCOL[4:0]
 );
 
 // Pixel multiplexer
-VID_MUX MOD_VID_MUX(
+PIX_MUX MOD_PIX_MUX(
 Clk,			   
 PCLK,	
 nPCLK,
@@ -591,7 +591,7 @@ always @(posedge Clk) begin
       if (PCLK)  OB_R[7:0] <= OB[7:0];
       if (RC)    PD_R[7:0] <= 8'h00;
  else if (PD_RB) PD_R[7:0] <= PD[7:0];
-         Do[7:0] <= ({8{R4}} & OB_R[7:0]) | ({8{RPIX}} & {2'h0,PIX[5:0]}) 
+	   Do[7:0] <= ({8{R4}} & OB_R[7:0]) | ({8{RPIX}} & {DBIN[7:6],PIX[5:0]}) 
 	| ({8{R2}} & {R2DB[2:0],DBIN[4:0]}) | ({8{XRB}} & PD_R[7:0]);  // instead of DBIN[4:0] you can add identifiers for 2c05 -02 (03,04)
                       end
 endmodule
@@ -1284,6 +1284,8 @@ assign SPR_OVERFLOW = ~( nPCLK | Hn0 | OVF_LATCH | OMFG_LATCH );
 wire OMV;
 assign OMV = (MODE4) ? OAM1ADR[7] & OAM1ADR[6] & OAM1ADR[5] & OAM1ADR[4] & OAM1ADR[3] & OAM1ADR[2] & ~OAM1ADR[1] & ~OAM1ADR[0] 
                      : OAM1ADR[7] & OAM1ADR[6] & OAM1ADR[5] & OAM1ADR[4] & OAM1ADR[3] & OAM1ADR[2] &  OAM1ADR[1] &  OAM1ADR[0];
+wire [2:0]OBDZ;
+assign OBDZ[2:0] =  OAMQ[4:2] &  {3{ ~( OAM1ADR[1] & ~OAM1ADR[0] )}};
 wire [7:0]OAM1Cout;
 assign OAM1Cout[7:0] = OAM1ADR[7:0] & {OAM1Cout[6:0],1'b1};
 wire [5:0]OAM14Cout; 
@@ -1294,8 +1296,8 @@ wire [4:0]OAM2Cout;
 assign OAM2Cout[4:0] = OAM2ADR[4:0] & {OAM2Cout[3:0],1'b1};
 // Internal memory modules
 wire [7:0]OAMQ, OAM2Q; 
-OAM_RAM  MOD_OAM_RAM  (OAM1ADR[7:0], Clk, DBIN[7:0], (WE & BLNK), OAMQ[7:0]);             // OAM  memory
-OAM2_RAM MOD_OAM2_RAM (OAM2ADR[4:0], Clk, ( {8{ I_OAM2 }} | OB2[7:0] ), WE, OAM2Q[7:0]);  // OAM2 memory
+OAM_RAM  MOD_OAM_RAM  (OAM1ADR[7:0], Clk, DBIN[7:0], (WE & BLNK), OAMQ[7:0]); // OAM  memory
+OAM2_RAM MOD_OAM2_RAM (OAM2ADR[4:0], Clk, OB2[7:0], WE, OAM2Q[7:0]);          // OAM2 memory
 // Logics
 always @(posedge Clk) begin
               if (~W4Q4) W4FF <= 1'b0;
@@ -1318,7 +1320,7 @@ always @(posedge Clk) begin
               if (nPCLK) begin
 	      W4Q2 <=  W4Q1;
 	      W4Q4 <= ~W4Q3;
-              OB[7:0] <= OAP ? OAMQ[7:0] : OAM2Q[7:0];
+          OB[7:0] <= I_OAM2 ? 8'hFF : OAP ? {OAMQ[7:5], OBDZ[2:0], OAMQ[1:0]} : OAM2Q[7:0];
 	      OMSTEP1 <= OFETCH;
 	      OMSTEP2 <= ~( Hnn0 & ~( I_OAM2 | nVIS ));
 	      ORES_LATCH <= nEVAL;
@@ -1520,7 +1522,7 @@ reg [7:0]QS_IN;     // First phase of the shift
 assign Q = QS[7];   // Shift register output
 // Logics
 always @(posedge Clk) begin
-  if (LOAD | STEP) QS_IN[7:0] <= LOAD ? D[7:0] : {QS[6:0], 1'b0};
+  if (LOAD | STEP) QS_IN[7:0] <= LOAD ? D[7:0] : {QS[6:0], 1'b1};
   if (NEXT) QS[7:0] <= QS_IN[7:0];
                       end
 // End of module shift register Sprite FIFO and BG_COLOR
@@ -1529,7 +1531,7 @@ endmodule
 //===============================================================================================
 // Pixel multiplexer module
 //===============================================================================================
-module VID_MUX(
+module PIX_MUX(
 input Clk,	     // System clock
 input PCLK,	     //  Pixel clock
 input nPCLK,         // ~Pixel clock
@@ -1674,3 +1676,4 @@ case(EMPH)  // Emphasis
                       end							
 // End of palette module
 endmodule
+
