@@ -397,7 +397,7 @@ ZCOL[4:0]
 );
 
 // Pixel multiplexer
-PIX_MUX MOD_VID_MUX(
+PIX_MUX MOD_PIX_MUX(
 Clk,			   
 PCLK,	
 nPCLK,
@@ -1671,6 +1671,7 @@ case(EMPH)  // Emphasis
                       end							
 // End of palette module
 endmodule
+
 
 
 
