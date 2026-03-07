@@ -1,6 +1,6 @@
 /*
  ===============================================================================================
- *                             Copyright (C) 2023 - 2024  andkorzh
+ *                             Copyright (C) 2023 - 2026  andkorzh
  *
  *
  *                This program is free software; you can redistribute it and/or
@@ -792,7 +792,7 @@ always @(posedge Clk) begin
 	 NFO2      <= ~( BLNK |  H[8] );
 	 FAT_IN    <= ~(  H[2]| ~H[1] );
 	
-	 if (H_LINE0)  FPORCH_FF <= 1'b1;
+	     if (H_LINE0)  FPORCH_FF <= 1'b1;
     else if (H_LINE1)  FPORCH_FF <= 1'b0;
          if (H_LINE21) BURST_FF  <= 1'b1;
     else if (H_LINE22) BURST_FF  <= 1'b0;	
@@ -806,9 +806,9 @@ always @(posedge Clk) begin
     else if (V_LINE2N | VLINE311)  BLNK_FF <= 1'b0;
          if (V_LINE4)  VB_FF   <= 1'b1;
     else if (V_LINE5)  VB_FF   <= 1'b0;
-	 RESCL_IN <= V_LINE2N | VLINE311; 
+	     RESCL_IN <= V_LINE2N | VLINE311; 
          VSET1    <= V_LINE3N | VLINE291 | VLINE241; // Activate Interrupt Delay
-	 VSET3    <= ~VSET2;
+	     VSET3    <= ~VSET2;
 		    end          
                       end							
 // End of PPU Main Timing Generator Module
@@ -856,25 +856,25 @@ assign ALE = ~( ~R7_Q3 | R7_Q5 ) | ~( ~W7_Q3 | W7_Q5 ) | ~( nPCLK | Hn0 | BLNK )
 // Logics
 always @(posedge Clk) begin
          if (~R7_Q4) R7_FF <= 1'b0;
-	 else if (R7)     R7_FF <= 1'b1;
+	else if (R7)     R7_FF <= 1'b1;
          if (~W7_Q4) W7_FF <= 1'b0;
-	 else if (W7)     W7_FF <= 1'b1;	 
+	else if (W7)     W7_FF <= 1'b1;	 
          if (PCLK) begin
-	 BLNK_LATCH  <= BLNK;
-	 TSTEP_LATCH <= DB_PAR;
-	 R7_Q1 <=  R7_FF & ~R7;
-	 W7_Q1 <=  W7_FF & ~W7;
-	 R7_Q3 <=  R7_Q2;
-	 W7_Q3 <=  W7_Q2;
-	 R7_Q5 <= ~R7_Q4;
-	 W7_Q5 <= ~W7_Q4;
-		   end
+	     BLNK_LATCH  <= BLNK;
+	     TSTEP_LATCH <= DB_PAR;
+	     R7_Q1 <=  R7_FF & ~R7;
+	     W7_Q1 <=  W7_FF & ~W7;
+	     R7_Q3 <=  R7_Q2;
+	     W7_Q3 <=  W7_Q2;
+	     R7_Q5 <= ~R7_Q4;
+	     W7_Q5 <= ~W7_Q4;
+		           end
          if (nPCLK) begin
          R7_Q2 <=  R7_Q1;
-	 W7_Q2 <=  W7_Q1;
-	 R7_Q4 <= ~R7_Q3;
-	 W7_Q4 <= ~W7_Q3;
-		    end          
+	     W7_Q2 <=  W7_Q1;
+	     R7_Q4 <= ~R7_Q3;
+	     W7_Q4 <= ~W7_Q3;
+		            end          
                       end							
 // End of Local Bus Control Module PPU
 endmodule
@@ -949,8 +949,8 @@ assign BGC_POS[3:0] = (~FH[0] & ~FH[1] & ~FH[2]) ? {SR3[7], SR2[7], SR1[7], SR0[
 							                                                4'b0000 ;
 // Background Pixel Shift Registers
 wire QTA, QTB;
-SHIFTREG SREG_TA( Clk, NEXT, STEP, SRLOAD ,PDTA[7:0], QTA );
-SHIFTREG SREG_TB( Clk, NEXT, STEP, SRLOAD ,PD[7:0],   QTB );
+SHIFTREG SREG_TA( Clk, 1'b1, NEXT, STEP, SRLOAD ,PDTA[7:0], QTA );
+SHIFTREG SREG_TB( Clk, 1'b1, NEXT, STEP, SRLOAD ,PD[7:0],   QTB );
 assign BGC[3:0] = BGC2[3:0] & { 4 { CLPB_LATCH }};
 // Logics
 always @(posedge Clk) begin
@@ -958,9 +958,7 @@ always @(posedge Clk) begin
       if (PD_SEL) PDAT[7:0] <= PD[7:0];	
       if (RC)   FH[2:0] <= 3'b000;
  else if (W5_1) FH[2:0] <= DBIN[2:0];	
-      if (SRLOAD)begin
-	  ATRO[1:0] <= ATSEL[1:0];
-		end
+	  if (SRLOAD) ATRO[1:0] <= ATSEL[1:0];
       if (NEXT)begin
 	  ATR[1:0] <= ATRO[1:0];
       SR0[7:0] <= FSR0[7:0];
@@ -991,15 +989,15 @@ endmodule
 module PAR_GEN(
 input Clk,	            // System clock 
 input PCLK,	            //  Pixel clock
-input nPCLK,                // ~Pixel clock
+input nPCLK,            // ~Pixel clock
 // Inputs
-input Hnn0,		    // Synchronized PPU atomic state
-input NHn1,		    // Synchronized PPU atomic state
-input NHn2,		    // Synchronized PPU atomic state
+input Hnn0,		        // Synchronized PPU atomic state
+input NHn1,		        // Synchronized PPU atomic state
+input NHn2,		        // Synchronized PPU atomic state
 input nF_NT,		    // Reading tile number from Name Table
-input RC,		    // Clearing registers
+input RC,		        // Clearing registers
 input PAR_O,		    // Fetch sprite graphics
-input SH2,		    // Sprite attribute reading phase
+input SH2,		        // Sprite attribute reading phase
 input [3:0]OV,		    // Sprite graphic line number
 input [7:0]OB,		    // Sprite data bus
 input [7:0]PD,		    // PPU Graphics Data Bus
@@ -1009,22 +1007,22 @@ input OBSEL,		    // MSB addresses of objects
 input BGSEL,		    // MSB background addresses
 input RESCL,		    // Prerender line (reset all fetch schemes)
 input SC_CNT,		    // Starting the address counter when raster and/or background are turned on
-input W0,		    // Write to register #2000
-input W5_1,		    // Write to register #2005.1
-input W5_2,		    // Write to register #2005.2
-input W6_1,		    // Write to register #2006.1
-input W6_2,		    // Write to register #2006.2
-input F_AT,		    // Attribute Fetching Phase
+input W0,		        // Write to register #2000
+input W5_1,		        // Write to register #2005.1
+input W5_2,		        // Write to register #2005.2
+input W6_1,		        // Write to register #2006.1
+input W6_2,		        // Write to register #2006.2
+input F_AT,		        // Attribute Fetching Phase
 input DB_PAR,		    // Forwarding CPU data to PPU bus
-input E_EV,		    // End of the process of viewing the list and comparing sprites
+input E_EV,		        // End of the process of viewing the list and comparing sprites
 input TSTEP,		    // Increment PPU address counters
-input F_TB,		    // Second tile byte fetch phase
+input F_TB,		        // Second tile byte fetch phase
 input I1_32,		    // PPU address increment +1/+32
-input BLNK,		    // Rendering is disabled
+input BLNK,		        // Rendering is disabled
 // Outputs
-output reg [13:0]PAD,       // VRAM Address/Data Output
-output reg [4:0]THO,	    // Tile counter output
-output TVO1		    // Vertical coordinate in attribute 
+output reg [13:0]PAD,   // VRAM Address/Data Output
+output reg [4:0]THO,	// Tile counter output
+output TVO1		        // Vertical coordinate in attribute 
 );
 // Variables
 reg TAL_LATCH;
@@ -1061,11 +1059,11 @@ wire [3:0]OBJ_INV;
 assign OBJ_INV[3:0] = {4{ VINV_LATCH }} ^ OVOUT[3:0];
 // Address counters control
 wire THLOAD, TVLOAD;
-assign THLOAD = ~( ~( EEVR2 | W62_2 )  | PCLK );
+assign THLOAD = ~( ~( EEVR2 | W62_2 )  | PCLK  );
 assign TVLOAD = ~( ~(( SCCNTR & RESCL )| W62_2 ) | PCLK );
 wire THSTEP, TVSTEP;
-assign THSTEP = ~( ~(( F_TB & Hnn0 )  | TSTEP )| PCLK );
-assign TVSTEP = ~( ~( E_EV   | TSTEP )| PCLK  );
+assign THSTEP = ~( ~(( F_TB   & Hnn0  )| TSTEP ) | PCLK );
+assign TVSTEP = ~( ~( E_EV   | TSTEP  )| PCLK  );
 wire Z_TV;
 assign Z_TV = ~( Z_TV1 | Z_TV2 );
 wire TH_IN, NTH_IN, NTV_IN, FV_IN;
@@ -1115,15 +1113,15 @@ always @(posedge Clk) begin
 	   if (W6_1 | W5_2 | RC) FV[0] <= RC ? 1'b0 : (W6_1 & DBIN[4]) | (W5_2 & DBIN[0]);
 	   if (W6_1 | W5_2 | RC) FV[1] <= RC ? 1'b0 : (W6_1 & DBIN[5]) | (W5_2 & DBIN[1]);
 	   if (W6_1 | W5_2 | RC) FV[2] <= RC ? 1'b0 : (W6_1 & 1'b0   ) | (W5_2 & DBIN[2]);
-           if ( PCLK & SH2 ) VINV_LATCH <= OB[7];
+       if ( PCLK & SH2 ) VINV_LATCH <= OB[7];
 	   TV_IN <= THZB | FVZ | ( I1_32 & BLNK );
 	   if (TAL) begin
 	   OVOUT[3:0] <= OVR[3:0];
 	   OBOUT[7:0] <= OB[7:0];
 	   PDOUT[7:0] <= PDIN[7:0];
 	            end
-           if (nPCLK & W62_2) W62_FF <= 1'b0;
-      else if (W6_2)          W62_FF <= 1'b1;
+       if (nPCLK & W62_2) W62_FF <= 1'b0;
+  else if (W6_2)          W62_FF <= 1'b1;
 	   if (THLOAD | THSTEP) THO[4:0] <= THLOAD ? TH[4:0] : THOIN[4:0];
 	   if (TVLOAD | TVSTEP | Z_TV) TVO[4:0] <= Z_TV ? 5'b00000 : TVLOAD ? TV[4:0] : TVOIN[4:0];
 	   if (THLOAD | THSTEP) NTHD0 <= THLOAD ? NTH : NTHD1;
@@ -1140,9 +1138,9 @@ always @(posedge Clk) begin
 	   NTVD1      <= NTVD0    ^ NTV_IN;
 	   FVOIN[2:0] <= FVO[2:0] ^ {FVOCout[1:0],FV_IN};
 	   PAD[13:0]  <= PAQ[13:0];
-                     end
+                 end
            if (nPCLK) begin
-           TAL_LATCH <= nF_NT | ~Hnn0;
+       TAL_LATCH <= nF_NT | ~Hnn0;
 	   OVR[3:0]  <= OV[3:0];
 	   PDIN[7:0] <= PD[7:0];
 	   TP[2:0]   <= (PAR_O) ? OBJ_INV[2:0] : FVO[2:0] ; 
@@ -1152,8 +1150,8 @@ always @(posedge Clk) begin
 	   Z_TV1     <= ~TVSTEP; 
 	   Z_TV2     <= ~TVZR;
 	   EEVR1     <= E_EV;
-           W62_1     <= ~( ~W62_FF | W6_2 ); 		
-                      end
+       W62_1     <= ~( ~W62_FF | W6_2 ); 		
+                    end
 		    end
 // End of PPU Address Generator Module
 endmodule
@@ -1223,22 +1221,22 @@ endmodule
 // Sprite Memory Management Module
 //===============================================================================================
 module OAM(
-input Clk,	    // System clock 
-input PCLK,	    //  Pixel clock
-input nPCLK,        // ~Pixel clock
+input	Clk,		     // System clock
+input  PCLK,	     // Pixel clock
+input nPCLK,        // Pixel clock
 // Inputs
-input Hnn0,	    // Synchronized PPU atomic state
-input Hn0,	    // Synchronized PPU atomic state 
-input NHn2,	    // Synchronized PPU atomic state	
-input BLNK,	    // Rendering is disabled
-input nVIS,	    // Visible part of the line
-input W3,	    // Write to OAM address register
-input W4,	    // Write to OAM data register
-input I_OAM2,	    // OAM2 Initialization (Clear) Signal
-input nEVAL,	    // Reset OAM2 counter and start OAM2 processing
-input PAR_O,	    // Fetch sprite graphics
-input OMFG,	    // Signal to copy the current comparison sprite in OAM2
-input RESCL,	    // Prerender line (reset all fetch schemes)
+input Hnn0,		     // Synchronized state of the PPU
+input Hn0,		     // Synchronized state of the PPU
+input NHn2,		     // Synchronized state of the PPU
+input BLNK,		     // Rendering is disabled
+input nVIS,		     // Visible part of the line
+input W3,			  // Write to OAM address register
+input W4,			  // Write to OAM data register
+input I_OAM2,		  // OAM2 Initialization (Clear) Signal
+input nEVAL,		  // Reset OAM2 counter and start OAM2 processing
+input PAR_O,		  // Fetch sprite graphics
+input OMFG,		     // Signal to copy the current comparison sprite in OAM2
+input RESCL,		  // Prerender line (reset all fetch schemes)
 input [7:0]DBIN,    // CPU data bus
 // Outputs
 output reg [7:0]OB, // Sprite data bus
@@ -1247,7 +1245,7 @@ output reg SPR_OV   // OAM counter is full or more than 8 sprites found
 );
 // Variables
 reg W4FF;
-reg W4Q1, W4Q2, W4Q3, W4Q4, W4Q5;
+reg [4:0]W4Q;
 reg OMSTEP1, OMSTEP2;
 reg ORES_LATCH;
 reg OSTEP1, OSTEP2, OSTEP3;
@@ -1255,82 +1253,75 @@ reg OVF_LATCH, OMFG_LATCH;
 reg OMV_LATCH, TMV_LATCH;
 reg OAMCTR2;
 reg [7:0]OB2;
-reg [7:0]OAM1ADR, OAM1ADR1;
-reg [4:0]OAM2ADR, OAM2ADR1;
 // Combinatorics
 wire WE_EN;
 assign WE_EN = ~( PCLK | BLNK | nVIS | OAMCTR2 | SPR_OV | ~Hnn0 );
 wire WE;
 assign WE = WE_EN | OFETCH;
 wire OFETCH;
-assign OFETCH = ~( ~W4Q3 | W4Q5 );
+assign OFETCH = ~( ~W4Q[2] | W4Q[4] );
 wire OAP;
 assign OAP = ~(( Hnn0 | nVIS ) & ~BLNK );
+wire SPR_OVERFLOW;
+assign SPR_OVERFLOW = ~( nPCLK | Hn0 | OVF_LATCH | OMFG_LATCH );
+// ОАМ counter control
 wire OMSTEP;
 assign OMSTEP = ~(( nPCLK | ~OMSTEP1 ) & ( nPCLK | OMSTEP2 ));
 wire MODE4;
 assign MODE4 = ~( ~OMFG | BLNK );
 wire ORES;
-assign ORES = ~( nPCLK | ORES_LATCH );
+assign ORES  = ~( nPCLK | ORES_LATCH );
 wire OSTEP;
 assign OSTEP = ~( nPCLK | OSTEP1 | ~(( PAR_O & NHn2 ) | ~( Hn0 | ~( OSTEP2 | OSTEP3 ))));
-wire SPR_OVERFLOW;
-assign SPR_OVERFLOW = ~( nPCLK | Hn0 | OVF_LATCH | OMFG_LATCH );
 wire OMV;
-assign OMV = (MODE4) ? OAM1ADR[7] & OAM1ADR[6] & OAM1ADR[5] & OAM1ADR[4] & OAM1ADR[3] & OAM1ADR[2] & ~OAM1ADR[1] & ~OAM1ADR[0] 
-                     : OAM1ADR[7] & OAM1ADR[6] & OAM1ADR[5] & OAM1ADR[4] & OAM1ADR[3] & OAM1ADR[2] &  OAM1ADR[1] &  OAM1ADR[0];
 wire [2:0]OBDZ;
-assign OBDZ[2:0] =  OAMQ[4:2] &  {3{ ~( OAM1ADR[1] & ~OAM1ADR[0] )}};	
-wire [7:0]OAM1Cout;
-assign OAM1Cout[7:0] = OAM1ADR[7:0] & {OAM1Cout[6:0],1'b1};
-wire [5:0]OAM14Cout; 
-assign OAM14Cout[5:0] = OAM1ADR[7:2] & {OAM14Cout[4:0],1'b1};
-wire [5:0]CNT4;
-assign CNT4[5:0] = OAM1ADR[7:2] ^ {OAM14Cout[4:0],1'b1};
-wire [4:0]OAM2Cout;
-assign OAM2Cout[4:0] = OAM2ADR[4:0] & {OAM2Cout[3:0],1'b1};
+assign OBDZ[2:0] =  OAMQ[4:2] &  {3{ ~( OAM1ADR[1] & ~OAM1ADR[0] )}};
+wire [4:0]OAM2ADR, OAM2Cout;
+wire [7:0]OAM1ADR;
+// OAM COUNTER
+//                  Clk  MODE   Reset LOAD   STEP    DATA     CNT_OUT      C_OUT
+OAM_COUNTER OAMCNT (Clk, MODE4, PAR_O, W3, OMSTEP, DBIN[7:0], OAM1ADR[7:0], OMV);
+// OAM2 COUNTER
+//                    Clk   F2              C_IN        Reset  LOAD   STEP   DATA    CNT_OUT        C_OUT
+COUNTER OAM2CNT[4:0] (Clk, nPCLK, {OAM2Cout[3:0], 1'b1}, ORES, 1'b0, OSTEP, 5'h00, OAM2ADR[4:0], OAM2Cout[4:0]);
 // Internal memory modules
 wire [7:0]OAMQ, OAM2Q; 
-OAM_RAM  MOD_OAM_RAM  (OAM1ADR[7:0], Clk, DBIN[7:0], (WE & BLNK), OAMQ[7:0]);   // OAM  memory
-OAM2_RAM MOD_OAM2_RAM (OAM2ADR[4:0], Clk, OB2[7:0],   WE, OAM2Q[7:0]);          // OAM2 memory
+OAM_RAM  MOD_OAM_RAM  (OAM1ADR[7:0], Clk, DBIN[7:0], (WE & BLNK), OAMQ[7:0]);  // OAM
+OAM2_RAM MOD_OAM2_RAM (OAM2ADR[4:0], Clk,  OB2[7:0],  WE,         OAM2Q[7:0]); // OAM2
 // Logics
 always @(posedge Clk) begin
-              if (~W4Q4) W4FF <= 1'b0;
-	 else if (W4)    W4FF <= 1'b1;
-	      if (RESCL)        R2DB5 <= 1'b0;
-	 else if (SPR_OVERFLOW) R2DB5 <= 1'b1;
+          if (~W4Q[3]) W4FF <= 1'b0;
+	 else if (W4)      W4FF <= 1'b1;
+	      if (RESCL)        R2DB5  <= 1'b0;
+	 else if (SPR_OVERFLOW) R2DB5  <= 1'b1;
 	      if (I_OAM2)       SPR_OV <= 1'b0;
 	 else if ( SPR_OVERFLOW |( OMSTEP & OMV_LATCH )) SPR_OV <= 1'b1;
 	      if (ORES)               OAMCTR2 <= 1'b0;
 	 else if (OSTEP & TMV_LATCH ) OAMCTR2 <= 1'b1;
-          if ( W3 | PAR_O | OMSTEP )	OAM1ADR[7:0] <= {8{ ~PAR_O }} & ( W3 ? DBIN[7:0] : OAM1ADR1[7:0]);
-          if (~( W3 | OMSTEP )) OAM1ADR1[7:0] <= MODE4 ? {CNT4[5:0], 2'b00 } : ( OAM1ADR[7:0] ^ {OAM1Cout[6:0],1'b1});
-	      if (OSTEP | ORES) OAM2ADR[4:0] <= ORES ? 5'b00000 : OAM2ADR1[4:0];
-	      if (~( BLNK | nPCLK )) OB2[7:0] <= OB[7:0]; 
+		  if (~( BLNK | nPCLK )) OB2[7:0] <= OB[7:0]; 
           if (PCLK) begin
-	      W4Q1 <= ~( W4 | ~W4FF );
-	      W4Q3 <=  W4Q2;
-	      W4Q5 <= ~W4Q4;
-			        end
-              if (nPCLK) begin
-	      W4Q2 <=  W4Q1;
-	      W4Q4 <= ~W4Q3;
-          OB[7:0] <= I_OAM2 ? 8'hFF : OAP ? {OAMQ[7:5], OBDZ[2:0], OAMQ[1:0]} : OAM2Q[7:0];
-	      OMSTEP1 <= OFETCH;
-	      OMSTEP2 <= ~( Hnn0 & ~( I_OAM2 | nVIS ));
-	      ORES_LATCH <= nEVAL;
-	      OSTEP1 <= ~( nEVAL & ~OAMCTR2 );
-	      OSTEP2 <= I_OAM2;
-	      OSTEP3 <= ~OMFG;
-	      OVF_LATCH  <= ~OAMCTR2;
-	      OMFG_LATCH <= OMFG;
-	      OMV_LATCH  <= OMV;
-	      TMV_LATCH  <= OAM2Cout[4];
-	      OAM2ADR1[4:0] <= OAM2ADR[4:0] ^ { OAM2Cout[3:0], 1'b1 };
-			            end          
-                     end							
+			W4Q[0] <= ~( W4 | ~W4FF );
+			W4Q[2] <=  W4Q[1];
+			W4Q[4] <= ~W4Q[3];
+			         end
+          if (nPCLK) begin
+			W4Q[1] <=  W4Q[0];
+			W4Q[3] <= ~W4Q[2];
+            OB[7:0] <= I_OAM2 ? 8'hFF : OAP ? {OAMQ[7:5], OBDZ[2:0], OAMQ[1:0]} : OAM2Q[7:0];
+		    OMSTEP1 <= OFETCH;
+			OMSTEP2 <= ~( Hnn0 & ~( I_OAM2 | nVIS ));
+			ORES_LATCH <= nEVAL;
+			OSTEP1 <= ~( nEVAL & ~OAMCTR2 );
+			OSTEP2 <= I_OAM2;
+			OSTEP3 <= ~OMFG;
+			OVF_LATCH  <= ~OAMCTR2;
+			OMFG_LATCH <= OMFG;
+		    OMV_LATCH  <= OMV;
+	        TMV_LATCH  <= OAM2Cout[4];
+			            end
+                      end
 // End of Sprite Memory Management Module
-endmodule			
+endmodule
 
 //===============================================================================================
 // Sprite FIFO Module
@@ -1379,22 +1370,22 @@ FIFO_HPOSCNT HPOSCNT7( Clk, PCLK, nPCLK, OB[7:0], (PCLK & SH3 & SEL_LATCH[7]), n
 wire [7:0]SDATA;
 assign SDATA[7:0] = {8{ PD_FIFO }} & PD_LATCH[7:0];
 wire[7:0]COL0, COL1;
-SHIFTREG SREG_0A( Clk, nPCLK,(PCLK & EN[0]), (PCLK & SH5 & SEL_LATCH[0]), SDATA[7:0], COL0[0] );
-SHIFTREG SREG_0B( Clk, nPCLK,(PCLK & EN[0]), (PCLK & SH7 & SEL_LATCH[0]), SDATA[7:0], COL1[0] );
-SHIFTREG SREG_1A( Clk, nPCLK,(PCLK & EN[1]), (PCLK & SH5 & SEL_LATCH[1]), SDATA[7:0], COL0[1] );
-SHIFTREG SREG_1B( Clk, nPCLK,(PCLK & EN[1]), (PCLK & SH7 & SEL_LATCH[1]), SDATA[7:0], COL1[1] );
-SHIFTREG SREG_2A( Clk, nPCLK,(PCLK & EN[2]), (PCLK & SH5 & SEL_LATCH[2]), SDATA[7:0], COL0[2] );
-SHIFTREG SREG_2B( Clk, nPCLK,(PCLK & EN[2]), (PCLK & SH7 & SEL_LATCH[2]), SDATA[7:0], COL1[2] );
-SHIFTREG SREG_3A( Clk, nPCLK,(PCLK & EN[3]), (PCLK & SH5 & SEL_LATCH[3]), SDATA[7:0], COL0[3] );
-SHIFTREG SREG_3B( Clk, nPCLK,(PCLK & EN[3]), (PCLK & SH7 & SEL_LATCH[3]), SDATA[7:0], COL1[3] );
-SHIFTREG SREG_4A( Clk, nPCLK,(PCLK & EN[4]), (PCLK & SH5 & SEL_LATCH[4]), SDATA[7:0], COL0[4] );
-SHIFTREG SREG_4B( Clk, nPCLK,(PCLK & EN[4]), (PCLK & SH7 & SEL_LATCH[4]), SDATA[7:0], COL1[4] );
-SHIFTREG SREG_5A( Clk, nPCLK,(PCLK & EN[5]), (PCLK & SH5 & SEL_LATCH[5]), SDATA[7:0], COL0[5] );
-SHIFTREG SREG_5B( Clk, nPCLK,(PCLK & EN[5]), (PCLK & SH7 & SEL_LATCH[5]), SDATA[7:0], COL1[5] );
-SHIFTREG SREG_6A( Clk, nPCLK,(PCLK & EN[6]), (PCLK & SH5 & SEL_LATCH[6]), SDATA[7:0], COL0[6] );
-SHIFTREG SREG_6B( Clk, nPCLK,(PCLK & EN[6]), (PCLK & SH7 & SEL_LATCH[6]), SDATA[7:0], COL1[6] );
-SHIFTREG SREG_7A( Clk, nPCLK,(PCLK & EN[7]), (PCLK & SH5 & SEL_LATCH[7]), SDATA[7:0], COL0[7] );
-SHIFTREG SREG_7B( Clk, nPCLK,(PCLK & EN[7]), (PCLK & SH7 & SEL_LATCH[7]), SDATA[7:0], COL1[7] ); 
+SHIFTREG SREG_0A( Clk, 1'b0, nPCLK,(PCLK & EN[0]), (PCLK & SH5 & SEL_LATCH[0]), SDATA[7:0], COL0[0] );
+SHIFTREG SREG_0B( Clk, 1'b0, nPCLK,(PCLK & EN[0]), (PCLK & SH7 & SEL_LATCH[0]), SDATA[7:0], COL1[0] );
+SHIFTREG SREG_1A( Clk, 1'b0, nPCLK,(PCLK & EN[1]), (PCLK & SH5 & SEL_LATCH[1]), SDATA[7:0], COL0[1] );
+SHIFTREG SREG_1B( Clk, 1'b0, nPCLK,(PCLK & EN[1]), (PCLK & SH7 & SEL_LATCH[1]), SDATA[7:0], COL1[1] );
+SHIFTREG SREG_2A( Clk, 1'b0, nPCLK,(PCLK & EN[2]), (PCLK & SH5 & SEL_LATCH[2]), SDATA[7:0], COL0[2] );
+SHIFTREG SREG_2B( Clk, 1'b0, nPCLK,(PCLK & EN[2]), (PCLK & SH7 & SEL_LATCH[2]), SDATA[7:0], COL1[2] );
+SHIFTREG SREG_3A( Clk, 1'b0, nPCLK,(PCLK & EN[3]), (PCLK & SH5 & SEL_LATCH[3]), SDATA[7:0], COL0[3] );
+SHIFTREG SREG_3B( Clk, 1'b0, nPCLK,(PCLK & EN[3]), (PCLK & SH7 & SEL_LATCH[3]), SDATA[7:0], COL1[3] );
+SHIFTREG SREG_4A( Clk, 1'b0, nPCLK,(PCLK & EN[4]), (PCLK & SH5 & SEL_LATCH[4]), SDATA[7:0], COL0[4] );
+SHIFTREG SREG_4B( Clk, 1'b0, nPCLK,(PCLK & EN[4]), (PCLK & SH7 & SEL_LATCH[4]), SDATA[7:0], COL1[4] );
+SHIFTREG SREG_5A( Clk, 1'b0, nPCLK,(PCLK & EN[5]), (PCLK & SH5 & SEL_LATCH[5]), SDATA[7:0], COL0[5] );
+SHIFTREG SREG_5B( Clk, 1'b0, nPCLK,(PCLK & EN[5]), (PCLK & SH7 & SEL_LATCH[5]), SDATA[7:0], COL1[5] );
+SHIFTREG SREG_6A( Clk, 1'b0, nPCLK,(PCLK & EN[6]), (PCLK & SH5 & SEL_LATCH[6]), SDATA[7:0], COL0[6] );
+SHIFTREG SREG_6B( Clk, 1'b0, nPCLK,(PCLK & EN[6]), (PCLK & SH7 & SEL_LATCH[6]), SDATA[7:0], COL1[6] );
+SHIFTREG SREG_7A( Clk, 1'b0, nPCLK,(PCLK & EN[7]), (PCLK & SH5 & SEL_LATCH[7]), SDATA[7:0], COL0[7] );
+SHIFTREG SREG_7B( Clk, 1'b0, nPCLK,(PCLK & EN[7]), (PCLK & SH7 & SEL_LATCH[7]), SDATA[7:0], COL1[7] ); 
 // Sprite Output Priority
 wire [7:0]SPR;
 assign SPR[0] = ~( CLPO | ~EN[0] | ~( COL0[0] | COL1[0] ) );
@@ -1488,11 +1479,9 @@ assign Cout[7:0] = ~CNT[7:0] & {Cout[6:0], 1'b1};
 always @(posedge Clk) begin
 	      if ( PCLK & ( ~|CNT[7:0] ))            ZH_FF <= 1'b0;
 	 else if (~( nPCLK | n0_H | ( ~|CNT[7:0] ))) ZH_FF <= 1'b1;
-              if (LOAD | STEP) CNT[7:0] <= LOAD ? OB[7:0] : CNT1[7:0];
+          if (LOAD | STEP) CNT[7:0] <= LOAD ? OB[7:0] : CNT1[7:0];
 	      if ( ~(LOAD | STEP)) CNT1[7:0] <= CNT[7:0] ^ {Cout[6:0], 1'b1};
-              if (nPCLK) begin
-	      EN <= ~( nVIS | ZH_FF );
-		         end
+          if (nPCLK)  EN <= ~( nVIS | ZH_FF );
                        end						 
 // End of Sprite FIFO Horizontal Position Counter Module
 endmodule
@@ -1501,9 +1490,10 @@ endmodule
 // Sprite FIFO and BG_COLOR shift register module
 //===============================================================================================
 module SHIFTREG(
-input Clk,	    // System clock
-// Inputs 
-input NEXT,	    // Shift Resolution, Phase 2
+input Clk,	        // System clock
+// Inputs
+input SIN,          // Shift register serial input	
+input NEXT,	        // Shift Resolution, Phase 2
 input STEP,         // Shift Resolution, Phase 1 
 input LOAD,         // Permission to load data for shift
 input [7:0]D,       // Data to shift
@@ -1517,8 +1507,8 @@ reg [7:0]QS_IN;     // First phase of the shift
 assign Q = QS[7];   // Shift register output
 // Logics
 always @(posedge Clk) begin
-	if (LOAD | STEP) QS_IN[7:0] <= LOAD ? D[7:0] : {QS[6:0], 1'b1};
-  if (NEXT) QS[7:0] <= QS_IN[7:0];
+	if (LOAD | STEP) QS_IN[7:0] <= LOAD ? D[7:0] : {QS[6:0], SIN};
+    if (NEXT) QS[7:0] <= QS_IN[7:0];
                       end
 // End of module shift register Sprite FIFO and BG_COLOR
 endmodule
@@ -1671,6 +1661,7 @@ case(EMPH)  // Emphasis
                       end							
 // End of palette module
 endmodule
+
 
 
 
