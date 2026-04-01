@@ -53,11 +53,13 @@ output ALE,         // ALE VRAM Address Low Byte Latch Strobe Output
 output nWR,         // VRAM Write Strobe
 output nRD,         // VRAM Read Strobe
 output SYNC,        // Composite sync output
-output [7:0]DBIN,   // PPU open data bus
+output [7:0]DBIN,   // PPU Register Open Bus
 output DB_PAR       // Forwarding CPU data to PPU bus
 );
 // Module connections
 wire nPCLK;
+wire [5:0]Hn;
+wire [5:0]Hnn;
 wire [7:0]OB;
 wire [3:0]OV;
 wire [7:0]Vo;
@@ -68,10 +70,6 @@ wire [3:0]BGC;
 wire [4:0]ZCOL;
 wire [4:0]CGA;
 wire [2:0]EMPH;   //EMPHASIS
-wire Hn0;
-wire nHn2;
-wire nHn1;
-wire [5:0]Hnn;
 wire W0;
 wire W1;
 wire R2;
@@ -113,6 +111,8 @@ wire N_FO;
 wire BURST;
 wire SC_CNT;
 wire nPICTURE;
+wire HSYNC;
+wire VSYNC;
 wire RC;
 wire RESCL;
 wire BLNK;
@@ -130,7 +130,7 @@ wire SH2;
 wire RPIX;
 wire SUBCLK;
 
-// CLK DIVIDER
+//CLK DIVIDER
 CLK_DIV MOD_CLK_DIV(
 Clk2,
 MODE,
@@ -140,7 +140,7 @@ nPCLK,
 SUBCLK
 );
 
-// Register Selection Signals
+//Register Selection Signals
 REGISTER_SELECT MOD_REGISTER_SELECT(
 Clk,
 DB[7:0],
@@ -221,9 +221,7 @@ BLACK,
 VBL_EN,
 R2,
 nRES,
-Hn0,
-nHn2,
-nHn1,
+Hn[5:0],
 Hnn[5:0],
 S_EV,
 CLIP_O,
@@ -242,6 +240,8 @@ N_FO,
 BURST,
 SC_CNT,
 SYNC,
+HSYNC,
+VSYNC,
 nPICTURE,
 RC,
 RESCL,
@@ -251,13 +251,13 @@ R2DB[2],
 Vo[7:0]
 );
 
-// PPU Local Bus Management
+//PPU Local Bus Management
 LOCAL_BUS_CONTROL MOD_LOCAL_BUS_CONTROL(
 Clk,
 PCLK,
 nPCLK,
 Hnn[0],
-Hn0,
+Hn[0],
 R7,
 W7,
 BLNK,
@@ -272,7 +272,7 @@ XRB,
 TH_MUX
 );
 
-// Background Pixel Generator
+//Background Pixel Generator
 BG_COLOR MOD_BG_COLOR(
 Clk,
 PCLK,
@@ -292,14 +292,14 @@ RC,
 BGC[3:0]
 );
 
-// PPU address generator
+//PPU address generator
 PAR_GEN MOD_PAR_GEN(
 Clk,
 PCLK,
 nPCLK,
 Hnn[0],
-nHn1,
-nHn2,
+Hn[1],
+Hn[2],
 F_NT,
 F_AT,
 F_TB,
@@ -330,7 +330,7 @@ THO[4:0],
 TVO1
 );
 
-// Find sprites to be output on a next line
+//Find sprites to be output on a next line
 OBJ_EVAL MOD_OBJ_EVAL(
 Clk,
 PCLK,
@@ -351,14 +351,14 @@ PD_FIFO,
 SPR0_EV
 );
 
-// Sprite Memory Management
+//Sprite Memory Management
 OAM MOD_OAM(
 Clk,
 PCLK,
 nPCLK,
 Hnn[0],
-Hn0,
-nHn2,
+Hn[0],
+Hn[2],
 BLNK,
 nVIS,
 W3,
@@ -374,7 +374,7 @@ R2DB[0],
 SPR_OV
 );
 
-// Sprite FIFO
+//Sprite FIFO
 OBJ_FIFO MOD_OBJ_FIFO(
 Clk,
 PCLK,
@@ -392,7 +392,7 @@ SH2,
 ZCOL[4:0]
 );
 
-// Pixel multiplexer
+//Pixel multiplexer
 PIX_MUX MOD_PIX_MUX(
 Clk,
 PCLK,
@@ -409,7 +409,7 @@ CGA[4:0],
 R2DB[1]
 );
 
-// Palette module
+//Palette module
 PALETTE MOD_PALETTE(
 Clk,
 PCLK,
@@ -473,7 +473,7 @@ input nDBE,            // PPU access strobe
 input RnW,             // R/W circulation direction
 input [2:0]A,          // Register address
 // Outputs
-output reg [7:0]DBIN,  // PPU open data bus
+output reg [7:0]DBIN,  // PPU Register Open Bus
 output R_EN,           // CPU Data Bus Tristate Management
 output reg W0,         // Write to register $2000
 output reg W1,         // Write to register $2001
@@ -512,6 +512,7 @@ always @(posedge Clk) begin
         W6_2 <=  ADR[2] &  ADR[1] & ~ADR[0] & ~RnWR & ~nDBER & ~DWR2;
         R7   <=  ADR[2] &  ADR[1] &  ADR[0] &  RnWR & ~nDBER;
         W7   <=  ADR[2] &  ADR[1] &  ADR[0] & ~RnWR & ~nDBER;
+
         if (R2) DWR1 <= 1'b1;
    else if (W5_1 | W5_2 | W6_1 | W6_2) DWR1 <= ~DWR2;
         if (R2) DWR2 <= 1'b1;
@@ -530,10 +531,10 @@ input nPCLK,        // ~Pixel clock
 input W0,           // Write to register $2000
 input W1,           // Write to register $2001
 input RC,           // Clearing registers
-input [7:0]DBIN,    // PPU open data bus
+input [7:0]DBIN,    // PPU Register Open Bus
 input nVIS,         // Visible part of the line
 input CLIP_O,       // Blanking the left column of 8 screen pixels for sprites
-input CLIP_B,       // Blanking the left column of 8 screen dots for the background
+input CLIP_B,       // Blanking the left column of 8 screen dots for background
 input MODE,         // PAL/NTSC mode
 // Outputs
 output reg I1_32,   // PPU address increment +1/+32
@@ -567,16 +568,8 @@ assign EMPH[2:0] = MODE ? {W1R[7], EMP_R, EMP_G} : {W1R[7], EMP_G, EMP_R}; // Fo
 always @(posedge Clk) begin
    if (W0) W0R[4:0] <= RC ? 5'h00 : {DBIN[7],DBIN[5:2]};
    if (W1) W1R[7:0] <= RC ? 8'h00 : DBIN[7:0];
-   if (~W0) I1_32   <= W0R[0];
-   if (~W0) OBSEL   <= W0R[1];
-   if (~W0) BGSEL   <= W0R[2];
-   if (~W0) O8_16   <= W0R[3];
-   if (~W1) BGCLIP  <= W1R[1];
-   if (~W1) OBCLIP  <= W1R[2];
-   if (~W1) BGE     <= W1R[3];
-   if (~W1) OBE     <= W1R[4];
-   if (~W1) EMP_R   <= W1R[5];
-   if (~W1) EMP_G   <= W1R[6];
+   if (~W0) {O8_16, BGSEL, OBSEL, I1_32} <= W0R[3:0];
+   if (~W1) {EMP_G, EMP_R, OBE, BGE, OBCLIP, BGCLIP} <= W1R[6:1];
    if (nPCLK) begin
    nVISR  <= nVIS;
    CLIPBR <= CLIP_B;
@@ -599,11 +592,11 @@ input [7:0]OB,     // Sprite data bus
 input RPIX,        // Selecting RAM data palette
 input [5:0]PIX,    // RAM data palette
 input R2,          // $2002 Reading Selection
-input [2:0]R2DB,   // R$2002 data
+input [2:0]R2DB,   // $2002 data
 input XRB,         // VRAM Read Selection
 input PD_RB,       // VRAM Bus Bridge Strobe
 input RC,          // Clearing registers
-input [7:0]DBIN,   // PPU open data bus
+input [7:0]DBIN,   // PPU Register Open Bus
 input [7:0]PD,     // PPU Graphics Data Bus
 // Outputs
 output [7:0]DB     // Output data for reading PPU from CPU side
@@ -622,7 +615,7 @@ always @(posedge Clk) begin
       if (RC)    PD_R[7:0] <= 8'h00;
  else if (PD_RB) PD_R[7:0] <= PD[7:0];
       Do[7:0] <= ({8{R4}} & OB_R[7:0]) | ({8{RPIX}} & {DBIN[7:6],PIX[5:0]})
-   | ({8{R2}} & {R2DB[2:0],DBIN[4:0]}) | ({8{XRB}} & PD_R[7:0]);  // instead of DBIN[4:0] you can add identifiers for 2c05 -02 (03,04)
+      | ({8{R2}} & {R2DB[2:0],DBIN[4:0]}) | ({8{XRB}} & PD_R[7:0]);  // instead of DBIN[4:0] you can add identifiers for 2c05 -02 (03,04)
                       end
 endmodule
 
@@ -630,7 +623,7 @@ endmodule
 // PPU Main Timing Generator Module
 //===============================================================================================
 module TIMING_GENERATOR(
-input Clk,           // System clock 
+input Clk,           // System clock
 input PCLK,          //  Pixel clock
 input nPCLK,         // ~Pixel clock
 // Inputs
@@ -643,10 +636,8 @@ input VBL_EN,        // Enable VBlank Interrupt Request
 input R2,            // Reading register $2002
 input nRES,          // PPU Master Reset
 // Outputs
-output Hn0,          // Synchronized PPU atomic state
-output nHn2,         // Synchronized PPU atomic state
-output nHn1,         // Synchronized PPU atomic state
-output reg[5:0]Hnn,  // Synchronized PPU atomic state
+output reg[5:0]Hn,   // Synchronized state of the PPU
+output reg[5:0]Hnn,  // Synchronized state of the PPU
 output reg S_EV,     // Starting the sprite list view process
 output CLIP_O,       // Left column blanking 8 dots at sprite
 output CLIP_B,       // Left column blanking 8 dots at background
@@ -655,7 +646,7 @@ output reg nEVAL,    // Reset OAM2 counter and start OAM2 processing
 output reg E_EV,     // End of the process of viewing the list and comparing sprites
 output reg I_OAM2,   // OAM2 Initialization (Clear) Signal
 output reg PAR_O,    // Fetch sprite graphics
-output reg nVIS,     // Visible part of the line
+output reg nVIS,     // Visible part of the line sprites
 output reg F_NT,     // Reading tile number from Name Table
 output F_AT,         // Phase of fetching attributes from Name Table
 output F_TA,         // First byte tile fetch phase
@@ -664,23 +655,20 @@ output N_FO,         // Activate graphics shift
 output BURST,        // Color Subcarrier Sync Burst Output Mask
 output SC_CNT,       // Starting the address counter when raster and/or background are turned on
 output SYNC,         // Composite sync output
+output reg HSYNC,    // horizontal synchronization
+output reg VSYNC,    // vertical synchronization
 output nPICTURE,     // Blanking
 output reg RC,       // Clearing registers
 output reg RESCL,    // Prerender line (reset all fetch schemes)
 output BLNK,         // Rendering is disabled
-output INT,          // NMI interrupt on VBLANK
-output reg R2DB7,    // Reading NMI flag
+output INT,          // interrupt on VBLANK
+output reg R2DB7,    // Reading INT flag
 output [7:0]Vo       // Vertical counter output (for sprite machine)
 );
 // Variables
-reg [8:0]H;
-reg [8:0]V;
-reg [8:0]H_IN;
-reg [8:0]V_IN;
 reg HC, VC_LATCH;
-reg ODDEVEN1, ODDEVEN2;
+reg [1:0]ODDEVEN;
 reg FPORCH_FF;
-reg [5:0]Hn;
 reg SEV_IN;
 reg CLIP_OUT, CLIP1, CLIP2;
 reg HPOS_IN;
@@ -696,29 +684,27 @@ reg NFO_OUT, NFO1, NFO2;
 reg FAT_IN;
 reg BURST_FF, BURST_OUT;
 reg N_HB;
-reg VSYNC_FF, HSYNC, VSYNC;
+reg VSYNC_FF;
 reg BPORCH_FF;
 reg PEN_FF, PICT1, PICT2;
 reg RESCL_IN;
 reg BLNK_FF;
 reg VB_FF;
 reg VSET1,VSET2,VSET3;
-reg INT_FF; 
+reg INT_FF;
 // Combinatorics
-// HV COUNTERS CONTROL
-wire [8:0]HCarry;
-assign HCarry[8:0] = H[8:0] & {HCarry[7:5],HIN5,HCarry[3:0], 1'b1};
-wire [8:0]VCarry;
-assign VCarry[8:0] = V[8:0] & {VCarry[7:0], H_LINE23};
-wire HIN5;
-assign HIN5 = H[4] & H[3] & H[2] & H[1] & H[0];
-wire VC;
-assign VC = HC | ~VC_LATCH;
-assign Hn0  =  Hn[0];
-assign nHn1 = ~Hn[1];
-assign nHn2 = ~Hn[2];
 assign CLIP_O = ~( CLIP_OUT | OBCLIP );
 assign CLIP_B = ~( CLIP_OUT | BGCLIP );
+// HV COUNTERS CONTROL
+wire [8:0]H, V, HCout, VCout, HCarry, VCarry;
+assign HCarry[8:0] = {HCout[7:5], H[4] & H[3] & H[2] & H[1] & H[0], HCout[3:0], 1'b1};
+assign VCarry[8:0] = {VCout[7:0], H_LINE23};
+wire VC;
+assign VC = HC | ~VC_LATCH;
+// HV COUNTERS
+//                Clk   F2       C_IN      Reset     LOAD     STEP   DATA   CNT_OUT    C_OUT
+COUNTER HCNT[8:0](Clk, nPCLK, HCarry[8:0], ~nRES, ~HC & PCLK, PCLK, 9'h000, H[8:0],  HCout[8:0]);
+COUNTER VCNT[8:0](Clk, nPCLK, VCarry[8:0], ~nRES, ~VC & PCLK, PCLK, 9'h000, V[8:0],  VCout[8:0]);
 //HV PLA (NTSC/PAL)
 wire H_LINE0, H_LINE1, H_LINE2, H_LINE5, H_LINE6, H_LINE7, H_LINE17, H_LINE18;
 wire H_LINE20, H_LINE21, H_LINE22, H_LINE23;
@@ -764,9 +750,9 @@ assign Vo[7:0] = V[7:0];
 assign INT = VBL_EN & INT_FF;
 // Logics
 always @(posedge Clk) begin
-         if (~nRES) ODDEVEN1 <= 1'b0;
-    else if ( V[8]) ODDEVEN1 <=  ODDEVEN2;
-         if (~V[8]) ODDEVEN2 <= ~ODDEVEN1;
+         if (~nRES) ODDEVEN[0] <= 1'b0;
+    else if ( V[8]) ODDEVEN[0] <=  ODDEVEN[1];
+         if (~V[8]) ODDEVEN[1] <= ~ODDEVEN[0];
          if (N_HB) begin
          if (V_LINE1N | V_LINE1P) VSYNC_FF <= 1'b1;
     else if (V_LINE0N | V_LINE0P) VSYNC_FF <= 1'b0;
@@ -775,10 +761,8 @@ always @(posedge Clk) begin
     else if (RESCL) RC <= 1'b0;
          if (RESCL | R2)                  INT_FF <= 1'b0;
     else if (~( nPCLK | ~VSET1 | VSET3 )) INT_FF <= 1'b1;
-         if ( ~R2 ) R2DB7 <= INT_FF;
+         if (~R2) R2DB7 <= INT_FF;
          if (PCLK) begin
-         H[8:0]    <= ~nRES ? 9'h000 : { 9 { HC }} & H_IN[8:0];
-         V[8:0]    <= ~nRES ? 9'h000 : { 9 { VC }} & V_IN[8:0];
          Hnn[5:0]  <= Hn[5:0];
          S_EV      <= SEV_IN;
          CLIP_OUT  <= ~( CLIP1 | ~CLIP2 );
@@ -801,9 +785,7 @@ always @(posedge Clk) begin
          VSET2     <= ~VSET1;
                     end
          if (nPCLK) begin
-         H_IN[8:0] <= H[8:0] ^ {HCarry[7:5],HIN5,HCarry[3:0], 1'b1};
-         V_IN[8:0] <= V[8:0] ^ {VCarry[7:0], H_LINE23};
-         HC        <= ~( H_LINE23 | ( H_LINE5 & ~ODDEVEN1 & RESCL & ~MODE ));
+         HC        <= ~( H_LINE23 | ( H_LINE5 & ~ODDEVEN[0] & RESCL & ~MODE ));
          VC_LATCH  <= V_LINE2N | VLINE311;
          Hn[5:0]   <= H[5:0];
          SEV_IN    <= H_LINE2;
@@ -836,7 +818,7 @@ always @(posedge Clk) begin
          if (V_LINE4)  VB_FF   <= 1'b1;
     else if (V_LINE5)  VB_FF   <= 1'b0;
          RESCL_IN <= V_LINE2N | VLINE311;
-         VSET1    <= V_LINE3N | VLINE291 | VLINE241; // Activate Interrupt Delay
+         VSET1    <= V_LINE3N | VLINE291 | VLINE241; // activating the interrupt queue
          VSET3    <= ~VSET2;
                    end
                       end
@@ -848,8 +830,8 @@ endmodule
 //===============================================================================================
 module LOCAL_BUS_CONTROL(
 input Clk,       // System clock
-input PCLK,      // Pixel clock
-input nPCLK,     // Pixel clock
+input PCLK,      //  Pixel clock
+input nPCLK,     // ~Pixel clock
 // Inputs
 input Hnn0,      // Synchronized state of the PPU
 input Hn0,       // Synchronized state of the PPU
@@ -877,11 +859,11 @@ reg TSTEP_LATCH;
 assign TH_MUX = PAD[13] & PAD[12] & PAD[11] & PAD[10] & PAD[9] & PAD[8] & BLNK_LATCH;
 assign TSTEP  = PD_RB | TSTEP_LATCH;
 assign PD_RB  = ~( ~R7Q[4] | R7Q[2] );
-assign DB_PAR = ~(  W7Q[1] | W7Q[3] );
+assign DB_PAR = ~(  W7Q[3] | W7Q[1] );
 assign nWR = ~DB_PAR | TH_MUX;
 assign nRD = ~( PD_RB | ( Hnn0 & ~BLNK ));
 assign XRB = ~( ~R7 | TH_MUX );
-assign ALE = ~( ~R7Q[2] | R7Q[4] ) | ~( ~W7Q[2] | W7Q[4] ) | ~( nPCLK | Hn0 | BLNK );
+assign ALE = ~( R7Q[4] | ~R7Q[2] ) | ~( W7Q[4] | ~W7Q[2] ) | ~( nPCLK | Hn0 | BLNK );
 // Logics
 always @(posedge Clk) begin
          if (~R7Q[3]) R7_FF <= 1'b0;
@@ -891,14 +873,14 @@ always @(posedge Clk) begin
          if (PCLK) begin
          BLNK_LATCH  <= BLNK;
          TSTEP_LATCH <= DB_PAR;
-         {R7Q[0], R7Q[2], R7Q[4]} <= { R7_FF & ~R7, R7Q[1], ~R7Q[3]};
-         {W7Q[0], W7Q[2], W7Q[4]} <= { W7_FF & ~W7, W7Q[1], ~W7Q[3]};
+         {R7Q[4], R7Q[2], R7Q[0]} <= {~R7Q[3], R7Q[1], R7_FF & ~R7};
+         {W7Q[4], W7Q[2], W7Q[0]} <= {~W7Q[3], W7Q[1], W7_FF & ~W7};
                     end
          if (nPCLK) begin
-         {R7Q[1], R7Q[3]} <= {R7Q[0], ~R7Q[2]};
-         {W7Q[1], W7Q[3]} <= {W7Q[0], ~W7Q[2]};
-                     end
-                        end
+         {R7Q[3], R7Q[1]} <= {~R7Q[2], R7Q[0]};
+         {W7Q[3], W7Q[1]} <= {~W7Q[2], W7Q[0]};
+                    end
+                       end
 // End of Local Bus Control Module PPU
 endmodule
 
@@ -907,8 +889,8 @@ endmodule
 //===============================================================================================
 module BG_COLOR(
 input Clk,        // System clock
-input PCLK,       // Pixel clock
-input nPCLK,      // Pixel clock
+input PCLK,       //  Pixel clock
+input nPCLK,      // ~Pixel clock
 // Inputs
 input Hnn0,       // Synchronized state of the PPU
 input nCLPB,      // Background is off
@@ -919,7 +901,7 @@ input N_FO,       // Activate graphics shift
 input [7:0]PD,    // PPU Graphics Data Bus
 input THO1,       // Horizontal coordinate in attribute
 input TVO1,       // Vertical coordinate in attribute
-input [2:0]DBIN,  // PPU open data bus
+input [2:0]DBIN,  // PPU Register Open Bus
 input W5_1,       // Write to the fine horizontal scroll register $2005.1
 input RC,         // Clearing registers
 // Outputs
@@ -937,17 +919,12 @@ reg [7:0]PDTA;
 reg [1:0]ATR;
 reg [1:0]ATRO;
 // Combinatorics
-wire PD_SR;
+wire PD_SR, PD_SEL, SRLOAD, STEP, STEP2, NEXT;
 assign PD_SR  = nPCLK & Hnn0 & F_TA;
-wire PD_SEL;
 assign PD_SEL = nPCLK & Hnn0 & F_AT_LATCH;
-wire SRLOAD;
 assign SRLOAD = nPCLK & Hnn0 & F_TB;
-wire STEP;
 assign STEP   = nPCLK & N_FO & ~( Hnn0 & F_TB );
-wire STEP2;
 assign STEP2  = nPCLK & N_FO;
-wire NEXT;
 assign NEXT   = ~( nPCLK | STEP | STEP2 );
 wire [1:0]ATSEL;
 assign ATSEL[0] = ( PDAT[0] & ~THO1R & ~TVO1 )|( PDAT[2] & THO1R & ~TVO1 )|( PDAT[4] & ~THO1R & TVO1 )|( PDAT[6] & THO1R & TVO1 );
@@ -972,7 +949,7 @@ assign BGC_POS[3:0] = (~FH[0] & ~FH[1] & ~FH[2]) ? {SR3[7], SR2[7], SR1[7], SR0[
                       (~FH[0] &  FH[1] &  FH[2]) ? {SR3[1], SR2[1], SR1[1], SR0[1]} :
                       ( FH[0] &  FH[1] &  FH[2]) ? {SR3[0], SR2[0], SR1[0], SR0[0]} :
                                                                                4'h0 ;
-assign BGC[3:0] = BGC2[3:0] & { 4 { CLPB_LATCH }};
+assign BGC[3:0] = BGC2[3:0] & {4{ CLPB_LATCH }};
 // Logics
 always @(posedge Clk) begin
       if (PD_SR)  PDTA[7:0] <= PD[7:0];
@@ -997,12 +974,12 @@ endmodule
 //===============================================================================================
 module PAR_GEN(
 input Clk,            // System clock
-input PCLK,           // Pixel clock
-input nPCLK,          // Pixel clock
+input PCLK,           //  Pixel clock
+input nPCLK,          // ~Pixel clock
 // Inputs
 input Hnn0,           // Synchronized state of the PPU
-input NHn1,           // Synchronized state of the PPU
-input NHn2,           // Synchronized state of the PPU
+input Hn1,            // Synchronized state of the PPU
+input Hn2,            // Synchronized state of the PPU
 input F_NT,           // Reading tile number from Name Table
 input F_AT,           // Attribute Fetching Phase
 input F_TB,           // Second tile byte fetch phase
@@ -1012,7 +989,7 @@ input SH2,            // Sprite attribute reading phase
 input [3:0]OV,        // Sprite graphic line number
 input [7:0]OB,        // Sprite data bus
 input [7:0]PD,        // PPU Graphics Data Bus
-input [7:0]DBIN,      // CPU data bus
+input [7:0]DBIN,      // PPU Register Open Bus
 input O8_16,          // Sprite height (0 - 8 points, 1 - 16 points)
 input OBSEL,          // MSB addresses of objects
 input BGSEL,          // MSB background addresses
@@ -1046,26 +1023,23 @@ reg [4:0]TH;
 reg [4:0]TV;
 reg NTH, NTV;
 reg [2:0]FV;
-reg EEVR1, EEVR2;
+reg [1:0]EEVR;
 reg SCCNTR;
-reg Z_TV1, Z_TV2, TVZR;
+reg [1:0]Z_TV;
+reg TVZR;
 reg W62_FF;
-reg W62_1, W62_2;
+reg [1:0]W62;
 reg TV_IN;
 // Combinatorics
-wire TAL;
-assign TAL = ~( nPCLK | TAL_LATCH );
 wire [3:0]OBJ_INV;
 assign OBJ_INV[3:0] = {4{ VINV_LATCH }} ^ OVOUT[3:0];
 // Address counters control
-wire THLOAD, TVLOAD;
-assign THLOAD = ~( ~( EEVR2 | W62_2 )  | PCLK );
-assign TVLOAD = ~( ~(( SCCNTR & RESCL )| W62_2 ) | PCLK );
-wire THSTEP, TVSTEP;
+wire THLOAD, TVLOAD, THSTEP, TVSTEP, ZTV;
+assign THLOAD = ~( ~( EEVR[1] | W62[1] )  | PCLK );
+assign TVLOAD = ~( ~(( SCCNTR & RESCL )| W62[1] ) | PCLK );
 assign THSTEP = ~( ~(( F_TB & Hnn0 )  | TSTEP )| PCLK );
 assign TVSTEP = ~( ~( E_EV   | TSTEP )| PCLK  );
-wire Z_TV;
-assign Z_TV = ~( Z_TV1 | Z_TV2 );
+assign ZTV = ~( Z_TV[0] | Z_TV[1] );
 wire TH_IN, NTH_IN, NTV_IN, FV_IN;
 assign TH_IN = ~( I1_32 & BLNK );
 assign NTH_IN =   THZ | TVZB;
@@ -1085,7 +1059,7 @@ wire [2:0]FVO, FVOCout;
 //                  Clk   F2              C_IN        Reset   LOAD    STEP   DATA    CNT_OUT     C_OUT
 COUNTER THCNT[4:0] (Clk, PCLK, {THOCout[3:0], TH_IN}, 1'b0, THLOAD, THSTEP, TH[4:0], THO[4:0], THOCout[4:0]);
 // TV COUNTER
-COUNTER TVCNT[4:0] (Clk, PCLK, {TVOCout[3:0], TV_IN}, Z_TV, TVLOAD, TVSTEP, TV[4:0], TVO[4:0], TVOCout[4:0]);
+COUNTER TVCNT[4:0] (Clk, PCLK, {TVOCout[3:0], TV_IN}, ZTV,  TVLOAD, TVSTEP, TV[4:0], TVO[4:0], TVOCout[4:0]);
 // NTH COUNTER
 COUNTER NTHCNT     (Clk, PCLK,                NTH_IN, 1'b0, THLOAD, THSTEP, NTH,     NTHDO,    NTHC);
 // NTV COUNTER
@@ -1097,10 +1071,10 @@ wire BFVO0, NBFVO1;
 assign BFVO0  =  BLNK & FVO[0];
 assign NBFVO1 = ~BLNK | FVO[1];
 wire PARR;
-assign PARR = ~( NHn2 | BLNK );
+assign PARR =  Hn2 & ~BLNK;
 wire [13:0]PAMUX;  // Picture address multiplexer
-assign PAMUX[7:0]  = DB_PAR ? DBIN[7:0] : PARR ? {TP[6:3],~NHn1,TP[2:0]} : F_AT ? {2'b11,TVO[4:2],THO[4:2]} : {TVO[2:0],THO[4:0]};
-assign PAMUX[13:8] =                      PARR ? {1'b0,TP[11:7]} : {NBFVO1,BFVO0,NTVDO,NTHDO, F_AT ? 2'b11 : TVO[4:3]};
+assign PAMUX[7:0]  = DB_PAR ? DBIN[7:0] : PARR ? {TP[6:3],Hn1,TP[2:0]} : F_AT ? {2'b11,TVO[4:2],THO[4:2]} : {TVO[2:0],THO[4:0]};
+assign PAMUX[13:8] = PARR ? {1'b0,TP[11:7]} : {NBFVO1,BFVO0,NTVDO,NTHDO, F_AT ? 2'b11 : TVO[4:3]};
 assign TVO1 = TVO[1];
 // Logics
 always @(posedge Clk) begin
@@ -1121,32 +1095,31 @@ always @(posedge Clk) begin
       if (W6_1 | W5_2 | RC) FV[2] <= RC ? 1'b0 : (W6_1 & 1'b0   ) | (W5_2 & DBIN[2]);
       if ( PCLK & SH2 ) VINV_LATCH <= OB[7];
       TV_IN <= THZB | FVZ | ( I1_32 & BLNK );
-      if (TAL) begin
+      if (~( nPCLK | TAL_LATCH )) begin
       OVOUT[3:0] <= OVR[3:0];
       OBOUT[7:0] <= OB[7:0];
       PDOUT[7:0] <= PDIN[7:0];
-               end
-      if (nPCLK & W62_2) W62_FF <= 1'b0;
- else if	(W6_2)          W62_FF <= 1'b1;
+                                   end
+      if (nPCLK & W62[1]) W62_FF <= 1'b0;
+ else if (W6_2)           W62_FF <= 1'b1;
       if (PCLK) begin
       TVZR   <= TVZ;
-      EEVR2  <= EEVR1;
+      EEVR[1]  <= EEVR[0];
       SCCNTR <= SC_CNT;
-      W62_2  <= W62_1;
+      W62[1]  <= W62[0];
       PAD[13:0]  <= PAMUX[13:0];
                  end
       if (nPCLK) begin
       TAL_LATCH <= ~F_NT | ~Hnn0;
       OVR[3:0]  <= OV[3:0];
       PDIN[7:0] <= PD[7:0];
-      TP[2:0]   <= (PAR_O) ? OBJ_INV[2:0] : FVO[2:0] ; 
-      TP[3]     <= (PAR_O) ? ((O8_16)   ? OBJ_INV[3] :  OBOUT[0] ) : PDOUT[0];
-      TP[10:4]  <= (PAR_O) ? OBOUT[7:1] : PDOUT[7:1] ;
-      TP[11]    <= (PAR_O) ? ((O8_16)   ? OBOUT[0] : OBSEL ) : BGSEL;
-      Z_TV1     <= ~TVSTEP;
-      Z_TV2     <= ~TVZR;
-      EEVR1     <= E_EV;
-      W62_1     <= ~( ~W62_FF | W6_2 );
+      TP[2:0]   <= (PAR_O) ? OBJ_INV[2:0] : FVO[2:0]   ;
+      TP[3]     <= (PAR_O) ? ((O8_16)     ? OBJ_INV[3] : OBOUT[0] ) : PDOUT[0];
+      TP[10:4]  <= (PAR_O) ? OBOUT[7:1]   : PDOUT[7:1] ;
+      TP[11]    <= (PAR_O) ? ((O8_16)     ? OBOUT[0]   : OBSEL )    : BGSEL;
+      Z_TV[1:0] <= {~TVZR, ~TVSTEP};
+      EEVR[0]   <= E_EV;
+      W62[0]    <= W62_FF & ~W6_2;  // W$2006.2 EDGE DET
                   end
                       end
 // End of PPU Address Generator Module
@@ -1156,55 +1129,53 @@ endmodule
 // Module for searching sprites to be output on a next line
 //===============================================================================================
 module OBJ_EVAL(
-input Clk,          // System clock
-input PCLK,         // Pixel clock
-input nPCLK,        // Pixel clock
+input Clk,           // System clock
+input PCLK,          //  Pixel clock
+input nPCLK,         // ~Pixel clock
 // Inputs
-input Hnn0,         // Synchronized state of the PPU
-input [7:0]V,       // Vertical counter output (for sprite machine)
-input [7:0]OB,      // Sprite data bus
-input O8_16,        // Sprite height (0 - 8 points, 1 - 16 points)
-input I_OAM2,       // OAM2 Initialization (Clear) Signal
-input nVIS,         // Visible part of the line
-input SPR_OV,       // OAM counter is full or more than 8 sprites found
-input F_NT,         // Reading tile number from Name Table
-input S_EV,         // Starting the sprite list view process
-input PAR_O,        // Fetch sprite graphics
+input Hnn0,          // Synchronized state of the PPU
+input [7:0]V,        // Vertical counter output (for sprite machine)
+input [7:0]OB,       // Sprite data bus
+input O8_16,         // Sprite height (0 - 8 points, 1 - 16 points)
+input I_OAM2,        // OAM2 Initialization (Clear) Signal
+input nVIS,          // Visible part of the line
+input SPR_OV,        // OAM counter is full or more than 8 sprites found
+input F_NT,          // Reading tile number from Name Table
+input S_EV,          // Starting the sprite list view process
+input PAR_O,         // Fetch sprite graphics
 // Outputs
-output [3:0]OV,     // Sprite graphic line number
-output OMFG,        // Signal to copy the current comparison sprite in OAM2
-output reg PD_FIFO, // OBJ FIFO Input Blocking
-output reg SPR0_EV  // Sprite #0 is on the current line
+output [3:0]OV,      // Sprite graphic line number
+output OMFG,         // Signal to copy the current comparison sprite in OAM2
+output reg PD_FIFO,  // OBJ FIFO Input Blocking
+output reg SPR0_EV   // Sprite #0 is on the current line
 );
 // Variables
 reg [5:0]CLATCH;
-reg SPR0_EV1, PD_FIFO1, PD_FIFO2;
+reg SPR0_EV1;
+reg [1:0]PDFIFO;
 reg [7:0]OBLATCH;
 // Combinatorics
 wire [7:0]OVS;
 assign OVS[7:0] = V[7:0] - OBLATCH[7:0];
 wire OVZ;
-assign OVZ = ( CLATCH[1] | CLATCH[3] | CLATCH[5] ) | ( ~O8_16 & OVS[3] ) | OVS[4] | OVS[5] | OVS[6] | OVS[7] | ~( ~OBLATCH[7] | V[7] );
+assign OVZ = ( CLATCH[5] | CLATCH[3] | CLATCH[1] ) | ( OVS[7] | OVS[6] ) | OVS[5] | OVS[4] | ( ~O8_16 & OVS[3] ) | ~( ~OBLATCH[7] | V[7] );
 wire DO_COPY;
 assign DO_COPY = ~( nVIS | I_OAM2 | SPR_OV | OVZ );
-assign OMFG = ~(( CLATCH[1] | CLATCH[3] | CLATCH[5] ) | DO_COPY );
+assign OMFG = ~( CLATCH[5] | CLATCH[3] | CLATCH[1] | DO_COPY );
 assign OV[3:0] = OVS[3:0];
 // Logics
 always @(posedge Clk) begin
          if (PCLK) begin
          OBLATCH[7:0] <= OB[7:0];
-         {CLATCH[1], CLATCH[3], CLATCH[5]} <= {CLATCH[0], CLATCH[2], CLATCH[4]};
+         {CLATCH[5], CLATCH[3], CLATCH[1]} <= {CLATCH[4], CLATCH[2], CLATCH[0]};
                    end
-         if (nPCLK) begin
-         PD_FIFO1 <= OVZ;
-         PD_FIFO2 <= ~F_NT | ~Hnn0;
-                     end
-         if (~( nPCLK | PD_FIFO2 )) PD_FIFO <= ~PD_FIFO1;
+         if (nPCLK) PDFIFO[1:0] <= { ~F_NT | ~Hnn0, OVZ };
+         if (~( nPCLK | PDFIFO[1] )) PD_FIFO <= ~PDFIFO[0];
          if (S_EV  & nPCLK) SPR0_EV1 <=  DO_COPY;
          if (PAR_O & nPCLK) SPR0_EV  <= ~SPR0_EV1;
-         if (nPCLK & Hnn0 ) {CLATCH[0], CLATCH[2], CLATCH[4]} <= {DO_COPY, CLATCH[1], CLATCH[3]};
-                     end
-// End of module for searching sprites to be output on this line
+         if (nPCLK & Hnn0)  {CLATCH[4], CLATCH[2], CLATCH[0]} <= {CLATCH[3], CLATCH[1], DO_COPY};
+                       end
+// End of module for searching sprites to be output on next line
 endmodule
 
 //===============================================================================================
@@ -1212,12 +1183,12 @@ endmodule
 //===============================================================================================
 module OAM(
 input Clk,          // System clock
-input PCLK,         // Pixel clock
-input nPCLK,        // Pixel clock
+input PCLK,         //  Pixel clock
+input nPCLK,        // ~Pixel clock
 // Inputs
 input Hnn0,         // Synchronized state of the PPU
 input Hn0,          // Synchronized state of the PPU
-input NHn2,         // Synchronized state of the PPU
+input Hn2,          // Synchronized state of the PPU
 input BLNK,         // Rendering is disabled
 input nVIS,         // Visible part of the line
 input W3,           // Write to OAM address register $2003
@@ -1227,7 +1198,7 @@ input nEVAL,        // Reset OAM2 counter and start OAM2 processing
 input PAR_O,        // Fetch sprite graphics
 input OMFG,         // Signal to copy the current comparison sprite in OAM2
 input RESCL,        // Prerender line (reset all fetch schemes)
-input [7:0]DBIN,    // PPU open data bus
+input [7:0]DBIN,    // PPU Register Open Bus
 // Outputs
 output reg [7:0]OB, // Sprite data bus
 output reg R2DB5,   // Sprite Overflow Flag
@@ -1262,7 +1233,7 @@ assign MODE4 = ~( ~OMFG | BLNK );
 wire ORES;
 assign ORES  = ~( nPCLK | ORES_LATCH );
 wire OAM2STEP;
-assign OAM2STEP = ~( nPCLK | OSTEP[0] | ~(( PAR_O & NHn2 ) | ~( Hn0 | ~( OSTEP[1] | OSTEP[2] ))));
+assign OAM2STEP = ~( nPCLK | OSTEP[0] | ~(( PAR_O & ~Hn2 ) | ~( Hn0 | ~( OSTEP[1] | OSTEP[2] ))));
 wire OMV;
 wire [2:0]OBDZ;
 assign OBDZ[2:0] =  OAMQ[4:2] &  {3{ ~( OAM1ADR[1] & ~OAM1ADR[0] )}};
@@ -1285,13 +1256,13 @@ always @(posedge Clk) begin
          if (RESCL)        R2DB5  <= 1'b0;
     else if (SPR_OVERFLOW) R2DB5  <= 1'b1;
          if (I_OAM2)       SPR_OV <= 1'b0;
-    else if ( SPR_OVERFLOW |( OAMSTEP & OMV_LATCH )) SPR_OV <= 1'b1;
+    else if (SPR_OVERFLOW |( OAMSTEP & OMV_LATCH )) SPR_OV <= 1'b1;
          if (ORES)                  OAMCTR2 <= 1'b0;
     else if (OAM2STEP & TMV_LATCH ) OAMCTR2 <= 1'b1;
-         if (~( BLNK | nPCLK )) OB2[7:0] <= OB[7:0]; 
-         if (PCLK) {W4Q[0], W4Q[2], W4Q[4]} <= {~(W4 | ~W4FF), W4Q[1], ~W4Q[3]};
+         if (~( BLNK | nPCLK )) OB2[7:0] <= OB[7:0];
+         if (PCLK) {W4Q[4], W4Q[2], W4Q[0]} <= {~W4Q[3], W4Q[1], ~(W4 | ~W4FF)};
          if (nPCLK) begin
-         {W4Q[1], W4Q[3]} <= {W4Q[0], ~W4Q[2]};
+         {W4Q[3], W4Q[1]} <= { ~W4Q[2], W4Q[0]};
          OB[7:0] <= I_OAM2 ? 8'hFF : OAP ? {OAMQ[7:5], OBDZ[2:0], OAMQ[1:0]} : OAM2Q[7:0];
          OMSTEP[1:0] <= {~( Hnn0 & ~( I_OAM2 | nVIS )), OFETCH};
          OSTEP[2:0]  <= {~OMFG, I_OAM2, ~(nEVAL & ~OAMCTR2)};
@@ -1313,12 +1284,12 @@ input Clk,          // System clock
 input PCLK,         //  Pixel clock
 input nPCLK,        // ~Pixel clock
 // Inputs
-input [5:0]Hnn,     // Synchronized PPU atomic state
+input [5:0]Hnn,     // Synchronized state of the PPU
 input HPOS_0,       // Starting sprite X coordinate counters (0 sprite position)
 input PAR_O,        // Fetch sprite graphics
 input CLPO,         // Sprites are disabled
 input nVIS,         // Visible part of the line
-input PD_FIFO,      // Resetting sprite graphics
+input PD_FIFO,      // OBJ FIFO Input Blocking
 input [7:0]PD,      // PPU Graphics Data Bus
 input [7:0]OB,      // Sprite data bus
 // Outputs 
@@ -1352,22 +1323,22 @@ FIFO_HPOSCNT HPOSCNT7( Clk, PCLK, nPCLK, OB[7:0], (PCLK & SH3 & SEL_LATCH[7]), n
 wire [7:0]SDATA;
 assign SDATA[7:0] = {8{ PD_FIFO }} & PD_LATCH[7:0];
 wire[7:0]COL0, COL1;
-SHIFTREG SREG_0A( Clk, 1'b0, nPCLK,(PCLK & EN[0]), (PCLK & SH5 & SEL_LATCH[0]), SDATA[7:0], ,COL0[0] );
-SHIFTREG SREG_0B( Clk, 1'b0, nPCLK,(PCLK & EN[0]), (PCLK & SH7 & SEL_LATCH[0]), SDATA[7:0], ,COL1[0] );
-SHIFTREG SREG_1A( Clk, 1'b0, nPCLK,(PCLK & EN[1]), (PCLK & SH5 & SEL_LATCH[1]), SDATA[7:0], ,COL0[1] );
-SHIFTREG SREG_1B( Clk, 1'b0, nPCLK,(PCLK & EN[1]), (PCLK & SH7 & SEL_LATCH[1]), SDATA[7:0], ,COL1[1] );
-SHIFTREG SREG_2A( Clk, 1'b0, nPCLK,(PCLK & EN[2]), (PCLK & SH5 & SEL_LATCH[2]), SDATA[7:0], ,COL0[2] );
-SHIFTREG SREG_2B( Clk, 1'b0, nPCLK,(PCLK & EN[2]), (PCLK & SH7 & SEL_LATCH[2]), SDATA[7:0], ,COL1[2] );
-SHIFTREG SREG_3A( Clk, 1'b0, nPCLK,(PCLK & EN[3]), (PCLK & SH5 & SEL_LATCH[3]), SDATA[7:0], ,COL0[3] );
-SHIFTREG SREG_3B( Clk, 1'b0, nPCLK,(PCLK & EN[3]), (PCLK & SH7 & SEL_LATCH[3]), SDATA[7:0], ,COL1[3] );
-SHIFTREG SREG_4A( Clk, 1'b0, nPCLK,(PCLK & EN[4]), (PCLK & SH5 & SEL_LATCH[4]), SDATA[7:0], ,COL0[4] );
-SHIFTREG SREG_4B( Clk, 1'b0, nPCLK,(PCLK & EN[4]), (PCLK & SH7 & SEL_LATCH[4]), SDATA[7:0], ,COL1[4] );
-SHIFTREG SREG_5A( Clk, 1'b0, nPCLK,(PCLK & EN[5]), (PCLK & SH5 & SEL_LATCH[5]), SDATA[7:0], ,COL0[5] );
-SHIFTREG SREG_5B( Clk, 1'b0, nPCLK,(PCLK & EN[5]), (PCLK & SH7 & SEL_LATCH[5]), SDATA[7:0], ,COL1[5] );
-SHIFTREG SREG_6A( Clk, 1'b0, nPCLK,(PCLK & EN[6]), (PCLK & SH5 & SEL_LATCH[6]), SDATA[7:0], ,COL0[6] );
-SHIFTREG SREG_6B( Clk, 1'b0, nPCLK,(PCLK & EN[6]), (PCLK & SH7 & SEL_LATCH[6]), SDATA[7:0], ,COL1[6] );
-SHIFTREG SREG_7A( Clk, 1'b0, nPCLK,(PCLK & EN[7]), (PCLK & SH5 & SEL_LATCH[7]), SDATA[7:0], ,COL0[7] );
-SHIFTREG SREG_7B( Clk, 1'b0, nPCLK,(PCLK & EN[7]), (PCLK & SH7 & SEL_LATCH[7]), SDATA[7:0], ,COL1[7] );
+SHIFTREG SREG_0A( Clk, 1'b0, nPCLK, (PCLK & EN[0]), (PCLK & SH5 & SEL_LATCH[0]), SDATA[7:0], ,COL0[0] );
+SHIFTREG SREG_0B( Clk, 1'b0, nPCLK, (PCLK & EN[0]), (PCLK & SH7 & SEL_LATCH[0]), SDATA[7:0], ,COL1[0] );
+SHIFTREG SREG_1A( Clk, 1'b0, nPCLK, (PCLK & EN[1]), (PCLK & SH5 & SEL_LATCH[1]), SDATA[7:0], ,COL0[1] );
+SHIFTREG SREG_1B( Clk, 1'b0, nPCLK, (PCLK & EN[1]), (PCLK & SH7 & SEL_LATCH[1]), SDATA[7:0], ,COL1[1] );
+SHIFTREG SREG_2A( Clk, 1'b0, nPCLK, (PCLK & EN[2]), (PCLK & SH5 & SEL_LATCH[2]), SDATA[7:0], ,COL0[2] );
+SHIFTREG SREG_2B( Clk, 1'b0, nPCLK, (PCLK & EN[2]), (PCLK & SH7 & SEL_LATCH[2]), SDATA[7:0], ,COL1[2] );
+SHIFTREG SREG_3A( Clk, 1'b0, nPCLK, (PCLK & EN[3]), (PCLK & SH5 & SEL_LATCH[3]), SDATA[7:0], ,COL0[3] );
+SHIFTREG SREG_3B( Clk, 1'b0, nPCLK, (PCLK & EN[3]), (PCLK & SH7 & SEL_LATCH[3]), SDATA[7:0], ,COL1[3] );
+SHIFTREG SREG_4A( Clk, 1'b0, nPCLK, (PCLK & EN[4]), (PCLK & SH5 & SEL_LATCH[4]), SDATA[7:0], ,COL0[4] );
+SHIFTREG SREG_4B( Clk, 1'b0, nPCLK, (PCLK & EN[4]), (PCLK & SH7 & SEL_LATCH[4]), SDATA[7:0], ,COL1[4] );
+SHIFTREG SREG_5A( Clk, 1'b0, nPCLK, (PCLK & EN[5]), (PCLK & SH5 & SEL_LATCH[5]), SDATA[7:0], ,COL0[5] );
+SHIFTREG SREG_5B( Clk, 1'b0, nPCLK, (PCLK & EN[5]), (PCLK & SH7 & SEL_LATCH[5]), SDATA[7:0], ,COL1[5] );
+SHIFTREG SREG_6A( Clk, 1'b0, nPCLK, (PCLK & EN[6]), (PCLK & SH5 & SEL_LATCH[6]), SDATA[7:0], ,COL0[6] );
+SHIFTREG SREG_6B( Clk, 1'b0, nPCLK, (PCLK & EN[6]), (PCLK & SH7 & SEL_LATCH[6]), SDATA[7:0], ,COL1[6] );
+SHIFTREG SREG_7A( Clk, 1'b0, nPCLK, (PCLK & EN[7]), (PCLK & SH5 & SEL_LATCH[7]), SDATA[7:0], ,COL0[7] );
+SHIFTREG SREG_7B( Clk, 1'b0, nPCLK, (PCLK & EN[7]), (PCLK & SH7 & SEL_LATCH[7]), SDATA[7:0], ,COL1[7] );
 // Sprite Output Priority
 wire [7:0]SPR;
 assign SPR[0] = ~( CLPO | ~EN[0] | ~( COL0[0] | COL1[0] ) );
@@ -1408,8 +1379,7 @@ always @(posedge Clk) begin
    SEL_LATCH[5] <=  Hnn[3] & ~Hnn[4] &  Hnn[5];
    SEL_LATCH[6] <= ~Hnn[3] &  Hnn[4] &  Hnn[5];
    SEL_LATCH[7] <=  Hnn[3] &  Hnn[4] &  Hnn[5];
-   ZPOS[0] <= HPOS_0;
-   ZPOS[2] <= ZPOS[1];
+   {ZPOS[0], ZPOS[2]} <= {HPOS_0, ZPOS[1]};
    PD_LATCH[7:0] <= MIRR_MUX[7:0];
    ATR0[2:0] <= ATR_IN0[2:0];
    ATR1[2:0] <= ATR_IN1[2:0];
@@ -1525,7 +1495,7 @@ reg BGC_LATCH, ZCOL_LATCH, OCOLN;
 wire OCOL;
 assign OCOL = ~( ~( ZCOLN[1] | ZCOLN[0] ) | ( ZCOLN[4] & ( BGC[1] | BGC[0] )));
 wire [3:0]BGCF;
-assign BGCF[3:0] = ( ~( BGC_LATCH | ZCOL_LATCH )) ? 4'b0000 : STEP2[3:0];
+assign BGCF[3:0] = ( ~( BGC_LATCH | ZCOL_LATCH )) ? 4'h0 : STEP2[3:0];
 assign CGA[4:0] = TH_MUX ? THO_LATCH[4:0] : STEP3[4:0];
 // Logics
 always @(posedge Clk) begin
@@ -1556,11 +1526,11 @@ input nPCLK,         // ~Pixel clock
 // Inputs
 input R7,            // Reading from register 2007
 input TH_MUX,        // Palette range
-input nPICTURE,      // blackout
+input nPICTURE,      // Blanking
 input B_W,           // B/W mode (zeroing the lower 4 bits of the color index)
 input DB_PAR,        // Forwarding CPU data to PPU bus
 input [4:0]CGA,      // Graphics data bus
-input [5:0]DBIN,     // PPU open data bus
+input [5:0]DBIN,     // PPU Register Open Bus
 input [2:0]EMPH,     // Emphasis B,G,R
 // Outputs
 output RPIX,         // Selecting pixel output
@@ -1573,7 +1543,7 @@ reg PICTURER;
 reg [7:0]ro, go, bo;
 // Combinatorics
 wire CGAH;
-assign CGAH = ( CGA[0] | CGA[1] ) & CGA[4];
+assign CGAH = CGA[4] & ( CGA[1] | CGA[0] );
 wire [3:0]CN;
 assign CN[3:0] = C[3:0] & { 4 { nB_W }};
 wire nB_W;
@@ -1662,9 +1632,13 @@ output C_OUT    // Carry out
 reg CNT1;
 assign C_OUT = CNT & C_IN;
 // Logics
+always @(posedge Clk or posedge Reset) begin
+       if (Reset) CNT <= 1'b0;
+  else if (LOAD)  CNT <= DATA;
+  else if (STEP)  CNT <= CNT1;
+                      end
 always @(posedge Clk) begin
-      if ( Reset | LOAD | STEP ) CNT <= ( Reset ? 1'b0 : LOAD ? DATA : CNT1 );
-      if ( F2 ) CNT1  <= CNT + C_IN;
+       if ( F2 ) CNT1 <= CNT + C_IN;
                       end
 endmodule
 
@@ -1696,6 +1670,6 @@ assign C_OUT = (MODE4) ? CNT[7] & CNT[6] & CNT[5] & CNT[4] & CNT[3] & CNT[2] & ~
 // Logics
 always @(posedge Clk) begin
      if (   LOAD | STEP | Reset ) CNT[7:0]  <= Reset ? 8'h00 : LOAD ? DATA[7:0] : CNT1[7:0];
-     if (~( LOAD | STEP ))        CNT1[7:0] <= MODE4 ? {CNT4[5:0], 2'b00 } : ( CNT[7:0] ^ {OAM1Cout[6:0],1'b1});
+     if (~( LOAD | STEP ))        CNT1[7:0] <= MODE4 ? {CNT4[5:0], 2'h0 } : ( CNT[7:0] ^ {OAM1Cout[6:0],1'b1});
                       end
 endmodule
