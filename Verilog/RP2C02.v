@@ -692,7 +692,7 @@ reg PEN_FF, PICT1, PICT2;
 reg RESCL_IN;
 reg BLNK_FF;
 reg VB_FF;
-reg VSET1,VSET2,VSET3;
+reg [2:0]VSET;
 reg INT_FF;
 // Combinatorics
 assign CLIP_O = ~( CLIP_OUT | OBCLIP );
@@ -760,8 +760,8 @@ always @(posedge Clk) begin
                     end
          if (~nRES) RC <= 1'b1;
     else if (RESCL) RC <= 1'b0;
-         if (RESCL | R2)                  INT_FF <= 1'b0;
-    else if (~( nPCLK | ~VSET1 | VSET3 )) INT_FF <= 1'b1;
+    if (RESCL | R2)                           INT_FF <= 1'b0;
+    else if (~( nPCLK | ~VSET[0] | VSET[2] )) INT_FF <= 1'b1;
          if (~R2) R2DB7 <= INT_FF;
          if (PCLK) begin
          Hnn[5:0]  <= Hn[5:0];
@@ -783,7 +783,7 @@ always @(posedge Clk) begin
          PICT1     <= BPORCH_FF;
          PICT2     <= PEN_FF;
          RESCL     <= RESCL_IN;
-         VSET2     <= ~VSET1;
+         VSET[1]   <= ~VSET[0];
                     end
          if (nPCLK) begin
          HC        <= ~( H_LINE23 | ( H_LINE5 & ~ODDEVEN[0] & RESCL & ~MODE ));
@@ -819,8 +819,8 @@ always @(posedge Clk) begin
          if (V_LINE4)  VB_FF   <= 1'b1;
     else if (V_LINE5)  VB_FF   <= 1'b0;
          RESCL_IN <= V_LINE2N | VLINE311;
-         VSET1    <= V_LINE3N | VLINE291 | VLINE241; // activating the interrupt queue
-         VSET3    <= ~VSET2;
+         VSET[0]  <= V_LINE3N | VLINE291 | VLINE241; // activating the interrupt queue
+         VSET[2]  <= ~VSET[1];
                    end
                       end
 // End of PPU Main Timing Generator Module
