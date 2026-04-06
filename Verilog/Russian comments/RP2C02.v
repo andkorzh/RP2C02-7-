@@ -655,8 +655,8 @@ output N_FO,         // Сигнал разрешения вывода граф�
 output BURST,        // Маска вывода вспышки синхронизации поднесущей цвета
 output SC_CNT,       // Запуск счетчика адресов при включении растра и/или фона
 output SYNC,         // Выход композитной синхронизации
-output reg HSYNC,    // Выход строчной синхронизации
-output reg VSYNC,    // Выход кадровой синхронизации
+output HSYNCo,       // Выход строчной синхронизации
+output VSYNCo,       // Выход кадровой синхронизации
 output nPICTURE,     // Гашение
 output reg RC,       // Очистка регистров PPU
 output reg RESCL,    // Строка пререндера (сброс всех схем выборки)
@@ -685,26 +685,26 @@ reg FAT_IN;
 reg BURST_FF, BURST_OUT;
 reg N_HB;
 reg VSYNC_FF;
+reg HSYNC;
+reg VSYNC; 
 reg BPORCH_FF;
 reg PEN_FF, PICT1, PICT2;
 reg RESCL_IN;
 reg BLNK_FF;
 reg VB_FF;
-reg VSET1,VSET2,VSET3;
+reg [2:0]VSET;
 reg INT_FF; 
 // Комбинаторика
 assign CLIP_O = ~( CLIP_OUT | OBCLIP );
 assign CLIP_B = ~( CLIP_OUT | BGCLIP );
 // HV COUNTERS CONTROL
-wire [8:0]H, V, HCout, VCout, HCarry, VCarry;
-assign HCarry[8:0] = {HCout[7:5], H[4] & H[3] & H[2] & H[1] & H[0], HCout[3:0], 1'b1};
-assign VCarry[8:0] = {VCout[7:0], H_LINE23};
+wire [8:0]H, V, HCout, VCout;
 wire VC;
 assign VC = HC | ~VC_LATCH;
 // HV COUNTERS
-//                Clk   F2       C_IN      Reset     LOAD     STEP   DATA   CNT_OUT    C_OUT
-COUNTER HCNT[8:0](Clk, nPCLK, HCarry[8:0], ~nRES, ~HC & PCLK, PCLK, 9'h000, H[8:0],  HCout[8:0]);
-COUNTER VCNT[8:0](Clk, nPCLK, VCarry[8:0], ~nRES, ~VC & PCLK, PCLK, 9'h000, V[8:0],  VCout[8:0]);
+//                Clk   F2    DIR                   C_IN                  Reset     LOAD     STEP   DATA   CNT_OUT    C_OUT
+COUNTER HCNT[8:0](Clk, nPCLK, 1'b1, {HCout[7:5], HIN5, HCout[3:0], 1'b1}, ~nRES, ~HC & PCLK, PCLK, 9'h000, H[8:0],  HCout[8:0]);
+COUNTER VCNT[8:0](Clk, nPCLK, 1'b1, {VCout[7:0], H_LINE23},               ~nRES, ~VC & PCLK, PCLK, 9'h000, V[8:0],  VCout[8:0]);
 //HV PLA (NTSC/PAL)
 wire H_LINE0, H_LINE1, H_LINE2, H_LINE5, H_LINE6, H_LINE7, H_LINE17, H_LINE18;
 wire H_LINE20, H_LINE21, H_LINE22, H_LINE23;
@@ -743,6 +743,8 @@ assign F_AT = ~( ~FAT_IN | ~( NFO1 | NFO2 ));
 //Выходы
 assign BURST = ~( BURST_OUT | ~SYNC );
 assign SC_CNT = ~( ~N_HB | BLACK );
+assign HSYNCo = HSYNC;
+assign VSYNCo = VSYNC_FF;
 assign SYNC = HSYNC | VSYNC;
 assign nPICTURE = PICT1 | PICT2;
 assign BLNK = BLACK | BLNK_FF;
@@ -759,8 +761,8 @@ always @(posedge Clk) begin
                     end
          if (~nRES) RC <= 1'b1;
     else if (RESCL) RC <= 1'b0;
-         if (RESCL | R2)                  INT_FF <= 1'b0;
-    else if (~( nPCLK | ~VSET1 | VSET3 )) INT_FF <= 1'b1;
+    if (RESCL | R2)                           INT_FF <= 1'b0;
+    else if (~( nPCLK | ~VSET[0] | VSET[2] )) INT_FF <= 1'b1;
          if (~R2) R2DB7 <= INT_FF;
          if (PCLK) begin
          Hnn[5:0]  <= Hn[5:0];
@@ -782,7 +784,7 @@ always @(posedge Clk) begin
          PICT1     <= BPORCH_FF;
          PICT2     <= PEN_FF;
          RESCL     <= RESCL_IN;
-         VSET2     <= ~VSET1;
+         VSET[1]   <= ~VSET[0];
                     end
          if (nPCLK) begin
          HC        <= ~( H_LINE23 | ( H_LINE5 & ~ODDEVEN[0] & RESCL & ~MODE ));
@@ -818,8 +820,8 @@ always @(posedge Clk) begin
          if (V_LINE4)  VB_FF   <= 1'b1;
     else if (V_LINE5)  VB_FF   <= 1'b0;
          RESCL_IN <= V_LINE2N | VLINE311;
-         VSET1    <= V_LINE3N | VLINE291 | VLINE241; // Активация задержки для прерывания
-         VSET3    <= ~VSET2;
+         VSET[0]  <= V_LINE3N | VLINE291 | VLINE241; // activating the interrupt queue
+         VSET[2]  <= ~VSET[1];
                      end
                       end
 // Конец модуля главного генератора таймингов PPU
@@ -932,13 +934,13 @@ assign ATSEL[1] = ( PDAT[1] & ~THO1R & ~TVO1 )|( PDAT[3] & THO1R & ~TVO1 )|( PDA
 // Сдвиговые регистры фона
 wire QTA, QTB, QT0, QT1, QT2, QT3; // QT0 - QT3 - not used
 wire[7:0]SR0, SR1, SR2, SR3;
-//                  Clk  SIn     NEXT  STEP   LOAD    P DATA In  PAROut    SEROut
-SHIFTREG SREG_TA  ( Clk, 1'b1,   NEXT, STEP,  SRLOAD, PDTA[7:0],         , QTA );
-SHIFTREG SREG_TB  ( Clk, 1'b1,   NEXT, STEP,  SRLOAD, PD[7:0]  ,         , QTB );
-SHIFTREG SREG_FS0 ( Clk, QTA,    NEXT, STEP2, 1'h0,   8'h00    , SR0[7:0], QT0 );
-SHIFTREG SREG_FS1 ( Clk, QTB,    NEXT, STEP2, 1'h0,   8'h00    , SR1[7:0], QT1 );
-SHIFTREG SREG_FS2 ( Clk, ATR[0], NEXT, STEP2, 1'h0,   8'h00    , SR2[7:0], QT2 );
-SHIFTREG SREG_FS3 ( Clk, ATR[1], NEXT, STEP2, 1'h0,   8'h00    , SR3[7:0], QT3 );
+//                  Clk  SIn     STEP   NEXT  LOAD    P DATA In  PAROut    SEROut
+SHIFTREG SREG_TA  ( Clk, 1'b1,   STEP,  NEXT, SRLOAD, PDTA[7:0],         , QTA );
+SHIFTREG SREG_TB  ( Clk, 1'b1,   STEP,  NEXT, SRLOAD, PD[7:0]  ,         , QTB );
+SHIFTREG SREG_FS0 ( Clk, QTA,    STEP2, NEXT, 1'h0,   8'h00    , SR0[7:0], QT0 );
+SHIFTREG SREG_FS1 ( Clk, QTB,    STEP2, NEXT, 1'h0,   8'h00    , SR1[7:0], QT1 );
+SHIFTREG SREG_FS2 ( Clk, ATR[0], STEP2, NEXT, 1'h0,   8'h00    , SR2[7:0], QT2 );
+SHIFTREG SREG_FS3 ( Clk, ATR[1], STEP2, NEXT, 1'h0,   8'h00    , SR3[7:0], QT3 );
 wire [3:0]BGC_POS;  // Выбор позиции точного склолла
 assign BGC_POS[3:0] = (~FH[0] & ~FH[1] & ~FH[2]) ? {SR3[7], SR2[7], SR1[7], SR0[7]} :
                       ( FH[0] & ~FH[1] & ~FH[2]) ? {SR3[6], SR2[6], SR1[6], SR0[6]} :
@@ -1055,17 +1057,12 @@ wire [4:0]TVO, THOCout, TVOCout;
 wire NTHDO, NTVDO, NTHC, NTVC;
 wire [2:0]FVO, FVOCout;
 //PAR COUNTERS
-// TH COUNTER
-//                  Clk   F2              C_IN        Reset   LOAD    STEP   DATA    CNT_OUT     C_OUT
-COUNTER THCNT[4:0] (Clk, PCLK, {THOCout[3:0], TH_IN}, 1'b0, THLOAD, THSTEP, TH[4:0], THO[4:0], THOCout[4:0]);
-// TV COUNTER
-COUNTER TVCNT[4:0] (Clk, PCLK, {TVOCout[3:0], TV_IN}, ZTV,  TVLOAD, TVSTEP, TV[4:0], TVO[4:0], TVOCout[4:0]);
-// NTH COUNTER
-COUNTER NTHCNT     (Clk, PCLK,                NTH_IN, 1'b0, THLOAD, THSTEP, NTH,     NTHDO,    NTHC);
-// NTV COUNTER
-COUNTER NTVCNT     (Clk, PCLK,                NTV_IN, 1'b0, TVLOAD, TVSTEP, NTV,     NTVDO,    NTVC);
-// FV COUNTER
-COUNTER FVCNT[2:0] (Clk, PCLK, {FVOCout[1:0], FV_IN}, 1'b0, TVLOAD, TVSTEP, FV[2:0], FVO[2:0], FVOCout[2:0]);
+//                  Clk   F2   DIR              C_IN        Reset   LOAD    STEP   DATA    CNT_OUT     C_OUT
+COUNTER THCNT[4:0] (Clk, PCLK, 1'b1, {THOCout[3:0], TH_IN}, 1'b0, THLOAD, THSTEP, TH[4:0], THO[4:0], THOCout[4:0]);  // TH  COUNTER
+COUNTER TVCNT[4:0] (Clk, PCLK, 1'b1, {TVOCout[3:0], TV_IN}, ZTV,  TVLOAD, TVSTEP, TV[4:0], TVO[4:0], TVOCout[4:0]);  // TV  COUNTER
+COUNTER NTHCNT     (Clk, PCLK, 1'b1,                NTH_IN, 1'b0, THLOAD, THSTEP, NTH,     NTHDO,    NTHC);          // NTH COUNTER
+COUNTER NTVCNT     (Clk, PCLK, 1'b1,                NTV_IN, 1'b0, TVLOAD, TVSTEP, NTV,     NTVDO,    NTVC);          // NTV COUNTER        
+COUNTER FVCNT[2:0] (Clk, PCLK, 1'b1, {FVOCout[1:0], FV_IN}, 1'b0, TVLOAD, TVSTEP, FV[2:0], FVO[2:0], FVOCout[2:0]);  // FV  COUNTER
 // Мультиплексор адреса
 wire BFVO0, NBFVO1;
 assign BFVO0  =  BLNK & FVO[0];
@@ -1243,8 +1240,8 @@ wire [7:0]OAM1ADR;
 //                  Clk  MODE   Reset LOAD   STEP    DATA      CNT_OUT      C_OUT
 OAM_COUNTER OAMCNT (Clk, MODE4, PAR_O, W3, OAMSTEP, DBIN[7:0], OAM1ADR[7:0], OMV);
 // OAM2 COUNTER
-//                    Clk   F2              C_IN        Reset  LOAD     STEP   DATA    CNT_OUT        C_OUT
-COUNTER OAM2CNT[4:0] (Clk, nPCLK, {OAM2Cout[3:0], 1'b1}, ORES, 1'b0, OAM2STEP, 5'h00, OAM2ADR[4:0], OAM2Cout[4:0]);
+//                    Clk   F2    DIR              C_IN       Reset  LOAD   STEP     DATA    CNT_OUT        C_OUT
+COUNTER OAM2CNT[4:0] (Clk, nPCLK, 1'b1, {OAM2Cout[3:0], 1'b1}, ORES, 1'b0, OAM2STEP, 5'h00, OAM2ADR[4:0], OAM2Cout[4:0]);
 // Вложенные модули памяти
 wire [7:0]OAMQ, OAM2Q;
 OAM_RAM  MOD_OAM_RAM  (OAM1ADR[7:0], Clk, DBIN[7:0], (WE & BLNK), OAMQ[7:0]);   // Память OAM
@@ -1323,22 +1320,23 @@ FIFO_HPOSCNT HPOSCNT7( Clk, PCLK, nPCLK, OB[7:0], (PCLK & SH3 & SEL_LATCH[7]), n
 wire [7:0]SDATA;
 assign SDATA[7:0] = {8{ PD_FIFO }} & PD_LATCH[7:0];
 wire[7:0]COL0, COL1;
-SHIFTREG SREG_0A( Clk, 1'b0, nPCLK, (PCLK & EN[0]), (PCLK & SH5 & SEL_LATCH[0]), SDATA[7:0], ,COL0[0] );
-SHIFTREG SREG_0B( Clk, 1'b0, nPCLK, (PCLK & EN[0]), (PCLK & SH7 & SEL_LATCH[0]), SDATA[7:0], ,COL1[0] );
-SHIFTREG SREG_1A( Clk, 1'b0, nPCLK, (PCLK & EN[1]), (PCLK & SH5 & SEL_LATCH[1]), SDATA[7:0], ,COL0[1] );
-SHIFTREG SREG_1B( Clk, 1'b0, nPCLK, (PCLK & EN[1]), (PCLK & SH7 & SEL_LATCH[1]), SDATA[7:0], ,COL1[1] );
-SHIFTREG SREG_2A( Clk, 1'b0, nPCLK, (PCLK & EN[2]), (PCLK & SH5 & SEL_LATCH[2]), SDATA[7:0], ,COL0[2] );
-SHIFTREG SREG_2B( Clk, 1'b0, nPCLK, (PCLK & EN[2]), (PCLK & SH7 & SEL_LATCH[2]), SDATA[7:0], ,COL1[2] );
-SHIFTREG SREG_3A( Clk, 1'b0, nPCLK, (PCLK & EN[3]), (PCLK & SH5 & SEL_LATCH[3]), SDATA[7:0], ,COL0[3] );
-SHIFTREG SREG_3B( Clk, 1'b0, nPCLK, (PCLK & EN[3]), (PCLK & SH7 & SEL_LATCH[3]), SDATA[7:0], ,COL1[3] );
-SHIFTREG SREG_4A( Clk, 1'b0, nPCLK, (PCLK & EN[4]), (PCLK & SH5 & SEL_LATCH[4]), SDATA[7:0], ,COL0[4] );
-SHIFTREG SREG_4B( Clk, 1'b0, nPCLK, (PCLK & EN[4]), (PCLK & SH7 & SEL_LATCH[4]), SDATA[7:0], ,COL1[4] );
-SHIFTREG SREG_5A( Clk, 1'b0, nPCLK, (PCLK & EN[5]), (PCLK & SH5 & SEL_LATCH[5]), SDATA[7:0], ,COL0[5] );
-SHIFTREG SREG_5B( Clk, 1'b0, nPCLK, (PCLK & EN[5]), (PCLK & SH7 & SEL_LATCH[5]), SDATA[7:0], ,COL1[5] );
-SHIFTREG SREG_6A( Clk, 1'b0, nPCLK, (PCLK & EN[6]), (PCLK & SH5 & SEL_LATCH[6]), SDATA[7:0], ,COL0[6] );
-SHIFTREG SREG_6B( Clk, 1'b0, nPCLK, (PCLK & EN[6]), (PCLK & SH7 & SEL_LATCH[6]), SDATA[7:0], ,COL1[6] );
-SHIFTREG SREG_7A( Clk, 1'b0, nPCLK, (PCLK & EN[7]), (PCLK & SH5 & SEL_LATCH[7]), SDATA[7:0], ,COL0[7] );
-SHIFTREG SREG_7B( Clk, 1'b0, nPCLK, (PCLK & EN[7]), (PCLK & SH7 & SEL_LATCH[7]), SDATA[7:0], ,COL1[7] );
+//                Clk   SIn       STEP        NEXT              LOAD             P DATA In  NC  SEROut
+SHIFTREG SREG_0A( Clk, 1'b0, (PCLK & EN[0]), nPCLK, (PCLK & SH5 & SEL_LATCH[0]), SDATA[7:0],  ,COL0[0] );
+SHIFTREG SREG_0B( Clk, 1'b0, (PCLK & EN[0]), nPCLK, (PCLK & SH7 & SEL_LATCH[0]), SDATA[7:0],  ,COL1[0] );
+SHIFTREG SREG_1A( Clk, 1'b0, (PCLK & EN[1]), nPCLK, (PCLK & SH5 & SEL_LATCH[1]), SDATA[7:0],  ,COL0[1] );
+SHIFTREG SREG_1B( Clk, 1'b0, (PCLK & EN[1]), nPCLK, (PCLK & SH7 & SEL_LATCH[1]), SDATA[7:0],  ,COL1[1] );
+SHIFTREG SREG_2A( Clk, 1'b0, (PCLK & EN[2]), nPCLK, (PCLK & SH5 & SEL_LATCH[2]), SDATA[7:0],  ,COL0[2] );
+SHIFTREG SREG_2B( Clk, 1'b0, (PCLK & EN[2]), nPCLK, (PCLK & SH7 & SEL_LATCH[2]), SDATA[7:0],  ,COL1[2] );
+SHIFTREG SREG_3A( Clk, 1'b0, (PCLK & EN[3]), nPCLK, (PCLK & SH5 & SEL_LATCH[3]), SDATA[7:0],  ,COL0[3] );
+SHIFTREG SREG_3B( Clk, 1'b0, (PCLK & EN[3]), nPCLK, (PCLK & SH7 & SEL_LATCH[3]), SDATA[7:0],  ,COL1[3] );
+SHIFTREG SREG_4A( Clk, 1'b0, (PCLK & EN[4]), nPCLK, (PCLK & SH5 & SEL_LATCH[4]), SDATA[7:0],  ,COL0[4] );
+SHIFTREG SREG_4B( Clk, 1'b0, (PCLK & EN[4]), nPCLK, (PCLK & SH7 & SEL_LATCH[4]), SDATA[7:0],  ,COL1[4] );
+SHIFTREG SREG_5A( Clk, 1'b0, (PCLK & EN[5]), nPCLK, (PCLK & SH5 & SEL_LATCH[5]), SDATA[7:0],  ,COL0[5] );
+SHIFTREG SREG_5B( Clk, 1'b0, (PCLK & EN[5]), nPCLK, (PCLK & SH7 & SEL_LATCH[5]), SDATA[7:0],  ,COL1[5] );
+SHIFTREG SREG_6A( Clk, 1'b0, (PCLK & EN[6]), nPCLK, (PCLK & SH5 & SEL_LATCH[6]), SDATA[7:0],  ,COL0[6] );
+SHIFTREG SREG_6B( Clk, 1'b0, (PCLK & EN[6]), nPCLK, (PCLK & SH7 & SEL_LATCH[6]), SDATA[7:0],  ,COL1[6] );
+SHIFTREG SREG_7A( Clk, 1'b0, (PCLK & EN[7]), nPCLK, (PCLK & SH5 & SEL_LATCH[7]), SDATA[7:0],  ,COL0[7] );
+SHIFTREG SREG_7B( Clk, 1'b0, (PCLK & EN[7]), nPCLK, (PCLK & SH7 & SEL_LATCH[7]), SDATA[7:0],  ,COL1[7] );
 // Приоритет вывода спрайтов
 wire [7:0]SPR;
 assign SPR[0] = ~( CLPO | ~EN[0] | ~( COL0[0] | COL1[0] ) );
@@ -1416,24 +1414,22 @@ input LOAD,     // Загрузка данных для пересчета
 input nVIS,     // Видимая часть строки
 input n0_H,     // Запуск счетчиков координаты X спрайтов (позиция 0 спрайтов)
 // Выходы 
-output reg EN   // Управление тристэйтом внешней шины данных CPU
+output reg EN   // Разрешение на вывод спрайта
 );
 // Переменные
 reg ZH_FF;      // Триггер управления обратным счетчиком
-reg [7:0]CNT;   // Защелки обратного счетчика
-reg [7:0]CNT1;  // Защелки обратного счетчика
 // Комбинаторика
 wire STEP;
 assign STEP = ~( PCLK | ~ZH_FF );
-wire [7:0]Cout;
-assign Cout[7:0] = ~CNT[7:0] & {Cout[6:0], 1'b1};
+wire [7:0]CNT, Cout;
+// FIFO DOWN COUNTER
+//                    Clk         F2        DIR       C_IN          Reset LOAD  STEP   DATA    CNT_OUT     C_OUT
+COUNTER FIFOCNT[7:0] (Clk, ~(LOAD | STEP), 1'b0, {Cout[6:0], 1'b1}, 1'b0, LOAD, STEP, OB[7:0], CNT[7:0], Cout[7:0]);
 // Логика
 always @(posedge Clk) begin
          if ( PCLK & ( ~|CNT[7:0] ))            ZH_FF <= 1'b0;
     else if (~( nPCLK | n0_H | ( ~|CNT[7:0] ))) ZH_FF <= 1'b1;
-         if (LOAD | STEP) CNT[7:0] <= LOAD ? OB[7:0] : CNT1[7:0];
-         if ( ~(LOAD | STEP)) CNT1[7:0] <= CNT[7:0] ^ {Cout[6:0], 1'b1};
-         if (nPCLK)  EN <= ~( nVIS | ZH_FF );
+         if (nPCLK) EN <= ~( nVIS | ZH_FF );
                        end
 // Конец модуля счетчика горизонтальной позиции спрайтового FIFO
 endmodule
@@ -1619,6 +1615,7 @@ module COUNTER(
 input Clk,       // Системный клок
 input F2,        // Фаза 2 (PCLK, nPCLK, и т д)
 // Входы
+input DIR,       // Напрвление счета
 input C_IN,      // Вход переноса
 input Reset,     // Сброс
 input LOAD,      // Загрузка данных
@@ -1629,7 +1626,7 @@ output reg CNT,  // Выход счетчика
 output C_OUT     // Перенос счетчика
 );
 reg CNT1;
-assign C_OUT = CNT & C_IN;
+assign C_OUT = DIR ? CNT & C_IN : ~CNT & C_IN;
 //Логика
 always @(posedge Clk or posedge Reset) begin
        if (Reset) CNT <= 1'b0;
@@ -1637,7 +1634,7 @@ always @(posedge Clk or posedge Reset) begin
   else if (STEP)  CNT <= CNT1;
                       end
 always @(posedge Clk) begin
-       if ( F2 ) CNT1 <= CNT + C_IN;
+       if ( F2 ) CNT1 <= CNT ^ C_IN;
                       end
 endmodule
 
