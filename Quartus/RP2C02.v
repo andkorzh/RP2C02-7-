@@ -701,6 +701,7 @@ assign CLIP_B = ~( CLIP_OUT | BGCLIP );
 wire [8:0]H, V, HCout, VCout;
 wire VC;
 assign VC = HC | ~VC_LATCH;
+// HV COUNTERS
 //                Clk   F2    DIR                   C_IN                  Reset     LOAD     STEP   DATA   CNT_OUT    C_OUT
 COUNTER HCNT[8:0](Clk, nPCLK, 1'b1, {HCout[7:5], HIN5, HCout[3:0], 1'b1}, ~nRES, ~HC & PCLK, PCLK, 9'h000, H[8:0],  HCout[8:0]);
 COUNTER VCNT[8:0](Clk, nPCLK, 1'b1, {VCout[7:0], H_LINE23},               ~nRES, ~VC & PCLK, PCLK, 9'h000, V[8:0],  VCout[8:0]);
