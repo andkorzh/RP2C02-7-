@@ -1441,8 +1441,8 @@ module SHIFTREG(
 input Clk,          // System clock
 // Inputs
 input SIN,          // Shift register serial input
-input NEXT,         // Shift Resolution, Phase 2
 input STEP,         // Shift Resolution, Phase 1
+input NEXT,         // Shift Resolution, Phase 2
 input LOAD,         // Permission to load data for shift
 input [7:0]D,       // Data to shift
 // Outputs
