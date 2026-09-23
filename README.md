@@ -21,7 +21,7 @@ Prototype PPU on FPGA Cyclone II  EP2C5T144
 
 Schematic diagram of the FPGA RGB PPU
 
-![PPU_FPGA](https://github.com/user-attachments/assets/399fde5c-03a2-46e6-b2be-142c54a0fa8d)
+<img width="7375" height="3661" alt="PPU_FPGA" src="https://github.com/user-attachments/assets/9f12b2a4-2205-4d5f-be94-44d4756a086c" />
 
 Added Gerber files for the printed circuit board of the FPGA replacement for the PPU.
 
