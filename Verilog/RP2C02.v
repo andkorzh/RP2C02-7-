@@ -1179,27 +1179,27 @@ endmodule
 // Sprite Memory Management Module
 //===============================================================================================
 module OAM(
-input Clk,          // System clock
-input PCLK,         //  Pixel clock
-input nPCLK,        // ~Pixel clock
+input Clk,            // System clock
+input PCLK,           // Pixel clock
+input nPCLK,          // Pixel clock
 // Inputs
-input Hnn0,         // Synchronized state of the PPU
-input Hn0,          // Synchronized state of the PPU
-input Hn2,          // Synchronized state of the PPU
-input BLNK,         // Rendering is disabled
-input nVIS,         // Visible part of the line
-input W3,           // Write to OAM address register $2003
-input W4,           // Write to OAM data register    $2004
-input I_OAM2,       // OAM2 Initialization (Clear) Signal
-input nEVAL,        // Reset OAM2 counter and start OAM2 processing
-input PAR_O,        // Fetch sprite graphics
-input OMFG,         // Signal to copy the current comparison sprite in OAM2
-input RESCL,        // Prerender line (reset all fetch schemes)
-input [7:0]DBIN,    // PPU Register Open Bus
+input Hnn0,           // Synchronized state of the PPU
+input Hn0,            // Synchronized state of the PPU
+input Hn2,            // Synchronized state of the PPU
+input BLNK,           // Rendering is disabled
+input nVIS,           // Visible part of the line
+input W3,             // Write to OAM address register $2003
+input W4,             // Write to OAM data register    $2004
+input I_OAM2,         // OAM2 Initialization (Clear) Signal
+input nEVAL,          // Reset OAM2 counter and start OAM2 processing
+input PAR_O,          // Fetch sprite graphics
+input OMFG,           // Signal to copy the current comparison sprite in OAM2
+input RESCL,          // Prerender line (reset all fetch schemes)
+input [7:0]DBIN,      // PPU Register Open Bus
 // Outputs
-output reg [7:0]OB, // Sprite data bus
-output reg R2DB5,   // Sprite Overflow Flag
-output reg SPR_OV   // OAM counter is full or more than 8 sprites found
+output reg [7:0]OB,   // Sprite data bus
+output reg R2DB5,     // Sprite Overflow Flag
+output reg SPR_OV     // OAM counter is full or more than 8 sprites found
 );
 // Variables
 reg W4FF;
@@ -1212,28 +1212,19 @@ reg OMV_LATCH, TMV_LATCH;
 reg OAMCTR2;
 reg [7:0]OB2;
 // Combinatorics
-wire WE_EN;
+wire WE_EN, WE, OFETCH, OAP, SPR_OVERFLOW, OAMSTEP, M4, OAM2STEP, ORES;
 assign WE_EN = ~( PCLK | BLNK | nVIS | OAMCTR2 | SPR_OV | ~Hnn0 );
-wire WE;
 assign WE = WE_EN | OFETCH;
-wire OFETCH;
 assign OFETCH = ~( ~W4Q[2] | W4Q[4] );
-wire OAP;
 assign OAP = ~(( Hnn0 | nVIS ) & ~BLNK );
-wire SPR_OVERFLOW;
 assign SPR_OVERFLOW = ~( nPCLK | Hn0 | OVF_LATCH | OMFG_LATCH );
 // OAM counter control
-wire OAMSTEP;
 assign OAMSTEP = ~(( nPCLK | ~OMSTEP[0] ) & ( nPCLK | OMSTEP[1] ));
-wire MODE4;
-assign MODE4 = ~( ~OMFG | BLNK );
-wire ORES;
-assign ORES  = ~( nPCLK | ORES_LATCH );
-wire OAM2STEP;
+assign M4 = ~( ~OMFG | BLNK );
+assign ORES = ~( nPCLK | ORES_LATCH );
 assign OAM2STEP = ~( nPCLK | OSTEP[0] | ~(( PAR_O & ~Hn2 ) | ~( Hn0 | ~( OSTEP[1] | OSTEP[2] ))));
-wire OMV;
 wire [2:0]OBDZ;
-assign OBDZ[2:0] =  OAMQ[4:2] &  {3{ ~( OAM1ADR[1] & ~OAM1ADR[0] )}};
+assign OBDZ[2:0] =  OAMQ[4:2] & {3{ ~( OAM1ADR[1] & ~OAM1ADR[0] )}};
 wire [4:0]OAM2ADR, OAM2Cout;
 wire [7:0]OAM1ADR, OAM1Cout;
 wire C1, C2;
@@ -1246,9 +1237,9 @@ COUNTER OAM1CNT[7:0] (Clk, ~(OAMSTEP|W3), 1'b1, {OAM1Cout[6:2],C2,C1,1'b1}, PAR_
 //                    Clk   F2    DIR              C_IN       Reset  CLR   LOAD   STEP     DATA    CNT_OUT        C_OUT
 COUNTER OAM2CNT[4:0] (Clk, nPCLK, 1'b1, {OAM2Cout[3:0], 1'b1}, ORES, 1'b0, 1'b0, OAM2STEP, 5'h00, OAM2ADR[4:0], OAM2Cout[4:0]);
 // Internal memory modules
-wire [7:0]OAMQ, OAM2Q; 
-OAM_RAM  MOD_OAM_RAM  (OAM1ADR[7:0], Clk, DBIN[7:0], (WE & BLNK), OAMQ[7:0]);  // OAM
-OAM2_RAM MOD_OAM2_RAM (OAM2ADR[4:0], Clk,  OB2[7:0],  WE,         OAM2Q[7:0]); // OAM2
+wire [7:0]OAMQ, OAM2Q;
+OAM_RAM  MOD_OAM_RAM ( Clk, 1'b1, 1'b0, (WE & BLNK), OAM1ADR[7:0], DBIN[7:0], OAMQ[7:0] ); // OAM  RAM (Clock, ClockEn, Reset, WE, Address, Data, Q)
+OAM2_RAM MOD_OAM2_RAM( Clk, 1'b1, 1'b0,  WE,         OAM2ADR[4:0],  OB2[7:0], OAM2Q[7:0]); // OAM2 RAM (Clock, ClockEn, Reset, WE, Address, Data, Q)
 // Logics
 always @(posedge Clk) begin
          if (~W4Q[3]) W4FF <= 1'b0;
@@ -1269,7 +1260,7 @@ always @(posedge Clk) begin
          ORES_LATCH  <= nEVAL;
          OVF_LATCH   <= ~OAMCTR2;
          OMFG_LATCH  <= OMFG;
-         OMV_LATCH   <= OMV;
+         OMV_LATCH   <= M4 ? &OAM1ADR[7:2] : &OAM1ADR[7:0];
          TMV_LATCH   <= OAM2Cout[4];
                      end
                        end
