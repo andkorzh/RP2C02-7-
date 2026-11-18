@@ -442,24 +442,21 @@ output  PCLK,        //  Пиксельклок
 output nPCLK,        // ~Пиксельклок
 output reg SUBCLK    // Поднесущая цвета
 );
-// Variables
-reg [1:0]PCLK_N;
-reg [3:0]PCLK_P;
+// Переменные
+reg DIV2n;
+reg [2:0]DIV;
 reg [1:0]SUB;
-// Combinatorics
-assign PCLK  =   PCLK_N[1] | PCLK_P[2] | PCLK_P[3];
-assign nPCLK = ~(PCLK_N[1] | PCLK_P[2] | PCLK_P[3]);
-// Logics
+// Комбинаторика
+assign PCLK  =   DIV[2] | DIV2n | (~MODE & DIV[1]);
+assign nPCLK = ~(DIV[2] | DIV2n | (~MODE & DIV[1]));
+// Логика
 always @(posedge Clk2) begin
         // Делитель пиксельклока
-        PCLK_N[1:0] <= {PCLK_N[0],   ~( ~nRES |  MODE | PCLK_N[1] )};
-        PCLK_P[2:0] <= {PCLK_P[1:0], ~( ~nRES | ~MODE | ( PCLK_P[1] | PCLK_P[2] ))};
+        DIV[2:0] <= { DIV[1] & MODE, DIV[0], ~( ~nRES | DIV[2] | DIV[1] )};
         // Делитель поднесущей цвета
         {SUBCLK, SUB[1:0]} <= {SUB[1:0], ~( SUBCLK | ~nRES )};
                         end
-always @(negedge Clk2) begin
-         PCLK_P[3] <= PCLK_P[1];
-                        end
+always @(negedge Clk2) DIV2n <= DIV[1] & MODE;
 endmodule
 
 //===============================================================================================
@@ -699,8 +696,9 @@ assign CLIP_O = ~( CLIP_OUT | OBCLIP );
 assign CLIP_B = ~( CLIP_OUT | BGCLIP );
 // HV COUNTERS CONTROL
 wire [8:0]H, V, HCout, VCout;
-wire VC;
+wire VC, HIN5;
 assign VC = HC | ~VC_LATCH;
+assign HIN5 = H[4] & H[3] & H[2] & H[1] & H[0];
 // HV COUNTERS
 //                Clk   F2    DIR                   C_IN                  Reset  CLR  LOAD  STEP   DATA   CNT_OUT   C_OUT
 COUNTER HCNT[8:0](Clk, nPCLK, 1'b1, {HCout[7:5], HIN5, HCout[3:0], 1'b1}, ~nRES, ~HC, 1'b0, PCLK, 9'h000, H[8:0], HCout[8:0]);
