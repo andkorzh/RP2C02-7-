@@ -702,9 +702,9 @@ wire [8:0]H, V, HCout, VCout;
 wire VC;
 assign VC = HC | ~VC_LATCH;
 // HV COUNTERS
-//                Clk   F2    DIR                   C_IN                  Reset     LOAD     STEP   DATA   CNT_OUT    C_OUT
-COUNTER HCNT[8:0](Clk, nPCLK, 1'b1, {HCout[7:5], HIN5, HCout[3:0], 1'b1}, ~nRES, ~HC & PCLK, PCLK, 9'h000, H[8:0],  HCout[8:0]);
-COUNTER VCNT[8:0](Clk, nPCLK, 1'b1, {VCout[7:0], H_LINE23},               ~nRES, ~VC & PCLK, PCLK, 9'h000, V[8:0],  VCout[8:0]);
+//                Clk   F2    DIR                   C_IN                  Reset  CLR  LOAD  STEP   DATA   CNT_OUT   C_OUT
+COUNTER HCNT[8:0](Clk, nPCLK, 1'b1, {HCout[7:5], HIN5, HCout[3:0], 1'b1}, ~nRES, ~HC, 1'b0, PCLK, 9'h000, H[8:0], HCout[8:0]);
+COUNTER VCNT[8:0](Clk, nPCLK, 1'b1, {VCout[7:0], H_LINE23},               ~nRES, ~VC, 1'b0, PCLK, 9'h000, V[8:0], VCout[8:0]);
 //HV PLA (NTSC/PAL)
 wire H_LINE0, H_LINE1, H_LINE2, H_LINE5, H_LINE6, H_LINE7, H_LINE17, H_LINE18;
 wire H_LINE20, H_LINE21, H_LINE22, H_LINE23;
@@ -1057,12 +1057,12 @@ wire [4:0]TVO, THOCout, TVOCout;
 wire NTHDO, NTVDO, NTHC, NTVC;
 wire [2:0]FVO, FVOCout;
 //PAR COUNTERS
-//                  Clk   F2   DIR              C_IN        Reset   LOAD    STEP   DATA    CNT_OUT     C_OUT
-COUNTER THCNT[4:0] (Clk, PCLK, 1'b1, {THOCout[3:0], TH_IN}, 1'b0, THLOAD, THSTEP, TH[4:0], THO[4:0], THOCout[4:0]); // TH  COUNTER
-COUNTER TVCNT[4:0] (Clk, PCLK, 1'b1, {TVOCout[3:0], TV_IN}, ZTV,  TVLOAD, TVSTEP, TV[4:0], TVO[4:0], TVOCout[4:0]); // TV  COUNTER
-COUNTER NTHCNT     (Clk, PCLK, 1'b1,                NTH_IN, 1'b0, THLOAD, THSTEP, NTH,     NTHDO,    NTHC);         // NTH COUNTER
-COUNTER NTVCNT     (Clk, PCLK, 1'b1,                NTV_IN, 1'b0, TVLOAD, TVSTEP, NTV,     NTVDO,    NTVC);         // NTV COUNTER
-COUNTER FVCNT[2:0] (Clk, PCLK, 1'b1, {FVOCout[1:0], FV_IN}, 1'b0, TVLOAD, TVSTEP, FV[2:0], FVO[2:0], FVOCout[2:0]); // FV  COUNTER
+//                  Clk   F2   DIR              C_IN        Reset  CLR    LOAD    STEP   DATA    CNT_OUT     C_OUT
+COUNTER THCNT[4:0] (Clk, PCLK, 1'b1, {THOCout[3:0], TH_IN}, 1'b0, 1'b0, THLOAD, THSTEP, TH[4:0], THO[4:0], THOCout[4:0]); // TH  COUNTER
+COUNTER TVCNT[4:0] (Clk, PCLK, 1'b1, {TVOCout[3:0], TV_IN}, ZTV,  1'b0, TVLOAD, TVSTEP, TV[4:0], TVO[4:0], TVOCout[4:0]); // TV  COUNTER
+COUNTER NTHCNT     (Clk, PCLK, 1'b1,                NTH_IN, 1'b0, 1'b0, THLOAD, THSTEP, NTH,     NTHDO,    NTHC);         // NTH COUNTER
+COUNTER NTVCNT     (Clk, PCLK, 1'b1,                NTV_IN, 1'b0, 1'b0, TVLOAD, TVSTEP, NTV,     NTVDO,    NTVC);         // NTV COUNTER
+COUNTER FVCNT[2:0] (Clk, PCLK, 1'b1, {FVOCout[1:0], FV_IN}, 1'b0, 1'b0, TVLOAD, TVSTEP, FV[2:0], FVO[2:0], FVOCout[2:0]); // FV  COUNTER
 // VRAM address multiplexer
 wire BFVO0, NBFVO1;
 assign BFVO0  =  BLNK & FVO[0];
@@ -1235,13 +1235,16 @@ wire OMV;
 wire [2:0]OBDZ;
 assign OBDZ[2:0] =  OAMQ[4:2] &  {3{ ~( OAM1ADR[1] & ~OAM1ADR[0] )}};
 wire [4:0]OAM2ADR, OAM2Cout;
-wire [7:0]OAM1ADR;
-// OAM COUNTER
-//                  Clk  MODE   Reset LOAD   STEP    DATA      CNT_OUT      C_OUT
-OAM_COUNTER OAMCNT (Clk, MODE4, PAR_O, W3, OAMSTEP, DBIN[7:0], OAM1ADR[7:0], OMV);
+wire [7:0]OAM1ADR, OAM1Cout;
+wire C1, C2;
+assign C1 = OAM1Cout[0] & ~M4;
+assign C2 = OAM1Cout[1] |  M4;
+//OAM COUNTER
+//                    Clk        F2       DIR              C_IN             Reset       CLR       LOAD    STEP    DATA       CNT_OUT        C_OUT
+COUNTER OAM1CNT[7:0] (Clk, ~(OAMSTEP|W3), 1'b1, {OAM1Cout[6:2],C2,C1,1'b1}, PAR_O, {6'h00,M4,M4}, W3,   OAMSTEP, DBIN[7:0], OAM1ADR[7:0], OAM1Cout[7:0]);
 // OAM2 COUNTER
-//                    Clk   F2    DIR              C_IN       Reset  LOAD   STEP     DATA    CNT_OUT        C_OUT
-COUNTER OAM2CNT[4:0] (Clk, nPCLK, 1'b1, {OAM2Cout[3:0], 1'b1}, ORES, 1'b0, OAM2STEP, 5'h00, OAM2ADR[4:0], OAM2Cout[4:0]);
+//                    Clk   F2    DIR              C_IN       Reset  CLR   LOAD   STEP     DATA    CNT_OUT        C_OUT
+COUNTER OAM2CNT[4:0] (Clk, nPCLK, 1'b1, {OAM2Cout[3:0], 1'b1}, ORES, 1'b0, 1'b0, OAM2STEP, 5'h00, OAM2ADR[4:0], OAM2Cout[4:0]);
 // Internal memory modules
 wire [7:0]OAMQ, OAM2Q; 
 OAM_RAM  MOD_OAM_RAM  (OAM1ADR[7:0], Clk, DBIN[7:0], (WE & BLNK), OAMQ[7:0]);  // OAM
@@ -1423,8 +1426,8 @@ wire STEP;
 assign STEP = ~( PCLK | ~ZH_FF );
 wire [7:0]CNT, Cout;
 // FIFO DOWN COUNTER
-//                    Clk         F2        DIR       C_IN          Reset LOAD  STEP   DATA    CNT_OUT     C_OUT
-COUNTER FIFOCNT[7:0] (Clk, ~(LOAD | STEP), 1'b0, {Cout[6:0], 1'b1}, 1'b0, LOAD, STEP, OB[7:0], CNT[7:0], Cout[7:0]);
+//                    Clk         F2        DIR       C_IN          Reset CLR   LOAD  STEP   DATA    CNT_OUT     C_OUT
+COUNTER FIFOCNT[7:0] (Clk, ~(LOAD | STEP), 1'b0, {Cout[6:0], 1'b1}, 1'b0, 1'b0, LOAD, STEP, OB[7:0], CNT[7:0], Cout[7:0]);
 // Logics
 always @(posedge Clk) begin
          if ( PCLK & ( ~|CNT[7:0] ))            ZH_FF <= 1'b0;
@@ -1619,6 +1622,7 @@ input F2,        // Phase 2 (PCLK, nPCLK, etc)
 input DIR,       // Direction of counting
 input C_IN,      // Carry input
 input Reset,     // Reset counter
+input CLR,       // Synchronous reset
 input LOAD,      // Load DATA
 input STEP,      // Step Count
 input DATA,      // DATA INPUT
@@ -1632,41 +1636,9 @@ assign C_OUT = DIR ? CNT & C_IN : ~CNT & C_IN;
 always @(posedge Clk or posedge Reset) begin
        if (Reset) CNT <= 1'b0;
   else if (LOAD)  CNT <= DATA;
-  else if (STEP)  CNT <= CNT1;
+  else if (STEP)  CNT <= CLR ? 1'b0 : CNT1;
                       end
 always @(posedge Clk) begin
-       if ( F2 ) CNT1 <= CNT ^ C_IN;
-                      end
-endmodule
-
-//===============================================================================================
-// counter module OAM1
-//===============================================================================================
-module OAM_COUNTER(
-// Clocks
-input Clk,           // Clock
-// Inputs
-input MODE4,         // Counting mode 1 or 4 step
-input Reset,         // Reset counter
-input LOAD,          // Load DATA
-input STEP,          // Step Count
-input  [7:0]DATA,    // DATA INPUT
-// Outputs 
-output reg [7:0]CNT, // Counter output
-output C_OUT         // Carry out
-);
-reg [7:0]CNT1;
-wire [7:0]OAM1Cout;
-assign OAM1Cout[7:0] = CNT[7:0] & {OAM1Cout[6:0],1'b1};
-wire [5:0]OAM4Cout; 
-assign OAM4Cout[5:0] = CNT[7:2] & {OAM4Cout[4:0],1'b1};
-wire [5:0]CNT4;
-assign CNT4[5:0]  = CNT[7:2] ^ {OAM4Cout[4:0],1'b1};
-assign C_OUT = (MODE4) ? CNT[7] & CNT[6] & CNT[5] & CNT[4] & CNT[3] & CNT[2] & ~CNT[1] & ~CNT[0]
-                       : CNT[7] & CNT[6] & CNT[5] & CNT[4] & CNT[3] & CNT[2] &  CNT[1] &  CNT[0];
-// Logics
-always @(posedge Clk) begin
-     if (   LOAD | STEP | Reset ) CNT[7:0]  <= Reset ? 8'h00 : LOAD ? DATA[7:0] : CNT1[7:0];
-     if (~( LOAD | STEP ))        CNT1[7:0] <= MODE4 ? {CNT4[5:0], 2'h0 } : ( CNT[7:0] ^ {OAM1Cout[6:0],1'b1});
+       if ( F2 ) CNT1 <= CNT + C_IN;
                       end
 endmodule
