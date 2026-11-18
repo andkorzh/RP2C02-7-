@@ -1562,47 +1562,47 @@ always @(posedge Clk) begin
     PIX[5:0] <= {C[5], C[4], CN[3:0]};
                end
     if (nPCLK) PICTURER <= nPICTURE;
-    case(EMPH)  // Emphasis
-      0: begin
-       ro <= ri;
-       go <= gi;
-       bo <= bi;
-         end
-      1: begin
-       ro <= ri;
-       go <= gi - gi[7:2];
-       bo <= bi - bi[7:2];
-         end
-      2: begin
-       ro <= ri - ri[7:2];
-       go <= gi;
-       bo <= bi - bi[7:2];
-         end
-      3: begin
-       ro <= ri - ri[7:2];
-       go <= gi - gi[7:3];
-       bo <= bi - bi[7:2] - bi[7:3];
-         end
-      4: begin
-       ro <= ri - ri[7:3];
-       go <= gi - gi[7:3];
-       bo <= bi;
-         end
-      5: begin
-       ro <= ri - ri[7:3];
-       go <= gi - gi[7:2];
-       bo <= bi - bi[7:3];
-         end
-      6: begin
-       ro <= ri - ri[7:2];
-       go <= gi - gi[7:3];
-       bo <= bi - bi[7:3];
-         end
-      7: begin
-       ro <= ri - ri[7:2];
-       go <= gi - gi[7:2];
-       bo <= bi - bi[7:2];
-         end
+    case(EMPH)
+    3'b000: begin // 0: Нет эффекта (100% яркости)
+            ro <= ri;
+			         go <= gi; 
+		  	       bo <= bi; 
+            end
+    3'b001: begin // 1: Ослабление G и B на 25% (остается 75%)
+            ro <= ri; 
+            go <= gi - {2'b0, gi[7:2]}; 
+            bo <= bi - {2'b0, bi[7:2]}; 
+            end
+    3'b010: begin // 2: Ослабление R и B на 25%
+            ro <= ri - {2'b0, ri[7:2]}; 
+            go <= gi; 
+            bo <= bi - {2'b0, bi[7:2]}; 
+            end
+    3'b011: begin // 3: Красный + Зеленый (Синий гасится сильнее)
+            ro <= ri - {2'b0, ri[7:2]}; 
+            go <= gi - {2'b0, gi[7:2]}; 
+            bo <= {1'b0, bi[7:1]} + {3'b0, bi[7:3]}; // Синий уменьшаем до 62.5% (bi>>1 + bi>>3)
+            end
+    3'b100: begin // 4: Ослабление R и G на 25%
+            ro <= ri - {2'b0, ri[7:2]}; 
+            go <= gi - {2'b0, gi[7:2]}; 
+            bo <= bi; 
+            end
+    3'b101: begin // 5: Красный + Синий
+            ro <= ri - {2'b0, ri[7:2]}; 
+            go <= {1'b0, gi[7:1]} + {3'b0, gi[7:3]}; // Зеленый до 62.5%
+            bo <= bi - {2'b0, bi[7:2]}; 
+            end
+    3'b110: begin // 6: Зеленый + Синий
+            ro <= {1'b0, ri[7:1]} + {3'b0, ri[7:3]}; // Красный до 62.5%
+            go <= gi - {2'b0, gi[7:2]}; 
+            bo <= bi - {2'b0, bi[7:2]}; 
+            end
+    3'b111: begin // 7: Полное затемнение всего кадра на 25%
+            ro <= ri - {2'b0, ri[7:2]}; 
+            go <= gi - {2'b0, gi[7:2]}; 
+            bo <= bi - {2'b0, bi[7:2]}; 
+            end
     endcase
                       end
 // Конец модуля палитры
