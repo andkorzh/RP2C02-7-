@@ -341,7 +341,7 @@ applicable agreement for further details.
 		(line (pt 52 8)(pt 56 12))
 	)
 	(text "VCC" (rect 4 7 24 17)(font "Arial" (font_size 6)))
-	(annotation_block (location)(rect 1040 216 1096 328))
+	(annotation_block (location)(rect 1040 208 1096 320))
 )
 (pin
 	(bidir)

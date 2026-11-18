@@ -443,23 +443,20 @@ output nPCLK,        // ~PIXEL CLOCK
 output reg SUBCLK    // Subcarrier clock
 );
 // Variables
-reg [1:0]PCLK_N;
-reg [3:0]PCLK_P;
+reg DIV2n;
+reg [2:0]DIV;
 reg [1:0]SUB;
 // Combinatorics
-assign PCLK  =   PCLK_N[1] | PCLK_P[2] | PCLK_P[3];
-assign nPCLK = ~(PCLK_N[1] | PCLK_P[2] | PCLK_P[3]);
+assign PCLK  =   DIV[2] | DIV2n | (~MODE & DIV[1]);
+assign nPCLK = ~(DIV[2] | DIV2n | (~MODE & DIV[1]));
 // Logics
 always @(posedge Clk2) begin
         // PCLK DIVIDER
-        PCLK_N[1:0] <= {PCLK_N[0],   ~( ~nRES |  MODE | PCLK_N[1] )};
-        PCLK_P[2:0] <= {PCLK_P[1:0], ~( ~nRES | ~MODE | ( PCLK_P[1] | PCLK_P[2] ))};
+        DIV[2:0] <= { DIV[1] & MODE, DIV[0], ~( ~nRES | DIV[2] | DIV[1] )};
         // SUBCARRIER DIVIDER
         {SUBCLK, SUB[1:0]} <= {SUB[1:0], ~( SUBCLK | ~nRES )};
                         end
-always @(negedge Clk2) begin
-         PCLK_P[3] <= PCLK_P[1];
-                        end
+always @(negedge Clk2) DIV2n <= DIV[1] & MODE;
 endmodule
 
 //===============================================================================================
@@ -699,8 +696,9 @@ assign CLIP_O = ~( CLIP_OUT | OBCLIP );
 assign CLIP_B = ~( CLIP_OUT | BGCLIP );
 // HV COUNTERS CONTROL
 wire [8:0]H, V, HCout, VCout;
-wire VC;
+wire VC, HIN5;
 assign VC = HC | ~VC_LATCH;
+assign HIN5 = H[4] & H[3] & H[2] & H[1] & H[0];
 // HV COUNTERS
 //                Clk   F2    DIR                   C_IN                  Reset  CLR  LOAD  STEP   DATA   CNT_OUT   C_OUT
 COUNTER HCNT[8:0](Clk, nPCLK, 1'b1, {HCout[7:5], HIN5, HCout[3:0], 1'b1}, ~nRES, ~HC, 1'b0, PCLK, 9'h000, H[8:0], HCout[8:0]);
@@ -1212,26 +1210,17 @@ reg OMV_LATCH, TMV_LATCH;
 reg OAMCTR2;
 reg [7:0]OB2;
 // Combinatorics
-wire WE_EN;
+wire WE_EN, WE, OFETCH, OAP, SPR_OVERFLOW, OAMSTEP, M4, OAM2STEP, ORES;
 assign WE_EN = ~( PCLK | BLNK | nVIS | OAMCTR2 | SPR_OV | ~Hnn0 );
-wire WE;
 assign WE = WE_EN | OFETCH;
-wire OFETCH;
 assign OFETCH = ~( ~W4Q[2] | W4Q[4] );
-wire OAP;
 assign OAP = ~(( Hnn0 | nVIS ) & ~BLNK );
-wire SPR_OVERFLOW;
 assign SPR_OVERFLOW = ~( nPCLK | Hn0 | OVF_LATCH | OMFG_LATCH );
 // OAM counter control
-wire OAMSTEP;
 assign OAMSTEP = ~(( nPCLK | ~OMSTEP[0] ) & ( nPCLK | OMSTEP[1] ));
-wire MODE4;
-assign MODE4 = ~( ~OMFG | BLNK );
-wire ORES;
+assign M4 = ~( ~OMFG | BLNK );
 assign ORES  = ~( nPCLK | ORES_LATCH );
-wire OAM2STEP;
 assign OAM2STEP = ~( nPCLK | OSTEP[0] | ~(( PAR_O & ~Hn2 ) | ~( Hn0 | ~( OSTEP[1] | OSTEP[2] ))));
-wire OMV;
 wire [2:0]OBDZ;
 assign OBDZ[2:0] =  OAMQ[4:2] &  {3{ ~( OAM1ADR[1] & ~OAM1ADR[0] )}};
 wire [4:0]OAM2ADR, OAM2Cout;
@@ -1246,7 +1235,7 @@ COUNTER OAM1CNT[7:0] (Clk, ~(OAMSTEP|W3), 1'b1, {OAM1Cout[6:2],C2,C1,1'b1}, PAR_
 //                    Clk   F2    DIR              C_IN       Reset  CLR   LOAD   STEP     DATA    CNT_OUT        C_OUT
 COUNTER OAM2CNT[4:0] (Clk, nPCLK, 1'b1, {OAM2Cout[3:0], 1'b1}, ORES, 1'b0, 1'b0, OAM2STEP, 5'h00, OAM2ADR[4:0], OAM2Cout[4:0]);
 // Internal memory modules
-wire [7:0]OAMQ, OAM2Q; 
+wire [7:0]OAMQ, OAM2Q;
 OAM_RAM  MOD_OAM_RAM  (OAM1ADR[7:0], Clk, DBIN[7:0], (WE & BLNK), OAMQ[7:0]);  // OAM
 OAM2_RAM MOD_OAM2_RAM (OAM2ADR[4:0], Clk,  OB2[7:0],  WE,         OAM2Q[7:0]); // OAM2
 // Logics
@@ -1269,7 +1258,7 @@ always @(posedge Clk) begin
          ORES_LATCH  <= nEVAL;
          OVF_LATCH   <= ~OAMCTR2;
          OMFG_LATCH  <= OMFG;
-         OMV_LATCH   <= OMV;
+         OMV_LATCH   <= M4 ? &OAM1ADR[7:2] : &OAM1ADR[7:0];
          TMV_LATCH   <= OAM2Cout[4];
                      end
                        end
