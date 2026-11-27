@@ -10,8 +10,8 @@ input SCANLINES_EN,       // Enable the CRT scanline effect
 // Outputs
 output EMPH_ON,           // Hardware dimming control output
 output reg [5:0]VGA_PIX,  // VGA color palette index
-output reg vga_hsync,     // Horizontal sync 1024x480 (positive)
-output reg vga_vsync      // Vertical sync 1024x480 (positive)
+output reg vga_hsync,     // Horizontal sync (positive)
+output reg vga_vsync      // Vertical sync (positive)
 );
 // Variables
 reg [10:0]H_CNT;
