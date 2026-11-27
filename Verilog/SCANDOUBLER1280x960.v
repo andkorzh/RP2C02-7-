@@ -3,15 +3,15 @@ input Clk_VGA,            // Pixelclock VGA 1280x960 107.386 MHz
 input MCLK,               // PPU system clock 21.477 or 42.954MHz
 input PCLK,               // Pixelclock PPU
 // Inputs
-input [8:0]Ho,            // Ãîðèçîíòàëüíàÿ êîîðäèíàòà PPU (0..340)
-input [8:0]Vo,            // Âåðòèêàëüíàÿ êîîðäèíàòà PPU (0..261)
-input [5:0]PIX,           // Âõîäíûå äàííûå èíäåêñà ïàëèòðû ïèêñåëåé PPU
-input SCANLINES_EN,       // Âêëþ÷èòü ñêàíëàéíû
+input [8:0]Ho,            // Horizontal counter PPU (0..340)
+input [8:0]Vo,            // Vertical counter PPU (0..261)
+input [5:0]PIX,           // PPU palette color index
+input SCANLINES_EN,       // Enable the CRT scanline effect
 // Outputs
-output EMPH_ON,           // Âûõîä óïðàâëåíèÿ àïïàðàòíûì ýìôàçèñîì
-output reg [5:0]VGA_PIX,  // Âûõîäíûå äàííûå èíäåêñà ïàëèòðû ïèêñåëåé VGA
-output reg vga_hsync,     // Ãîðèçîíòàëüíàÿ ñèíõðîíèçàöèÿ (ïîëÿðíîñòü +)
-output reg vga_vsync      // Âåðòèêàëüíàÿ ñèíõðîíèçàöèÿ (ïîëÿðíîñòü +)
+output EMPH_ON,           // Hardware dimming control output
+output reg [5:0]VGA_PIX,  // VGA color palette index
+output reg vga_hsync,     // Horizontal sync 1024x480 (positive)
+output reg vga_vsync      // Vertical sync 1024x480 (positive)
 );
 // Variables
 reg [10:0]H_CNT;
