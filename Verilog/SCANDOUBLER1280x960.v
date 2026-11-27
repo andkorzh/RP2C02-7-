@@ -1,7 +1,7 @@
 module SCANDOUBLER1280x960 (
 input Clk_VGA,            // Pixelclock VGA 1280x960 107.386 MHz
 input MCLK,               // PPU system clock 21.477 or 42.954MHz
-input PCLK,               // Pixelclock PPU
+input PCLK,               // Pixelclock PPU 5.369 MHz
 // Inputs
 input [8:0]Ho,            // Horizontal counter PPU (0..340)
 input [8:0]Vo,            // Vertical counter PPU (0..261)
