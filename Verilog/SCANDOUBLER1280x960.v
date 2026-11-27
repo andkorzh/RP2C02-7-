@@ -1,20 +1,19 @@
 module SCANDOUBLER1280x960 (
-// Такты
-input Clk_VGA,            // Пиксельклок VGA 1280x960 107.386 МГц
-input MCLK,               // Системный клок PPU
-input PCLK,               // Пиксельклок PPU
-// Входы
-input [8:0]Ho,            // Горизонтальная координата PPU (0..340)
-input [8:0]Vo,            // Вертикальная координата PPU (0..261)
-input [5:0]PIX,           // Входные данные индекса палитры пикселей PPU
-input SCANLINES_EN,       // Включить сканлайны
-// Выходы
-output EMPH_ON,           // Выход управления аппаратным эмфазисом
-output reg [5:0]VGA_PIX,  // Выходные данные индекса палитры пикселей VGA
-output reg vga_hsync,     // Горизонтальная синхронизация (полярность +)
-output reg vga_vsync      // Вертикальная синхронизация (полярность +)
+input Clk_VGA,            // Pixelclock VGA 1280x960 107.386 MHz
+input MCLK,               // PPU system clock 21.477 or 42.954MHz
+input PCLK,               // Pixelclock PPU
+// Inputs
+input [8:0]Ho,            // ГѓГ®Г°ГЁГ§Г®Г­ГІГ Г«ГјГ­Г Гї ГЄГ®Г®Г°Г¤ГЁГ­Г ГІГ  PPU (0..340)
+input [8:0]Vo,            // Г‚ГҐГ°ГІГЁГЄГ Г«ГјГ­Г Гї ГЄГ®Г®Г°Г¤ГЁГ­Г ГІГ  PPU (0..261)
+input [5:0]PIX,           // Г‚ГµГ®Г¤Г­Г»ГҐ Г¤Г Г­Г­Г»ГҐ ГЁГ­Г¤ГҐГЄГ±Г  ГЇГ Г«ГЁГІГ°Г» ГЇГЁГЄГ±ГҐГ«ГҐГ© PPU
+input SCANLINES_EN,       // Г‚ГЄГ«ГѕГ·ГЁГІГј Г±ГЄГ Г­Г«Г Г©Г­Г»
+// Outputs
+output EMPH_ON,           // Г‚Г»ГµГ®Г¤ ГіГЇГ°Г ГўГ«ГҐГ­ГЁГї Г ГЇГЇГ Г°Г ГІГ­Г»Г¬ ГЅГ¬ГґГ Г§ГЁГ±Г®Г¬
+output reg [5:0]VGA_PIX,  // Г‚Г»ГµГ®Г¤Г­Г»ГҐ Г¤Г Г­Г­Г»ГҐ ГЁГ­Г¤ГҐГЄГ±Г  ГЇГ Г«ГЁГІГ°Г» ГЇГЁГЄГ±ГҐГ«ГҐГ© VGA
+output reg vga_hsync,     // ГѓГ®Г°ГЁГ§Г®Г­ГІГ Г«ГјГ­Г Гї Г±ГЁГ­ГµГ°Г®Г­ГЁГ§Г Г¶ГЁГї (ГЇГ®Г«ГїГ°Г­Г®Г±ГІГј +)
+output reg vga_vsync      // Г‚ГҐГ°ГІГЁГЄГ Г«ГјГ­Г Гї Г±ГЁГ­ГµГ°Г®Г­ГЁГ§Г Г¶ГЁГї (ГЇГ®Г«ГїГ°Г­Г®Г±ГІГј +)
 );
-// Переменные
+// Variables
 reg [10:0]H_CNT;
 reg [10:0]V_CNT;
 reg [2:0]PIX_DIV;
@@ -22,7 +21,7 @@ reg [7:0]R_ADDR;
 reg [7:0]Ho_DELAY[0:5];
 reg [1:0]FRAME_START_SYNC;
 // =========================================================================
-// 1. Задержка горизонтального адреса записи пикселей с учетом задержки PPU
+// 1. Horizontal pixel write address latency considering PPU latency
 // =========================================================================
 always @(posedge MCLK) begin
     if (PCLK)  begin
@@ -37,7 +36,7 @@ always @(posedge MCLK) begin
                end
                        end
 // =========================================================================
-// 2. Лайнбуфер DPRAM 6 bit (2x256)
+// 2. Linebuffer DPRAM 6 bit (2x256)
 // =========================================================================
 wire [5:0]LBUFF_OUT;
 LINE_BUFFER LINE_BUFFER(
@@ -46,33 +45,33 @@ LINE_BUFFER LINE_BUFFER(
 .rdclock   (Clk_VGA),
 .wraddress ({~Vo[0], Ho_DELAY[5]}),
 .wrclock   (MCLK),
-.wren      (Ho < 9'd259), // Пишем только активные 240 строк
+.wren      (Ho < 9'd259), // ГЏГЁГёГҐГ¬ ГІГ®Г«ГјГЄГ® Г ГЄГІГЁГўГ­Г»ГҐ 240 Г±ГІГ°Г®ГЄ
 .q         (LBUFF_OUT[5:0])
 );
 // =========================================================================
-// 3. Генератор развертки и логика чтения (1705 x 1048)
+// 3. Sync generator and read logic (1705 x 1048)
 // =========================================================================
-// Горизонталь (1705 тактов):
-// 0..1279    : Активная область (1280)
+// Horizontal (1705 ticks):
+// 0..1279 : Active area (1280)
 // 1280..1327 : Front Porch (48)
 // 1328..1439 : HSYNC (112)
-// 1440..1704 : Back Porch (265) - увеличено для корректной калибровки ТВ
-// Вертикаль (1048 строк):
-// 0..959     : Активная область (960)
-// 960..1004  : Front Porch (45)
+// 1440..1704 : Back Porch (265) - increased for correct TV calibration
+// Vertical (1048 lines):
+// 0..959 : Active area (960)
+// 960..1004 : Front Porch (45)
 // 1005..1007 : VSYNC (3)
-// 1008..1047 : Back Porch (40) - приведено к стандарту VESA (~36 строк)
+// 1008..1047 : Back Porch (40) - normalized to VESA standard (~36 lines)
 always @(posedge Clk_VGA) begin
-            // Детектор начала кадра PPU для жесткой привязки (Genlock)
+            // PPU start of frame detector for hard locking (Genlock)
                  FRAME_START_SYNC[1:0] <= {FRAME_START_SYNC[0], ((Vo == 9'd0) & (Ho == 9'd0))};
-            if (~FRAME_START_SYNC[1] & FRAME_START_SYNC[0]) begin // Положительный фронт начала кадра
+            if (~FRAME_START_SYNC[1] & FRAME_START_SYNC[0]) begin // Positive edge of frame start
                 H_CNT[10:0]  <= 11'd0;
                 V_CNT[10:0]  <= 11'd0;
                 PIX_DIV[2:0] <= 3'd0;
                 R_ADDR[7:0]  <= 8'd0;
                                                             end
            else begin
-            // Счетчики развертки VGA
+            // VGA scan counters
             if (H_CNT[10:0] == 11'd1704) begin
                 H_CNT[10:0] <= 11'd0;
             if (V_CNT[10:0] == 11'd1047)
@@ -80,7 +79,7 @@ always @(posedge Clk_VGA) begin
            else V_CNT[10:0] <= V_CNT[10:0] + 1'b1;
                                          end
            else H_CNT[10:0] <= H_CNT[10:0] + 1'b1;
-            // Логика чтения из буфера (с учетом 1 такта задержки чтения DPRAM)
+            // taking into account 1 clock cycle of DPRAM read delay)
             if (H_CNT[10:0] >= 11'd1280) begin
                 PIX_DIV[2:0] <= 3'd0;
                 R_ADDR[7:0]  <= 8'd0;
@@ -94,10 +93,10 @@ always @(posedge Clk_VGA) begin
                 end
            end
                 VGA_PIX[5:0] <= ((H_CNT[10:0] < 11'd1280) & (V_CNT[10:0] > 11'd3) & (V_CNT[10:0] < 11'd964)) ? LBUFF_OUT[5:0] : 6'h3F;
-// Синхроимпульсы (положительная полярность)
+// Sync pulses (positive polarity)
     vga_hsync <= (H_CNT[10:0] >= 11'd1328) & (H_CNT[10:0] < 11'd1505);
     vga_vsync <= (V_CNT[10:0] >= 11'd1005) & (V_CNT[10:0] < 11'd1008);
                             end
-// Затемняем сканлайны аппаратным эмфазисом
+// Darkening scanlines with hardware emphasis
 assign EMPH_ON = SCANLINES_EN & ((V_CNT[1:0] == 10'd3) | (V_CNT[1:0] == 10'd2));
 endmodule
