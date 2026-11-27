@@ -1,6 +1,6 @@
 module SCANDOUBLER1024x480 (
 input Clk,                // System clock 42.954MHz (21.477277 * 2)
-input PCLK,               // Pixelclock
+input PCLK,               // Pixelclock PPU 5.369 MHz
 input [8:0]Ho,            // Horizontal counter PPU (0..340)
 input [8:0]Vo,            // Vertical counter PPU (0..261)
 input [5:0]PIX,           // PPU palette color index
