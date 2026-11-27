@@ -5,7 +5,7 @@ input [8:0]Ho,            // Horizontal counter PPU (0..340)
 input [8:0]Vo,            // Vertical counter PPU (0..261)
 input [5:0]PIX,           // PPU palette color index
 input SCANLINES_EN,       // Enable the CRT scanline effect
-// Âûõîäû
+// Outputs
 output EMPH_ON,           // Hardware dimming control output
 output [5:0]VGA_PIX,      // VGA color palette index
 output reg  VGA_HSYNC,    // Horizontal sync 1024x480 (positive)
